@@ -289,7 +289,7 @@ export default function Home() {
                     className="font-display font-extrabold leading-none"
                     style={{ fontSize: '56px', color: '#6ABF4B' }}
                   >
-                    até 20% off
+                    até 35% off
                   </div>
                   <span
                     className="shrink-0 font-display font-bold"
