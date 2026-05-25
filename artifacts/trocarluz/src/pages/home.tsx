@@ -37,6 +37,7 @@ export default function Home() {
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+          style={{ opacity: 0.55 }}
         />
 
         {/* Content — left-aligned, sits on top */}
@@ -119,6 +120,107 @@ export default function Home() {
               className="shrink-0 text-[#1A1F36] font-medium border-b-2 border-[#1A1F36] pb-0.5 hover:opacity-70 transition-opacity"
             >
               Prepare-se agora
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── QUICK-ACTION CARDS — visible without scrolling ───────────────── */}
+      <section className="bg-white py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Casa */}
+            <Link
+              href="/para-sua-casa"
+              style={{ textDecoration: 'none' }}
+            >
+              <div
+                className="group flex items-center justify-between gap-4 cursor-pointer transition-all duration-150"
+                style={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #E2E1DC',
+                  borderLeft: '5px solid #00B86B',
+                  borderRadius: '12px',
+                  padding: '24px 28px',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(0,0,0,0.09)';
+                  (e.currentTarget as HTMLElement).style.borderColor = '#00B86B';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
+                  (e.currentTarget as HTMLElement).style.borderColor = '#E2E1DC';
+                  (e.currentTarget as HTMLElement).style.borderLeftColor = '#00B86B';
+                }}
+              >
+                <div>
+                  <div
+                    className="font-display font-bold mb-1"
+                    style={{ fontSize: '20px', color: '#1A1F36' }}
+                  >
+                    Para sua casa
+                  </div>
+                  <div
+                    style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#6B7080' }}
+                  >
+                    Geração Distribuída — economia solar sem instalação
+                  </div>
+                </div>
+                <div
+                  className="shrink-0 font-display font-semibold whitespace-nowrap"
+                  style={{ fontSize: '15px', color: '#00B86B' }}
+                >
+                  Quero economizar →
+                </div>
+              </div>
+            </Link>
+
+            {/* Empresa */}
+            <Link
+              href="/para-sua-empresa"
+              style={{ textDecoration: 'none' }}
+            >
+              <div
+                className="group flex items-center justify-between gap-4 cursor-pointer transition-all duration-150"
+                style={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #E2E1DC',
+                  borderLeft: '5px solid #FFD000',
+                  borderRadius: '12px',
+                  padding: '24px 28px',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(0,0,0,0.09)';
+                  (e.currentTarget as HTMLElement).style.borderColor = '#FFD000';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)';
+                  (e.currentTarget as HTMLElement).style.borderColor = '#E2E1DC';
+                  (e.currentTarget as HTMLElement).style.borderLeftColor = '#FFD000';
+                }}
+              >
+                <div>
+                  <div
+                    className="font-display font-bold mb-1"
+                    style={{ fontSize: '20px', color: '#1A1F36' }}
+                  >
+                    Para sua empresa
+                  </div>
+                  <div
+                    style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px', color: '#6B7080' }}
+                  >
+                    Mercado Livre + GD — reduza custos operacionais
+                  </div>
+                </div>
+                <div
+                  className="shrink-0 font-display font-semibold whitespace-nowrap"
+                  style={{ fontSize: '15px', color: '#B89B00' }}
+                >
+                  Analisar minha empresa →
+                </div>
+              </div>
             </Link>
           </div>
         </div>

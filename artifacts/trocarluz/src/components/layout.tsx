@@ -2,6 +2,18 @@ import { Link, useLocation } from "wouter";
 import { ReactNode, useState } from "react";
 import { List, X } from "@phosphor-icons/react";
 
+function BoltLogo({ size = 24 }: { size?: number }) {
+  const h = Math.round(size * 1.35);
+  return (
+    <svg width={size} height={h} viewBox="0 0 24 32" fill="none" aria-hidden="true">
+      {/* Navy shadow layer — slightly behind */}
+      <path d="M16 0L9 15h6L12 32l13-18h-7L20 0z" fill="#0A2240" transform="translate(2,1)"/>
+      {/* Green front layer */}
+      <path d="M14 0L7 15h6L10 32l13-18h-7L18 0z" fill="#6ABF4B"/>
+    </svg>
+  );
+}
+
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,8 +31,11 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-50" style={{ backgroundColor: '#0A1628' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="font-display font-extrabold text-2xl flex-shrink-0">
-              <span style={{ color: '#6ABF4B' }}>Trocar</span><span style={{ color: '#FFD000' }}>Luz</span>
+            <Link href="/" className="flex items-center gap-2 flex-shrink-0" style={{ textDecoration: 'none' }}>
+              <BoltLogo size={22} />
+              <span className="font-display font-extrabold text-xl tracking-tight">
+                <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFFFFF' }}>LUZ</span>
+              </span>
             </Link>
 
             <nav className="hidden md:flex gap-8 items-center">
@@ -74,8 +89,11 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-1 md:col-span-1">
-              <Link href="/" className="font-display font-extrabold text-2xl block mb-4">
-                <span style={{ color: '#6ABF4B' }}>Trocar</span><span style={{ color: '#FFD000' }}>Luz</span>
+              <Link href="/" className="flex items-center gap-2 mb-4" style={{ textDecoration: 'none' }}>
+                <BoltLogo size={20} />
+                <span className="font-display font-extrabold text-lg tracking-tight">
+                  <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFFFFF' }}>LUZ</span>
+                </span>
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
                 Parceiro de Ótima Energia
