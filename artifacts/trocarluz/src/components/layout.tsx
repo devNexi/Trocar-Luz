@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { ReactNode, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
@@ -16,41 +16,38 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-[#F7F7F5]">
-      <header className="bg-white border-b border-[#E2E1DC] sticky top-0 z-50">
+      <header className="sticky top-0 z-50" style={{ backgroundColor: '#0A1628' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="font-display font-extrabold text-2xl text-[hsl(var(--primary))] flex-shrink-0">
-              TrocarLuz
+            <Link href="/" className="font-display font-extrabold text-2xl flex-shrink-0">
+              <span style={{ color: '#6ABF4B' }}>Trocar</span><span style={{ color: '#FFD000' }}>Luz</span>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex gap-6 items-center">
+            <nav className="hidden md:flex gap-8 items-center">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-sm font-medium ${
-                    location === link.href ? "text-[hsl(var(--primary))]" : "text-[#1A1F36] hover:text-[hsl(var(--primary))]"
-                  } transition-colors`}
+                  className="text-white/90 hover:text-white transition-colors"
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '16px' }}
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
 
-            {/* Mobile menu button */}
-            <button 
-              className="md:hidden p-2 text-[#1A1F36]"
+            <button
+              className="md:hidden p-2 text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={24} /> : <List size={24} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-[#E2E1DC]">
+          <div className="md:hidden border-t border-white/10" style={{ backgroundColor: '#0A1628' }}>
             <div className="px-4 pt-2 pb-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
@@ -58,7 +55,7 @@ export function Layout({ children }: { children: ReactNode }) {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium ${
-                    location === link.href ? "text-[hsl(var(--primary))] bg-green-50" : "text-[#1A1F36] hover:bg-gray-50"
+                    location === link.href ? "text-[#6ABF4B]" : "text-white/85 hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -77,8 +74,8 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-1 md:col-span-1">
-              <Link href="/" className="font-display font-bold text-2xl text-[hsl(var(--primary))] block mb-4">
-                TrocarLuz
+              <Link href="/" className="font-display font-extrabold text-2xl block mb-4">
+                <span style={{ color: '#6ABF4B' }}>Trocar</span><span style={{ color: '#FFD000' }}>Luz</span>
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
                 Parceiro de Ótima Energia
@@ -87,7 +84,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 ✓ Parceiros verificados
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-display font-semibold text-lg mb-4">Serviços</h4>
               <ul className="space-y-2">
@@ -115,7 +112,7 @@ export function Layout({ children }: { children: ReactNode }) {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-[#2a3047] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6B7080]">
             <p>© {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados.</p>
             <p>Ajudando o Brasil a comparar melhor e economizar.</p>
