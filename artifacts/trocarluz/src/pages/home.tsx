@@ -231,7 +231,7 @@ export default function Home() {
             {/* Yellow connecting line at number baseline */}
             <div
               className="hidden md:block absolute left-[calc(16.67%)] right-[calc(16.67%)]"
-              style={{ top: '62px', height: '2px', backgroundColor: '#FFD000', zIndex: 0 }}
+              style={{ top: '62px', height: '2px', backgroundColor: 'rgba(255,208,0,0.40)', zIndex: 0 }}
             />
             {[
               { n: '01', title: 'Informe', desc: 'Diga seu estado e média de consumo para vermos as ofertas da sua região.' },
@@ -282,7 +282,7 @@ export default function Home() {
                 <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(106,191,75,0.07)' }}>
                   <div
                     className="font-display font-extrabold leading-none"
-                    style={{ fontSize: '56px', color: '#2D7A3A' }}
+                    style={{ fontSize: '56px', color: '#6ABF4B' }}
                   >
                     até 20% off
                   </div>
@@ -341,7 +341,7 @@ export default function Home() {
                 <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(0,184,107,0.06)' }}>
                   <div
                     className="font-display font-extrabold leading-none"
-                    style={{ fontSize: '56px', color: '#007A47' }}
+                    style={{ fontSize: '56px', color: '#00B86B' }}
                   >
                     até 30% off
                   </div>
@@ -386,7 +386,7 @@ export default function Home() {
       </section>
 
       {/* ── TRUST STATS — #6ABF4B lime green ─────────────────────────────── */}
-      <section className="py-20" style={{ backgroundColor: '#6ABF4B' }}>
+      <section className="py-20" style={{ backgroundColor: '#0A1628' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
