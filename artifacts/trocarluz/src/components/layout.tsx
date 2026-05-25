@@ -2,16 +2,6 @@ import { Link, useLocation } from "wouter";
 import { ReactNode, useState, useEffect } from "react";
 import { List, X } from "@phosphor-icons/react";
 
-function BoltLogo({ size = 24 }: { size?: number }) {
-  const h = Math.round(size * 1.35);
-  return (
-    <svg width={size} height={h} viewBox="0 0 24 32" fill="none" aria-hidden="true">
-      <path d="M16 0L9 15h6L12 32l13-18h-7L20 0z" fill="#0A2240" transform="translate(2,1)"/>
-      <path d="M14 0L7 15h6L10 32l13-18h-7L18 0z" fill="#6ABF4B"/>
-    </svg>
-  );
-}
-
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,11 +41,8 @@ export function Layout({ children }: { children: ReactNode }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0" style={{ textDecoration: 'none' }}>
-              <BoltLogo size={22} />
-              <span className="font-display font-extrabold text-xl tracking-tight">
-                <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFD000' }}>LUZ</span>
-              </span>
+            <Link href="/" className="flex items-center flex-shrink-0" style={{ textDecoration: 'none' }}>
+              <img src="/trocarluz-logo.png" alt="TrocarLuz" style={{ height: '40px', display: 'block' }} />
             </Link>
 
             <nav className="hidden md:flex gap-6 items-center">
@@ -109,11 +96,8 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-1 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-4" style={{ textDecoration: 'none' }}>
-                <BoltLogo size={20} />
-                <span className="font-display font-extrabold text-lg tracking-tight">
-                  <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFD000' }}>LUZ</span>
-                </span>
+              <Link href="/" className="flex items-center mb-4" style={{ textDecoration: 'none' }}>
+                <img src="/trocarluz-logo.png" alt="TrocarLuz" style={{ height: '32px', display: 'block' }} />
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
                 Parceiro de Ótima Energia

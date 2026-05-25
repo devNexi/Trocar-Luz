@@ -200,7 +200,7 @@ export default function Home() {
                   'Economia garantida todos os meses',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
-                    <Lightning size={22} weight="fill" className="shrink-0 mt-0.5" style={{ color: '#FFD000' }} />
+                    <Lightning size={22} weight="fill" className="shrink-0 mt-0.5" style={{ color: '#6ABF4B' }} />
                     <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: '#1A1F36', lineHeight: '1.6' }}>
                       {item}
                     </span>
@@ -209,7 +209,7 @@ export default function Home() {
               </ul>
               <span
                 className="inline-block font-display font-bold"
-                style={{ backgroundColor: '#FFD000', color: '#1A1F36', borderRadius: '999px', padding: '8px 20px', fontSize: '15px' }}
+                style={{ backgroundColor: '#6ABF4B', color: '#FFFFFF', borderRadius: '999px', padding: '8px 20px', fontSize: '15px' }}
               >
                 Clientes economizam em média 18% na conta
               </span>
@@ -270,7 +270,7 @@ export default function Home() {
                 className="flex flex-col transition-all duration-200 cursor-pointer"
                 style={{
                   border: '1px solid #E2E1DC',
-                  borderLeft: '4px solid #FFD000',
+                  borderLeft: '4px solid #6ABF4B',
                   borderRadius: '16px',
                   overflow: 'hidden',
                   minHeight: '300px',
@@ -279,11 +279,10 @@ export default function Home() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)'; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'; }}
               >
-                {/* Tinted header */}
-                <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(255,208,0,0.07)' }}>
+                <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(106,191,75,0.07)' }}>
                   <div
                     className="font-display font-extrabold leading-none"
-                    style={{ fontSize: '56px', color: '#B89800' }}
+                    style={{ fontSize: '56px', color: '#2D7A3A' }}
                   >
                     até 20% off
                   </div>
@@ -291,8 +290,8 @@ export default function Home() {
                     className="shrink-0 font-display font-bold"
                     style={{
                       fontSize: '12px',
-                      color: '#0A1628',
-                      backgroundColor: '#FFD000',
+                      color: '#FFFFFF',
+                      backgroundColor: '#6ABF4B',
                       borderRadius: '999px',
                       padding: '4px 12px',
                       whiteSpace: 'nowrap',
@@ -311,8 +310,8 @@ export default function Home() {
                   <div
                     className="w-full text-center font-display font-bold mt-auto"
                     style={{
-                      backgroundColor: '#FFD000',
-                      color: '#0A1628',
+                      backgroundColor: '#6ABF4B',
+                      color: '#FFFFFF',
                       fontSize: '16px',
                       padding: '14px 24px',
                       borderRadius: '8px',
