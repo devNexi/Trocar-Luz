@@ -10,6 +10,15 @@ function BoltIcon({ style }: { style?: React.CSSProperties }) {
   );
 }
 
+function FooterBoltIcon() {
+  return (
+    <svg width="20" height="28" viewBox="0 0 20 28" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginBottom: '2px' }}>
+      <polygon points="12,0 0,16 8,16 8,28 20,12 12,12" fill="rgba(255,255,255,0.3)"/>
+      <polygon points="10,0 0,14 7,14 7,28 18,12 11,12" fill="#6ABF4B"/>
+    </svg>
+  );
+}
+
 const logoStyle: React.CSSProperties = {
   fontFamily: "'Poppins', sans-serif",
   fontWeight: 800,
@@ -121,7 +130,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="col-span-1 md:col-span-1">
               {/* Footer logo — "LUZ" in white so it reads on dark bg */}
               <Link href="/" className="inline-flex items-center gap-1 mb-4" style={{ ...logoStyle, fontSize: '20px' }}>
-                <BoltIcon style={{ filter: 'brightness(0) invert(1)' }} />
+                <FooterBoltIcon />
                 <span style={{ color: '#6ABF4B' }}>TROCAR</span>
                 <span style={{ color: '#FFFFFF' }}>LUZ</span>
               </Link>

@@ -39,6 +39,11 @@ export default function Home() {
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(90deg, rgba(10,22,40,0.72) 0%, rgba(10,22,40,0.35) 55%, transparent 100%)' }}
         />
+        {/* Top gradient — makes logo/nav text readable against the illustration */}
+        <div
+          className="absolute inset-x-0 top-0 pointer-events-none"
+          style={{ height: '25%', background: 'linear-gradient(to bottom, rgba(10,22,40,0.75) 0%, rgba(10,22,40,0) 100%)' }}
+        />
 
         <div
           className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center"
@@ -231,7 +236,7 @@ export default function Home() {
             {/* Yellow connecting line at number baseline */}
             <div
               className="hidden md:block absolute left-[calc(16.67%)] right-[calc(16.67%)]"
-              style={{ top: '62px', height: '2px', backgroundColor: 'rgba(255,208,0,0.40)', zIndex: 0 }}
+              style={{ top: '62px', height: '2px', backgroundColor: 'rgba(255,255,255,0.15)', zIndex: 0 }}
             />
             {[
               { n: '01', title: 'Informe', desc: 'Diga seu estado e média de consumo para vermos as ofertas da sua região.' },
