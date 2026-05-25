@@ -19,7 +19,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="bg-white border-b border-[#E2E1DC] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="font-display font-bold text-2xl text-[hsl(var(--primary))] flex-shrink-0">
+            <Link href="/" className="font-display font-extrabold text-2xl text-[hsl(var(--primary))] flex-shrink-0">
               TrocarLuz
             </Link>
 
