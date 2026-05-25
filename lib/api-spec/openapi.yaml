@@ -3,20 +3,28 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: TrocarLuz API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: leads
+    description: GD lead capture
+  - name: articles
+    description: Content articles
+  - name: faqs
+    description: Frequently asked questions
+  - name: states
+    description: Brazilian states energy data
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,7 +32,207 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /leads:
+    post:
+      operationId: createLead
+      tags: [leads]
+      summary: Submit a GD lead (residential or business)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LeadInput"
+      responses:
+        "201":
+          description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lead"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /articles:
+    get:
+      operationId: listArticles
+      tags: [articles]
+      summary: List published articles
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: estado
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArticleSummary"
+    post:
+      operationId: createArticle
+      tags: [articles]
+      summary: Publish a new article (AI agent endpoint, requires API key)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ArticleInput"
+      responses:
+        "201":
+          description: Article created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /articles/{slug}:
+    get:
+      operationId: getArticle
+      tags: [articles]
+      summary: Get article by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Article found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /faqs:
+    get:
+      operationId: listFaqs
+      tags: [faqs]
+      summary: List published FAQs
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: FAQ list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Faq"
+    post:
+      operationId: createFaq
+      tags: [faqs]
+      summary: Create a FAQ entry (AI agent endpoint, requires API key)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FaqInput"
+      responses:
+        "201":
+          description: FAQ created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Faq"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /states:
+    get:
+      operationId: listStates
+      tags: [states]
+      summary: List all Brazilian states with energy data
+      responses:
+        "200":
+          description: States list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/State"
+
+  /states/{slug}:
+    get:
+      operationId: getState
+      tags: [states]
+      summary: Get energy data for a specific state
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: State found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/State"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
   schemas:
     HealthStatus:
       type: object
@@ -34,3 +242,283 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Lead:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        nome:
+          type: string
+        whatsapp:
+          type: string
+        estado:
+          type: string
+        distribuidora:
+          type: ["string", "null"]
+        consumoBand:
+          type: ["string", "null"]
+        empresa:
+          type: ["string", "null"]
+        valorContaBand:
+          type: ["string", "null"]
+        segmento:
+          type: ["string", "null"]
+        pageSource:
+          type: ["string", "null"]
+        utmSource:
+          type: ["string", "null"]
+        utmMedium:
+          type: ["string", "null"]
+        utmCampaign:
+          type: ["string", "null"]
+        status:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - type
+        - nome
+        - whatsapp
+        - estado
+        - status
+        - createdAt
+
+    LeadInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [residential, business]
+        nome:
+          type: string
+          minLength: 2
+        whatsapp:
+          type: string
+          minLength: 8
+        estado:
+          type: string
+          minLength: 2
+          maxLength: 2
+        distribuidora:
+          type: string
+        consumoBand:
+          type: string
+        empresa:
+          type: string
+        valorContaBand:
+          type: string
+        segmento:
+          type: string
+        pageSource:
+          type: string
+        utmSource:
+          type: string
+        utmMedium:
+          type: string
+        utmCampaign:
+          type: string
+      required:
+        - type
+        - nome
+        - whatsapp
+        - estado
+
+    ArticleSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        excerpt:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        estado:
+          type: ["string", "null"]
+        author:
+          type: string
+        publishedAt:
+          type: ["string", "null"]
+        updatedAt:
+          type: string
+      required:
+        - id
+        - slug
+        - title
+        - author
+        - updatedAt
+
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        metaDescription:
+          type: ["string", "null"]
+        content:
+          type: string
+        excerpt:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        estado:
+          type: ["string", "null"]
+        keywords:
+          type: array
+          items:
+            type: string
+        author:
+          type: string
+        reviewer:
+          type: ["string", "null"]
+        schemaType:
+          type: ["string", "null"]
+        faqItems:
+          type: ["object", "null"]
+        published:
+          type: boolean
+        publishedAt:
+          type: ["string", "null"]
+        updatedAt:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - slug
+        - title
+        - content
+        - author
+        - published
+        - updatedAt
+        - createdAt
+
+    ArticleInput:
+      type: object
+      properties:
+        slug:
+          type: string
+          minLength: 1
+        title:
+          type: string
+          minLength: 1
+        metaDescription:
+          type: string
+        content:
+          type: string
+          minLength: 1
+        excerpt:
+          type: string
+        category:
+          type: string
+        estado:
+          type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        author:
+          type: string
+        reviewer:
+          type: string
+        schemaType:
+          type: string
+        faqItems:
+          type: object
+        published:
+          type: boolean
+      required:
+        - slug
+        - title
+        - content
+
+    Faq:
+      type: object
+      properties:
+        id:
+          type: string
+        question:
+          type: string
+        answer:
+          type: string
+        category:
+          type: ["string", "null"]
+        displayOrder:
+          type: ["integer", "null"]
+        published:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - question
+        - answer
+        - published
+        - createdAt
+
+    FaqInput:
+      type: object
+      properties:
+        question:
+          type: string
+          minLength: 1
+        answer:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        displayOrder:
+          type: integer
+        published:
+          type: boolean
+      required:
+        - question
+        - answer
+
+    State:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        uf:
+          type: string
+        region:
+          type: string
+        distributor:
+          type: string
+        avgTariffResidential:
+          type: ["number", "null"]
+        gdAvailable:
+          type: boolean
+        aclAvailable2028:
+          type: boolean
+        description:
+          type: ["string", "null"]
+      required:
+        - slug
+        - name
+        - uf
+        - region
+        - distributor
+        - gdAvailable
+        - aclAvailable2028
