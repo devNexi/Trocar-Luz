@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout";
 import { SEOHead } from "@/components/seo-head";
 import { useGetArticle, getGetArticleQueryKey } from "@workspace/api-client-react";
 import { useParams, Link } from "wouter";
+import { MiniLeadForm } from "@/components/mini-lead-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -109,13 +110,10 @@ export default function GuideDetail() {
 
           <aside className="w-full lg:w-[320px] shrink-0">
             <div className="sticky top-24 bg-[#1A1F36] rounded-[16px] p-6 text-white border border-[#2a3047]">
-              <h3 className="font-display font-bold text-xl mb-3">Ficou com dúvida?</h3>
-              <p className="text-gray-300 text-sm mb-6">
-                Fale com um especialista agora mesmo e descubra como economizar na conta de luz.
-              </p>
-              <Link href="/para-sua-casa" className="btn-primary block text-center w-full">
-                Falar com especialista
-              </Link>
+              <MiniLeadForm
+                heading="Ficou com dúvida? Fale com um especialista."
+                sourcePage="guias-slug"
+              />
             </div>
           </aside>
           

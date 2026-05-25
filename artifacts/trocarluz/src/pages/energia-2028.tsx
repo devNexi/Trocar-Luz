@@ -52,6 +52,18 @@ export default function Energia2028() {
           </div>
         </div>
       </section>
+
+      <section className="py-16 bg-[#1A1F36]">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display font-bold text-3xl text-white mb-2 text-center">
+            Avise-me quando o mercado abrir na minha região.
+          </h2>
+          <p className="text-gray-400 text-center mb-8">
+            Deixe seus dados e entraremos em contato assim que o Mercado Livre chegar até você.
+          </p>
+          <LeadForm type="residential" sourcePage="energia-2028-waitlist" />
+        </div>
+      </section>
     </Layout>
   );
 }

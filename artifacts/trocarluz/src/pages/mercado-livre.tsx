@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import { SEOHead } from "@/components/seo-head";
+import { LeadForm } from "@/components/lead-form";
 
 export default function MercadoLivre() {
   return (
@@ -37,6 +38,15 @@ export default function MercadoLivre() {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-[#F7F7F5]">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display font-bold text-3xl text-[#1A1F36] mb-8 text-center">
+            Sua empresa pode migrar para o mercado livre agora
+          </h2>
+          <LeadForm type="business" sourcePage="mercado-livre" />
         </div>
       </section>
     </Layout>

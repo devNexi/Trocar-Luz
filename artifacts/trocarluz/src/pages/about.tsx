@@ -66,6 +66,25 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      <section className="py-20 bg-[#F7F7F5]">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display font-bold text-3xl text-[#1A1F36] mb-4">
+            Quer saber mais? Entre em contato.
+          </h2>
+          <p className="text-[#6B7080] mb-8">
+            Nossa equipe está pronta para tirar suas dúvidas e ajudar você a economizar.
+          </p>
+          <a
+            href="https://wa.me/5511999999999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2 px-8 py-4 text-base"
+          >
+            Falar pelo WhatsApp
+          </a>
+        </div>
+      </section>
     </Layout>
   );
 }

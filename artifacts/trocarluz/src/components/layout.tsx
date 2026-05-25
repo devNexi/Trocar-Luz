@@ -24,6 +24,8 @@ export function Layout({ children }: { children: ReactNode }) {
     { href: "/geracao-distribuida", label: "Geração Distribuída" },
     { href: "/energia-2028", label: "Energia 2028" },
     { href: "/guias", label: "Guias" },
+    { href: "/estados", label: "Por Estado" },
+    { href: "/perguntas-frequentes", label: "Perguntas Frequentes" },
   ];
 
   return (
