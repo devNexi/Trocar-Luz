@@ -42,7 +42,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-              <img src="/trocarluz-logo.png" alt="TrocarLuz" height="36" />
+              <img src="/trocarluz-logo-v3.png" alt="TrocarLuz" height="36" />
             </Link>
 
             <nav className="hidden md:flex gap-6 items-center">
@@ -97,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-1 md:col-span-1">
               <Link href="/" className="inline-flex mb-4" style={{ textDecoration: 'none' }}>
-                <img src="/trocarluz-logo.png" alt="TrocarLuz" height="36" />
+                <img src="/trocarluz-logo-v3.png" alt="TrocarLuz" height="36" />
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
                 Parceiro de Ótima Energia
