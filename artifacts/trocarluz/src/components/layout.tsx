@@ -2,9 +2,9 @@ import { Link, useLocation } from "wouter";
 import { ReactNode, useState, useEffect } from "react";
 import { List, X } from "@phosphor-icons/react";
 
-function BoltIcon() {
+function BoltIcon({ style }: { style?: React.CSSProperties }) {
   return (
-    <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginBottom: '2px' }}>
+    <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginBottom: '2px', ...style }}>
       <path d="M9 0L1 13h6L5 22l10-13H9L11 0z" fill="#6ABF4B"/>
     </svg>
   );
@@ -121,7 +121,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="col-span-1 md:col-span-1">
               {/* Footer logo — "LUZ" in white so it reads on dark bg */}
               <Link href="/" className="inline-flex items-center gap-1 mb-4" style={{ ...logoStyle, fontSize: '20px' }}>
-                <BoltIcon />
+                <BoltIcon style={{ filter: 'brightness(0) invert(1)' }} />
                 <span style={{ color: '#6ABF4B' }}>TROCAR</span>
                 <span style={{ color: '#FFFFFF' }}>LUZ</span>
               </Link>
