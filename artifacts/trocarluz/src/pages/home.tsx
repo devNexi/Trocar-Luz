@@ -28,43 +28,16 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden text-white pt-20 pb-24 md:pt-32 md:pb-40" style={{ backgroundColor: '#0A1628' }}>
-        {/* Bold illustrated asset — lime/yellow/navy palette at 35% opacity */}
-        <div className="absolute inset-y-0 right-0 w-[55%] md:w-[48%] flex items-center justify-end pointer-events-none select-none" style={{ mixBlendMode: 'screen', opacity: 0.75 }}>
-          <svg viewBox="0 0 560 640" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-auto max-h-[640px]" aria-hidden="true">
-            {/* Outer hexagon frame */}
-            <polygon points="280,22 492,132 492,372 280,482 68,372 68,132" stroke="#AAFF47" strokeWidth="2.5" fill="none"/>
-            {/* Inner hexagon dashed */}
-            <polygon points="280,88 420,166 420,322 280,400 140,322 140,166" stroke="#FFE600" strokeWidth="2" fill="none" strokeDasharray="7 11"/>
-            {/* Large lightning bolt — main hero element */}
-            <path d="M318 88 L232 308 L284 308 L250 534 L372 280 L318 280 Z" fill="#AAFF47"/>
-            {/* Hexagon vertex dots */}
-            <circle cx="280" cy="22" r="9" fill="#FFE600"/>
-            <circle cx="492" cy="132" r="7" fill="#AAFF47"/>
-            <circle cx="492" cy="372" r="7" fill="#FFE600"/>
-            <circle cx="280" cy="482" r="9" fill="#AAFF47"/>
-            <circle cx="68" cy="372" r="7" fill="#FFE600"/>
-            <circle cx="68" cy="132" r="7" fill="#AAFF47"/>
-            {/* Tick marks radiating from each vertex */}
-            <line x1="280" y1="22" x2="280" y2="-6" stroke="#AAFF47" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="492" y1="132" x2="516" y2="118" stroke="#FFE600" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="492" y1="372" x2="516" y2="386" stroke="#AAFF47" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="280" y1="482" x2="280" y2="510" stroke="#FFE600" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="68" y1="372" x2="44" y2="386" stroke="#AAFF47" strokeWidth="3.5" strokeLinecap="round"/>
-            <line x1="68" y1="132" x2="44" y2="118" stroke="#FFE600" strokeWidth="3.5" strokeLinecap="round"/>
-            {/* Energy pulse rings centred on bolt */}
-            <circle cx="280" cy="312" r="68" stroke="#FFE600" strokeWidth="1.5" fill="none" opacity="0.5"/>
-            <circle cx="280" cy="312" r="114" stroke="#AAFF47" strokeWidth="1" fill="none" opacity="0.28"/>
-            {/* Scattered accent dots */}
-            <circle cx="152" cy="76" r="5" fill="#FFE600"/>
-            <circle cx="408" cy="76" r="5" fill="#AAFF47"/>
-            <circle cx="108" cy="252" r="3.5" fill="#FFE600" opacity="0.75"/>
-            <circle cx="452" cy="252" r="3.5" fill="#AAFF47" opacity="0.75"/>
-            <circle cx="140" cy="438" r="4" fill="#AAFF47"/>
-            <circle cx="420" cy="438" r="4" fill="#FFE600"/>
-          </svg>
-        </div>
+        {/* Full-bleed hero illustration at 30% opacity — no gradient overlay */}
+        <img
+          src="/illustrations/heroes/trocarluz-hero.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+          style={{ opacity: 0.30 }}
+        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 1 }}>
           <div className="max-w-3xl">
             <h1 className="font-display font-extrabold text-4xl md:text-6xl lg:text-[64px] leading-[1.1] mb-6 tracking-tight">
               Compare e economize na sua conta de energia.
