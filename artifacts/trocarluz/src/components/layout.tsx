@@ -1,14 +1,12 @@
 import { Link, useLocation } from "wouter";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { List, X } from "@phosphor-icons/react";
 
 function BoltLogo({ size = 24 }: { size?: number }) {
   const h = Math.round(size * 1.35);
   return (
     <svg width={size} height={h} viewBox="0 0 24 32" fill="none" aria-hidden="true">
-      {/* Navy shadow layer — slightly behind */}
       <path d="M16 0L9 15h6L12 32l13-18h-7L20 0z" fill="#0A2240" transform="translate(2,1)"/>
-      {/* Green front layer */}
       <path d="M14 0L7 15h6L10 32l13-18h-7L18 0z" fill="#6ABF4B"/>
     </svg>
   );
@@ -17,6 +15,20 @@ function BoltLogo({ size = 24 }: { size?: number }) {
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHome = location === '/';
+
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+    setScrolled(false);
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isHome]);
 
   const navLinks = [
     { href: "/para-sua-casa", label: "Para sua casa" },
@@ -25,28 +37,34 @@ export function Layout({ children }: { children: ReactNode }) {
     { href: "/energia-2028", label: "Energia 2028" },
     { href: "/guias", label: "Guias" },
     { href: "/estados", label: "Por Estado" },
-    { href: "/perguntas-frequentes", label: "Perguntas Frequentes" },
+    { href: "/perguntas-frequentes", label: "Dúvidas" },
   ];
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-[#F7F7F5]">
-      <header className="sticky top-0 z-50" style={{ backgroundColor: '#0A1628' }}>
+      <header
+        className="sticky top-0 z-50"
+        style={{
+          backgroundColor: scrolled ? '#0A1628' : 'transparent',
+          transition: 'background-color 0.2s ease',
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link href="/" className="flex items-center gap-2 flex-shrink-0" style={{ textDecoration: 'none' }}>
               <BoltLogo size={22} />
               <span className="font-display font-extrabold text-xl tracking-tight">
-                <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFFFFF' }}>LUZ</span>
+                <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFD000' }}>LUZ</span>
               </span>
             </Link>
 
-            <nav className="hidden md:flex gap-8 items-center">
+            <nav className="hidden md:flex gap-6 items-center">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-white/90 hover:text-white transition-colors"
-                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '16px' }}
+                  className="text-white/90 hover:text-white transition-colors whitespace-nowrap"
+                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '15px' }}
                 >
                   {link.label}
                 </Link>
@@ -94,7 +112,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link href="/" className="flex items-center gap-2 mb-4" style={{ textDecoration: 'none' }}>
                 <BoltLogo size={20} />
                 <span className="font-display font-extrabold text-lg tracking-tight">
-                  <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFFFFF' }}>LUZ</span>
+                  <span style={{ color: '#6ABF4B' }}>TROCAR</span><span style={{ color: '#FFD000' }}>LUZ</span>
                 </span>
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
