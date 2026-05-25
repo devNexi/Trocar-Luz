@@ -65,7 +65,7 @@ export default function Home() {
                 maxWidth: '480px',
               }}
             >
-              Veja as opções reais disponíveis na sua região. Mude para uma energia mais barata, sem burocracia e sem alterar sua instalação.
+              Geração distribuída já disponível para reduzir sua conta agora. E a partir de dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link
@@ -98,7 +98,7 @@ export default function Home() {
             <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
               <ShieldCheck size={20} weight="fill" style={{ color: '#00B86B' }} />
               <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px' }}>
-                Mais de 12 mil comparações feitas
+                Broker certificado CCEE · Mais de 12 mil comparações feitas
               </span>
             </div>
           </div>
@@ -112,15 +112,15 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <Lightning size={26} weight="fill" style={{ color: '#0A1628' }} className="shrink-0" />
               <p className="font-display font-semibold" style={{ color: '#0A1628', fontSize: '17px' }}>
-                Em 2028, 88 milhões de lares poderão escolher seu fornecedor de energia.
+                A partir de dezembro de 2027, consumidores residenciais poderão escolher seu fornecedor — mas só através de um broker certificado. Somos esse broker.
               </p>
             </div>
             <Link
               href="/energia-2028"
               className="shrink-0 font-medium hover:opacity-70 transition-opacity"
-              style={{ color: '#0A1628', borderBottom: '2px solid #0A1628', paddingBottom: '2px', textDecoration: 'none', fontSize: '15px' }}
+              style={{ color: '#0A1628', borderBottom: '2px solid #0A1628', paddingBottom: '2px', textDecoration: 'none', fontSize: '15px', whiteSpace: 'nowrap' }}
             >
-              Prepare-se agora
+              Saiba como →
             </Link>
           </div>
         </div>
@@ -239,9 +239,9 @@ export default function Home() {
               style={{ top: '62px', height: '2px', backgroundColor: 'rgba(255,255,255,0.15)', zIndex: 0 }}
             />
             {[
-              { n: '01', title: 'Informe', desc: 'Diga seu estado e média de consumo para vermos as ofertas da sua região.' },
-              { n: '02', title: 'Compare', desc: 'Veja as opções reais, parceiros verificados e entenda o desconto projetado.' },
-              { n: '03', title: 'Troque', desc: 'Faça a adesão digital rápida, sem quebrar paredes ou mudar a instalação.' },
+              { n: '01', title: 'Informe', desc: 'Nos diga seu estado, sua distribuidora e seu consumo médio. Analisamos sua elegibilidade para GD agora e para o mercado livre em 2027.' },
+              { n: '02', title: 'Compare', desc: 'Mostramos as opções reais disponíveis para o seu perfil — economia garantida hoje via GD, e as melhores ofertas do mercado livre quando abrir para você.' },
+              { n: '03', title: 'Troque', desc: 'A TrocarLuz é seu broker certificado. Cuidamos de todo o processo de migração — da notificação à distribuidora até a assinatura com seu novo fornecedor.' },
             ].map((step) => (
               <div key={step.n} className="relative z-10 flex flex-col items-center text-center px-6 md:px-10">
                 <div
@@ -310,7 +310,7 @@ export default function Home() {
                     Geração Distribuída
                   </h3>
                   <p className="mb-6" style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#6B7080', lineHeight: '1.6' }}>
-                    Energia solar sem instalação. Para casa e empresa.
+                    Disponível agora para residências e empresas. Energia solar de fazendas parceiras com desconto direto na sua conta. Zero instalação, zero obras.
                   </p>
                   <div
                     className="w-full text-center font-display font-bold mt-auto"
@@ -369,7 +369,7 @@ export default function Home() {
                     Mercado Livre de Energia
                   </h3>
                   <p className="mb-6" style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#6B7080', lineHeight: '1.6' }}>
-                    Para empresas com CNPJ. Migre do mercado cativo.
+                    Aberto para empresas agora. Para residências a partir de dezembro de 2027. Como broker certificado CCEE, gerenciamos toda a sua migração.
                   </p>
                   <div
                     className="w-full text-center font-display font-bold mt-auto"
