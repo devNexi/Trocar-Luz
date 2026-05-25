@@ -2,35 +2,6 @@ import { Link, useLocation } from "wouter";
 import { ReactNode, useState, useEffect } from "react";
 import { List, X } from "@phosphor-icons/react";
 
-function BoltIcon({ style }: { style?: React.CSSProperties }) {
-  return (
-    <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginBottom: '2px', ...style }}>
-      <path d="M9 0L1 13h6L5 22l10-13H9L11 0z" fill="#6ABF4B"/>
-    </svg>
-  );
-}
-
-function FooterBoltIcon() {
-  return (
-    <svg width="20" height="28" viewBox="0 0 20 28" aria-hidden="true" style={{ display: 'inline-block', verticalAlign: 'middle', marginBottom: '2px' }}>
-      <polygon points="12,0 0,16 8,16 8,28 20,12 12,12" fill="rgba(255,255,255,0.3)"/>
-      <polygon points="10,0 0,14 7,14 7,28 18,12 11,12" fill="#6ABF4B"/>
-    </svg>
-  );
-}
-
-const logoStyle: React.CSSProperties = {
-  fontFamily: "'Poppins', sans-serif",
-  fontWeight: 800,
-  fontSize: '22px',
-  letterSpacing: '-0.02em',
-  lineHeight: 1,
-  textDecoration: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '5px',
-};
-
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -70,11 +41,8 @@ export function Layout({ children }: { children: ReactNode }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            {/* Nav logo — no PNG, no box */}
-            <Link href="/" style={logoStyle}>
-              <BoltIcon />
-              <span style={{ color: '#6ABF4B' }}>TROCAR</span>
-              <span style={{ color: '#1A3A5C' }}>LUZ</span>
+            <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+              <img src="/trocarluz-logo.png" alt="TrocarLuz" height="36" />
             </Link>
 
             <nav className="hidden md:flex gap-6 items-center">
@@ -128,11 +96,8 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-1 md:col-span-1">
-              {/* Footer logo — "LUZ" in white so it reads on dark bg */}
-              <Link href="/" className="inline-flex items-center gap-1 mb-4" style={{ ...logoStyle, fontSize: '20px' }}>
-                <FooterBoltIcon />
-                <span style={{ color: '#6ABF4B' }}>TROCAR</span>
-                <span style={{ color: '#FFFFFF' }}>LUZ</span>
+              <Link href="/" className="inline-flex mb-4" style={{ textDecoration: 'none' }}>
+                <img src="/trocarluz-logo.png" alt="TrocarLuz" height="36" />
               </Link>
               <p className="text-[#9EA3B0] text-sm mb-4">
                 Parceiro de Ótima Energia

@@ -418,9 +418,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FINAL CTA — #00B86B green ─────────────────────────────────────── */}
-      <section className="py-24 text-center text-white" style={{ backgroundColor: '#00B86B' }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── FINAL CTA — hero illustration on green base ───────────────────── */}
+      <section className="relative py-24 text-center text-white overflow-hidden" style={{ backgroundColor: '#00B86B' }}>
+        <img
+          src="/illustrations/heroes/trocarluz-hero.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+          style={{ opacity: 0.5, mixBlendMode: 'multiply' }}
+        />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" style={{ zIndex: 1 }}>
           <h2
             className="font-display font-extrabold text-white mb-5"
             style={{ fontSize: 'clamp(40px, 5vw, 56px)', lineHeight: '1.05' }}
