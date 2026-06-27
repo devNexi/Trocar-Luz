@@ -1,0 +1,37 @@
+The audit is accepted — good work finding the bill-access leak rather than hiding it. Now execute fixes in this exact priority order. Do NOT re-audit; fix, and after each, show me the proof (code + a real request/response or curl).
+
+=== TIER 1 — BLOCKERS (do today, before any real customer traffic) ===
+
+1. Bill-file access (PII leak):
+   - Immediate hotfix NOW: gate GET /api/storage/objects/* — but NOT with the shared CONTENT_API_KEY. That static key is too dangerous for customer PII.
+   - Correct fix: implement SHORT-LIVED SIGNED DOWNLOAD URLs (same presigned mechanism as upload, applied to GET, short expiry e.g. 15 min). Each bill access is individually time-limited; no permanent key, per-access revocable.
+   - If signed-download can't ship in the same session, apply a temporary auth guard to stop the leak today, but mark it clearly as TEMPORARY and implement signed URLs before any partner or volume access. Show me which you did.
+   - Verify: confirm an unauthenticated GET to a known bill path now returns 401/403, and a valid signed URL works and expires.
+
+2. Discount numbers — replace, don't just lower:
+   - Short patch (only if it ships this session): lower GD_BANDS to a defensible ceiling — no band above ~22%, most 15–20%; remove every 30%.
+   - Real fix (preferred): replace the hardcoded GD_BANDS with the offers-table lookup from the GD master spreadsheet (gd_offers table, per-partner-per-region, status filter, ticket-mínimo gate) per the offers-table spec. This simultaneously fixes real partner coverage and makes the WAITLIST path reachable. Tell me which you shipped; if patch-only, confirm the offers table is the next task.
+   - Verify: no value >22% remains anywhere (grep and show).
+
+3. Privacy policy retention clause:
+   - Add an LGPD Art. 15 retention period (e.g. "mantidos por até 5 anos após o encerramento da relação comercial, salvo obrigação legal"). Show the added text.
+
+=== TIER 2 — LAUNCH-READINESS (before any BYD/partner blast, not before small organic traffic) ===
+
+4. Integration hook → ASYNC: move fireIntegrationHook off the request path (fire-and-forget / queued), so a slow or down Ótima webhook cannot block or fail customer submissions under load. Show the change.
+
+5. Anti-spam: add a honeypot field to the submit form now (zero-friction). Add a global rate limit across all IPs on /api/switch-requests (e.g. 1000/hour total) in addition to the per-IP limit. (Full CAPTCHA only if abuse appears.) Show both.
+
+=== TIER 3 — SEO ARCHITECTURE (decision required, then schedule) ===
+
+6. This is a DECISION, not a quick fix. The site is client-rendered, so article content, per-page meta, OG tags, and AI-citability are absent from the raw HTML — which means the SEO/GEO authority goal is currently NOT being achieved. 
+   - Do the cheap parts now: add Article/BlogPosting schema.org to guide pages; confirm /parceiros/veiculos-eletricos and all pages are in sitemap.xml; ensure per-page <title>/meta are set client-side.
+   - Then give me a clear recommendation + effort estimate for the real fix: SSR or static prerendering (Next.js migration vs Vite SSR vs a prerender-middleware for crawlers/social bots). I will decide whether to schedule it now or defer — but I need the options and cost, not a silent default.
+   - Do NOT tell me SEO "works" until article HTML + meta + OG are server-rendered.
+
+=== TIER 4 — DEFER until BYD/partners are signed (do NOT build speculatively) ===
+- WhatsApp template creation/approval + passing name + tracking code (publicId) as template variables — do this when you're ready to actually send, not before.
+- Real partner profiles beyond the offers table — populate as partners are contracted.
+- Ótima Portal / Zoho integration behind the hook — wire when those endpoints exist.
+
+For each tier-1 and tier-2 item: PASS/FAIL + the evidence. Stop after Tier 2 and confirm before doing Tier 3 work.

@@ -66,6 +66,10 @@ export default function EnviarConta() {
     e.preventDefault();
     setSubmitError(null);
 
+    // Honeypot: if this hidden field has any value, it was filled by a bot — silently abort
+    const trap = (e.currentTarget as HTMLFormElement).elements.namedItem("_trap") as HTMLInputElement | null;
+    if (trap?.value) return;
+
     if (!lgpdConsent || !partnerShareConsent || !whatsappConsent) {
       setSubmitError("Todos os consentimentos são obrigatórios para continuar.");
       return;
@@ -93,7 +97,9 @@ export default function EnviarConta() {
     }
 
     try {
+      // Include honeypot in payload (server also checks it)
       const payload: Record<string, unknown> = {
+        _trap: "",
         nome: nome.trim(),
         whatsapp: phoneDigits,
         customerType: "residential",
@@ -277,6 +283,8 @@ export default function EnviarConta() {
             onSubmit={handleSubmit}
             style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "40px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}
           >
+            {/* Honeypot — hidden from real users, bots fill it automatically */}
+            <input name="_trap" type="text" tabIndex={-1} aria-hidden="true" autoComplete="off" style={{ display: "none" }} />
             <div className="space-y-6">
 
               {/* Name */}

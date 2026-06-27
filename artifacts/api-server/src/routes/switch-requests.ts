@@ -18,12 +18,23 @@ const estimateLimiter = rateLimit({
   message: { error: "Muitas solicitações. Tente novamente em 1 minuto." },
 });
 
-const switchRequestLimiter = rateLimit({
+// Per-IP: 5 requests per minute
+const switchRequestPerIpLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 5,
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: { error: "Muitas solicitações. Tente novamente em 1 minuto." },
+});
+
+// Global: 1000 requests per hour across ALL IPs (blast / launch protection)
+const switchRequestGlobalLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 1000,
+  keyGenerator: () => "global",
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: { error: "Serviço temporariamente sobrecarregado. Tente novamente em instantes." },
 });
 
 function statusLabel(status: string): string {
@@ -66,7 +77,14 @@ router.post("/savings-estimate", estimateLimiter, async (req, res): Promise<void
   res.json(result);
 });
 
-router.post("/switch-requests", switchRequestLimiter, async (req, res): Promise<void> => {
+router.post("/switch-requests", switchRequestGlobalLimiter, switchRequestPerIpLimiter, async (req, res): Promise<void> => {
+  // Honeypot: bots fill hidden fields, real users never do
+  if (req.body._trap) {
+    req.log.warn({ ip: req.ip }, "Honeypot triggered — bot submission silently dropped");
+    res.status(201).json({ publicId: "ok", status: "ok", statusLabel: "ok", trackingUrl: "/" });
+    return;
+  }
+
   const parsed = CreateSwitchRequestBody.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
@@ -148,8 +166,8 @@ router.post("/switch-requests", switchRequestLimiter, async (req, res): Promise<
     },
   });
 
-  // Fire integration hook (stub)
-  await fireIntegrationHook({
+  // Fire integration hook off the request path — a slow/down Ótima webhook must NOT block customer submission
+  void fireIntegrationHook({
     event: "SWITCH_REQUEST_SUBMITTED",
     switchRequest: {
       publicId: switchReq.publicId,
@@ -172,8 +190,8 @@ router.post("/switch-requests", switchRequestLimiter, async (req, res): Promise<
     },
   });
 
-  // Send WhatsApp confirmation (stub if not configured)
-  await sendConfirmationTemplate({ whatsapp: data.whatsapp, nome: data.nome });
+  // Send WhatsApp confirmation off the request path — a missing/down WA API must NOT block the response
+  void sendConfirmationTemplate({ whatsapp: data.whatsapp, nome: data.nome });
 
   req.log.info(
     { publicId, state: data.state, noPartner, status: finalStatus },

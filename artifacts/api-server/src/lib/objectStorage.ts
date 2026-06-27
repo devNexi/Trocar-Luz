@@ -204,6 +204,25 @@ export class ObjectStorageService {
       requestedPermission: requestedPermission ?? ObjectPermission.READ,
     });
   }
+
+  /**
+   * Generate a short-lived signed GET URL for a private entity (e.g. a bill file).
+   * Default TTL: 900 seconds (15 minutes). The URL is single-access-window — no permanent link is ever stored.
+   */
+  async getSignedEntityDownloadUrl(objectPath: string, ttlSec: number = 900): Promise<string> {
+    if (!objectPath.startsWith("/objects/")) {
+      throw new ObjectNotFoundError();
+    }
+    const parts = objectPath.slice(1).split("/");
+    const entityId = parts.slice(1).join("/");
+    let entityDir = this.getPrivateObjectDir();
+    if (!entityDir.endsWith("/")) {
+      entityDir = `${entityDir}/`;
+    }
+    const objectEntityPath = `${entityDir}${entityId}`;
+    const { bucketName, objectName } = parseObjectPath(objectEntityPath);
+    return signObjectURL({ bucketName, objectName, method: "GET", ttlSec });
+  }
 }
 
 function parseObjectPath(path: string): {

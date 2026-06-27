@@ -5,7 +5,6 @@ import {
   RequestUploadUrlResponse,
 } from "@workspace/api-zod";
 import { ObjectStorageService, ObjectNotFoundError } from "../lib/objectStorage";
-import { ObjectPermission } from "../lib/objectAcl";
 
 const router: IRouter = Router();
 const objectStorageService = new ObjectStorageService();
@@ -13,7 +12,7 @@ const objectStorageService = new ObjectStorageService();
 /**
  * POST /storage/uploads/request-url
  *
- * Request a presigned URL for file upload.
+ * Request a presigned PUT URL for file upload.
  * The client sends JSON metadata (name, size, contentType) — NOT the file.
  * Then uploads the file directly to the returned presigned URL.
  */
@@ -80,51 +79,40 @@ router.get("/storage/public-objects/*filePath", async (req: Request, res: Respon
 /**
  * GET /storage/objects/*
  *
- * Serve object entities from PRIVATE_OBJECT_DIR.
- * These are served from a separate path from /public-objects and can optionally
- * be protected with authentication or ACL checks based on the use case.
+ * Generate a short-lived signed download URL (15 min TTL) for a private entity.
+ * REQUIRES: Authorization: Bearer <CONTENT_API_KEY>
+ *
+ * Returns 302 redirect to the GCS signed URL.
+ * Each request generates a fresh time-limited token — no permanent bill URL is ever served.
  */
 router.get("/storage/objects/*path", async (req: Request, res: Response) => {
+  // Deny if key not configured OR if bearer doesn't match — same 401 either way
+  const apiKey = process.env.CONTENT_API_KEY ?? "";
+  const authHeader = req.headers.authorization ?? "";
+  if (!apiKey || authHeader !== `Bearer ${apiKey}`) {
+    req.log.warn({ ip: req.ip, keyConfigured: !!apiKey }, "Unauthorized attempt to access private object");
+    res.status(401).json({ error: "Unauthorized." });
+    return;
+  }
+
   try {
     const raw = req.params.path;
     const wildcardPath = Array.isArray(raw) ? raw.join("/") : raw;
     const objectPath = `/objects/${wildcardPath}`;
-    const objectFile = await objectStorageService.getObjectEntityFile(objectPath);
 
-    // --- Protected route example (uncomment when using replit-auth) ---
-    // if (!req.isAuthenticated()) {
-    //   res.status(401).json({ error: "Unauthorized" });
-    //   return;
-    // }
-    // const canAccess = await objectStorageService.canAccessObjectEntity({
-    //   userId: req.user.id,
-    //   objectFile,
-    //   requestedPermission: ObjectPermission.READ,
-    // });
-    // if (!canAccess) {
-    //   res.status(403).json({ error: "Forbidden" });
-    //   return;
-    // }
+    // Generate a 15-minute signed GET URL — no permanent link ever leaves the server
+    const signedUrl = await objectStorageService.getSignedEntityDownloadUrl(objectPath, 900);
 
-    const response = await objectStorageService.downloadObject(objectFile);
-
-    res.status(response.status);
-    response.headers.forEach((value, key) => res.setHeader(key, value));
-
-    if (response.body) {
-      const nodeStream = Readable.fromWeb(response.body as ReadableStream<Uint8Array>);
-      nodeStream.pipe(res);
-    } else {
-      res.end();
-    }
+    req.log.info({ objectPath }, "Signed download URL generated (15 min TTL)");
+    res.redirect(302, signedUrl);
   } catch (error) {
     if (error instanceof ObjectNotFoundError) {
       req.log.warn({ err: error }, "Object not found");
       res.status(404).json({ error: "Object not found" });
       return;
     }
-    req.log.error({ err: error }, "Error serving object");
-    res.status(500).json({ error: "Failed to serve object" });
+    req.log.error({ err: error }, "Error generating signed download URL");
+    res.status(500).json({ error: "Failed to generate signed URL" });
   }
 });
 

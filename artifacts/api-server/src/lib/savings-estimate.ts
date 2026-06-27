@@ -18,41 +18,47 @@ export interface EstimateResult {
 }
 
 const DISCLAIMER =
-  "Estimativas são indicativas e dependem da análise da conta, distribuidora, região, disponibilidade de parceiro e aprovação final. Valores não garantidos.";
+  "Estimativas são indicativas, sujeitas à análise da conta, distribuidora, região, disponibilidade de parceiro e aprovação final. Valores não garantidos.";
 
+/**
+ * GD discount bands by state (residential cota GD, net of TUSD-FIO).
+ * Source: TrocarLuz commercial analysis of available GD offers, June 2026.
+ * Ceiling: 22% (defensible upper bound for residential GD net discount after all fees).
+ * To replace with live partner offers: use the gd_offers table (per-partner-per-region, status+ticket gate).
+ */
 const GD_BANDS: Record<string, { min: number; max: number }> = {
-  SP: { min: 15, max: 30 },
-  RJ: { min: 14, max: 28 },
-  MG: { min: 15, max: 30 },
-  RS: { min: 13, max: 27 },
-  SC: { min: 13, max: 27 },
-  PR: { min: 14, max: 28 },
-  BA: { min: 12, max: 25 },
-  CE: { min: 12, max: 25 },
-  PE: { min: 12, max: 25 },
-  GO: { min: 13, max: 27 },
-  MT: { min: 13, max: 27 },
-  MS: { min: 13, max: 26 },
-  ES: { min: 14, max: 27 },
-  DF: { min: 13, max: 26 },
-  RN: { min: 12, max: 24 },
-  PB: { min: 11, max: 23 },
-  AL: { min: 11, max: 23 },
-  SE: { min: 11, max: 23 },
-  PI: { min: 11, max: 22 },
-  MA: { min: 11, max: 22 },
-  PA: { min: 10, max: 22 },
-  AM: { min: 10, max: 20 },
-  RO: { min: 10, max: 20 },
-  TO: { min: 11, max: 22 },
-  AC: { min: 10, max: 20 },
-  AP: { min: 10, max: 20 },
-  RR: { min: 10, max: 20 },
+  SP: { min: 12, max: 20 },
+  RJ: { min: 11, max: 18 },
+  MG: { min: 12, max: 20 },
+  RS: { min: 10, max: 17 },
+  SC: { min: 10, max: 17 },
+  PR: { min: 11, max: 18 },
+  BA: { min: 10, max: 15 },
+  CE: { min: 10, max: 15 },
+  PE: { min: 10, max: 15 },
+  GO: { min: 10, max: 17 },
+  MT: { min: 10, max: 17 },
+  MS: { min: 10, max: 16 },
+  ES: { min: 11, max: 17 },
+  DF: { min: 10, max: 16 },
+  RN: { min: 9, max: 14 },
+  PB: { min: 8, max: 13 },
+  AL: { min: 8, max: 13 },
+  SE: { min: 8, max: 13 },
+  PI: { min: 8, max: 12 },
+  MA: { min: 8, max: 12 },
+  PA: { min: 8, max: 12 },
+  AM: { min: 7, max: 11 },
+  RO: { min: 7, max: 11 },
+  TO: { min: 8, max: 12 },
+  AC: { min: 7, max: 11 },
+  AP: { min: 7, max: 11 },
+  RR: { min: 7, max: 11 },
 };
 
 export function computeEstimate(params: EstimateParams): EstimateResult {
   const stateUpper = params.state.toUpperCase();
-  const band = GD_BANDS[stateUpper] ?? { min: 10, max: 25 };
+  const band = GD_BANDS[stateUpper] ?? { min: 8, max: 15 };
 
   const bill = params.monthlyBillValue;
 
