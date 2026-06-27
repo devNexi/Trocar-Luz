@@ -1,0 +1,38 @@
+This was a large Phase 1 build. Before I trust it with real customer traffic and a partner launch, do a thorough, ADVERSARIAL self-audit — not a feature recap. For each item below, do not tell me it "should" work: open the actual file or run the actual request, show me the specific code/output that proves it, and flag honestly anything that is stubbed, hardcoded, missing, or uncertain. If something is not done or not verifiable, say so plainly — I would rather hear "not done" than "done" and discover otherwise.
+
+=== 1. COMPLIANCE & DATA (highest priority — show me, don't assert) ===
+- Print the exact label text of every consent checkbox on /enviar-conta. I need THREE distinct, separately-recorded consents: (a) receive WhatsApp messages, (b) SHARE the customer's data and electricity bill with partners to generate a proposal, (c) general LGPD/privacy acceptance. Show where each is stored on the switch_request record as its own field. If (b) — the partner-sharing consent — is missing or merged into another, flag it as a blocker.
+- Bill upload security: show me the bucket configuration and how the file URL is generated. Confirm uploaded bills are NOT publicly accessible — i.e. access is via short-lived signed URLs or an authenticated route, not a permanent public link. If the bucket is public or URLs are unsigned/permanent, flag it as a PII leak and tell me exactly how to fix it.
+- Confirm the privacy policy (/politica-de-privacidade) actually covers data sharing with energy partners and a retention period, not just boilerplate.
+
+=== 2. THE ESTIMATE NUMBERS (commercial risk) ===
+- Show me the source of the "13%–30% by state" discount bands. Confirm these are NOT presented to the user as a promise. Print the exact disclaimer text shown next to the estimate.
+- The 30% upper bound looks too high for residential GD (realistic is ~10–20%). Tell me where this number came from and let me change the bands to a defensible range in ONE place. Confirm the estimate copy never says "economize 30%" as a guarantee — only an indicative range with "sujeito à análise e disponibilidade."
+
+=== 3. SEO/GEO IS REAL, NOT ASSERTED (open source and show me) ===
+- Are the content, guide, state, and EV pages SERVER-RENDERED or static-prerendered, or are they client-rendered React? Show me how. If they are client-rendered, the SEO goal fails — tell me straight, and tell me what it takes to fix (SSR/prerender).
+- For one guide article, show me the actual rendered HTML a crawler receives (curl the URL, not a browser screenshot). Confirm the article text, <title>, meta description, and canonical tag are present in the raw HTML.
+- Show me sitemap.xml output and confirm every guide/state/EV page is in it. Confirm robots.txt allows indexing.
+- Confirm schema.org structured data is on the guide and FAQ pages (not just /carro-eletrico).
+
+=== 4. THE CORE FLOW ACTUALLY PERSISTS AND ROUTES (run it, show output) ===
+- Run a real POST to /api/savings-estimate and paste the request + response.
+- Run a real POST to /api/switch-requests with a test payload and paste the response (publicId). Then show me the actual DB row created in switch_requests AND the row(s) in switch_request_events. Confirm both consents and partner_share_consent are stored true.
+- Confirm partner matching: with a test state, show which partner the request routed to, and what happens when NO partner covers a state — does it go to a graceful waitlist/catch-all, or does it error/strand the user? Show the code path.
+- Hit GET /api/switch-requests/:publicId/status for that record and paste the response. Confirm it exposes ONLY customer-safe fields (no internal IDs, partner internals, or PII beyond what the customer should see).
+
+=== 5. WHATSAPP STATE (confirm what's real) ===
+- Confirm the WhatsApp send is currently a stub that does nothing, so I know the customer currently receives no message on submit. Show me where the confirmation message content lives and what env vars activate real sending.
+- When activated, confirm proactive messages are designed as approved utility-category templates via the official Cloud API (not free-form, not unofficial automation), and that this number is isolated for this consumer use only.
+
+=== 6. THE DB-OWNERSHIP RULE (no mixing) ===
+- Confirm switch_requests etc. live in TrocarLuz's OWN database, and that nothing writes directly into the Ótima Portal DB or Zoho. Show me the integration hook — confirm it's a stub/outbound call, not a direct cross-database write.
+
+=== 7. ABUSE & RESILIENCE ===
+- Confirm rate-limiting is active on BOTH /api/savings-estimate and /api/switch-requests (show the limit). Is there any captcha/bot protection on the public submit? If not, flag it — a public POST that creates DB rows + fires partner routing will get spammed.
+- Tell me what happens under a sudden spike (e.g. a partner blast sends thousands of submissions in an hour): does anything queue/throttle, or does it route all at once? This matters for a BYD-scale launch.
+
+=== 8. WHAT'S NOT DONE ===
+- List honestly everything that is stubbed, faked, hardcoded, placeholder, or deferred in this build — estimate logic, WhatsApp, integration hook, partner data, anything. I want the complete "not real yet" list in one place.
+
+Output format: go item by item (1–8). For each, give me a clear PASS / PARTIAL / FAIL / NOT DONE, the evidence (code snippet or request/response), and for anything not PASS, the specific fix. Do not summarise features — audit them.
