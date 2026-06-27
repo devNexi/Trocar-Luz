@@ -71,6 +71,103 @@ export interface LeadInput {
   utmCampaign?: string;
 }
 
+export type SavingsEstimateInputCustomerType = typeof SavingsEstimateInputCustomerType[keyof typeof SavingsEstimateInputCustomerType];
+
+
+export const SavingsEstimateInputCustomerType = {
+  residential: 'residential',
+  business: 'business',
+} as const;
+
+export interface SavingsEstimateInput {
+  cep?: string;
+  /**
+     * @minLength 2
+     * @maxLength 2
+     */
+  state: string;
+  distributor?: string;
+  /** @minimum 0 */
+  monthlyBillValue: number;
+  customerType: SavingsEstimateInputCustomerType;
+  propertyType?: string;
+  hasEv?: boolean;
+  source?: string;
+  campaign?: string;
+  partnerCode?: string;
+}
+
+export type SavingsEstimateResponseNextStep = typeof SavingsEstimateResponseNextStep[keyof typeof SavingsEstimateResponseNextStep];
+
+
+export const SavingsEstimateResponseNextStep = {
+  upload_bill: 'upload_bill',
+  join_waitlist: 'join_waitlist',
+} as const;
+
+export interface SavingsEstimateResponse {
+  eligible: boolean;
+  discountMin: number;
+  discountMax: number;
+  savingsMinBrl: number;
+  savingsMaxBrl: number;
+  nextStep: SavingsEstimateResponseNextStep;
+  disclaimer: string;
+  partnerAvailable: boolean;
+}
+
+export type SwitchRequestInputCustomerType = typeof SwitchRequestInputCustomerType[keyof typeof SwitchRequestInputCustomerType];
+
+
+export const SwitchRequestInputCustomerType = {
+  residential: 'residential',
+  business: 'business',
+} as const;
+
+export interface SwitchRequestInput {
+  /** @minLength 2 */
+  nome: string;
+  /** @minLength 8 */
+  whatsapp: string;
+  email?: string;
+  customerType: SwitchRequestInputCustomerType;
+  propertyType?: string;
+  hasEv?: boolean;
+  cep?: string;
+  /**
+     * @minLength 2
+     * @maxLength 2
+     */
+  state: string;
+  distributor?: string;
+  monthlyBillValue?: number;
+  estimatedDiscountMin?: number;
+  estimatedDiscountMax?: number;
+  estimatedSavingsMin?: number;
+  estimatedSavingsMax?: number;
+  billFileUrl?: string;
+  source?: string;
+  campaign?: string;
+  partnerCode?: string;
+  lgpdConsent: boolean;
+  partnerShareConsent: boolean;
+  whatsappConsent: boolean;
+}
+
+export interface SwitchRequestCreated {
+  publicId: string;
+  status: string;
+  statusLabel: string;
+  trackingUrl: string;
+}
+
+export interface SwitchRequestStatus {
+  publicId: string;
+  status: string;
+  statusLabel: string;
+  updatedAt: string;
+}
+
 export interface ArticleSummary {
   id: string;
   slug: string;
@@ -175,6 +272,21 @@ export interface State {
   aclAvailable2028: boolean;
   /** @nullable */
   description?: string | null;
+}
+
+export interface UploadUrlRequest {
+  /** @minLength 1 */
+  name: string;
+  /** @minimum 1 */
+  size: number;
+  /** @minLength 1 */
+  contentType: string;
+}
+
+export interface UploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+  metadata?: UploadUrlRequest;
 }
 
 export type ListArticlesParams = {

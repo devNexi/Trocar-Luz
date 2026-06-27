@@ -18,6 +18,14 @@ import GuideDetail from "@/pages/guide-detail";
 import FAQ from "@/pages/faq";
 import About from "@/pages/about";
 
+// New pages
+import CompararDesconto from "@/pages/comparar-desconto";
+import EnviarConta from "@/pages/enviar-conta";
+import StatusPage from "@/pages/status";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import CarroEletrico from "@/pages/carro-eletrico";
+import ParceirosEV from "@/pages/parceiros-ev";
+
 const queryClient = new QueryClient();
 
 function Router() {
@@ -29,13 +37,25 @@ function Router() {
       <Route path="/geracao-distribuida" component={GD} />
       <Route path="/mercado-livre-energia" component={MercadoLivre} />
       <Route path="/energia-2028" component={Energia2028} />
-      
+
+      {/* GD engine */}
+      <Route path="/comparar-desconto" component={CompararDesconto} />
+      <Route path="/enviar-conta" component={EnviarConta} />
+      <Route path="/status/:publicId" component={StatusPage} />
+
+      {/* Legal */}
+      <Route path="/politica-de-privacidade" component={PrivacyPolicy} />
+
+      {/* Content */}
+      <Route path="/carro-eletrico" component={CarroEletrico} />
+      <Route path="/parceiros/veiculos-eletricos" component={ParceirosEV} />
+
+      {/* Guides & states */}
       <Route path="/estados" component={StatesIndex} />
       <Route path="/estados/:estado" component={StateDetail} />
-      
       <Route path="/guias" component={GuidesIndex} />
       <Route path="/guias/:slug" component={GuideDetail} />
-      
+
       <Route path="/perguntas-frequentes" component={FAQ} />
       <Route path="/sobre" component={About} />
 

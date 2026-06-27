@@ -1,0 +1,128 @@
+You are building changes to the TrocarLuz website + backend.
+
+STACK
+- Frontend: React + Vite, wouter routing
+- Backend: Express API
+- DB: PostgreSQL + Drizzle (TrocarLuz's OWN database)
+- Brand: #00B86B (CTA only) · #0A1628 (navy) · #6ABF4B (GD accent on light) · #FFD000 (only on navy) · no gradients · max 2 brand colours per section
+- Fonts: Sora 800 (headings) · Inter (body/UI)
+- Existing API: POST /api/leads · GET/POST /api/articles · GET/POST /api/faqs · GET /api/states
+- All user-facing copy in Brazilian Portuguese.
+
+STRATEGIC OBJECTIVE
+Turn TrocarLuz from an educational lead-capture site into a public residential GD (geração distribuída) comparison + switch-request engine, with the SEO/authority layer expanded in parallel.
+
+POSITIONING (critical)
+TrocarLuz means "compare and choose the best way to reduce your electricity bill" — NOT "change supplier" and NOT "trocar distribuidora."
+For residential GD, NEVER imply the customer changes their distributor. Use:
+"Você continua conectado à sua distribuidora, mas pode receber créditos/descontos na conta por meio de geração distribuída, dependendo da disponibilidade na sua região."
+TrocarLuz ORCHESTRATES and ROUTES; the GD PARTNER executes the enrolment. Do not build contract automation.
+Primary CTA: "Ver desconto disponível" · Secondary CTA: "Enviar conta de luz"
+
+BUILD IN TWO PHASES — do not build everything at once.
+
+=== COMPLIANCE & DATA (applies to all phases — do not skip) ===
+
+WhatsApp:
+- This is OPT-IN, inbound (the user requests messages on the site). Use the OFFICIAL WhatsApp Business Cloud API only — no unofficial automation.
+- The proposal-ready message is sent outside the 24-hour window, so it MUST be a pre-approved UTILITY-category template. Submit all proactive messages as approved templates.
+- Implement an inbound webhook to capture the customer's SIM/NÃO reply and map it to the switch request.
+- This WhatsApp number/Business Manager is a CLEAN, DEDICATED consumer channel. It must never be used for, or linked to, cold outbound outreach. Keep it isolated.
+
+LGPD / data protection:
+- Two separate consent checkboxes at switch-request submission, both required:
+  1. "Aceito receber mensagens da TrocarLuz/Ótima sobre minha análise e proposta pelo WhatsApp."
+  2. "Autorizo o compartilhamento dos meus dados e da minha conta de luz com parceiros para a geração de uma proposta de economia."
+- Link to a privacy policy. Store a data-retention rule.
+- Bill files must be stored securely with signed/access-controlled URLs — never publicly accessible. Validate file type and size on upload.
+
+Consumer protection (CDC):
+- Estimates must be clearly indicative, never guaranteed.
+- The 48h proposal validity must be framed as revalidation tied to real partner conditions, never fabricated scarcity. Use:
+  "A proposta fica válida por 48 horas porque disponibilidade, desconto e condições do parceiro podem mudar. Depois desse prazo, será necessário revalidar."
+
+=== SEO / GEO (do this — it's a primary goal) ===
+- Server-side render or statically prerender all content, state, and guide pages (a client-only SPA will not rank or get cited by AI engines).
+- Per-page <title>, meta description, canonical URL.
+- schema.org structured data (Article, FAQPage, BreadcrumbList, Organization where relevant).
+- Generate sitemap.xml and robots.txt.
+- Write content in a factual, Q&A-structured, citable style optimised for both search and AI answer engines.
+
+=== DATA OWNERSHIP (architectural rule — do not violate) ===
+- All new tables live in TrocarLuz's OWN Postgres database.
+- Do NOT write directly into the Ótima Portal database (separate Neon instance) or Zoho.
+- Design a clean handoff: on switch-request submission, expose/call an integration hook that can later push a deal into the Ótima Portal and a lead into Zoho. Stub it if those integrations aren't live yet; do not couple the databases.
+
+============================================================
+PHASE 1 — ENGINEERING (ship fast)
+============================================================
+Goal: a working capture → estimate → bill → WhatsApp → routed switch request. Partner proposal return can be semi-manual at first (ops receives partner proposal and triggers the customer message); do NOT build the full partner-submission machine yet.
+
+Customer flow:
+1. User enters CEP, estado, distribuidora, valor médio da conta, tipo de imóvel, tipo (residência/empresa), possui carro elétrico? (sim/não).
+2. User sees an INDICATIVE savings range with disclaimer.
+3. User enters WhatsApp (mandatory) + both consent checkboxes.
+4. User uploads electricity bill (secure storage).
+5. User submits switch request → saved to DB → event SWITCH_REQUEST_SUBMITTED → integration hook fired → routed to the matching GD partner (by region) → confirmation WhatsApp template sent.
+
+Estimate logic (honest):
+- Rule-based, region-aware, clearly non-binding. Show a realistic GD discount range (e.g. typical residential GD savings band) for the region, NOT a fabricated precise number. Disclaimer:
+  "Estimativas são indicativas e dependem da análise da conta, distribuidora, região, disponibilidade de parceiro e aprovação final."
+
+Partner matching:
+- Create a `partners` table/config keyed by state/distribuidora coverage. For MVP a lookup table (or single partner) is fine. If no partner covers the region → graceful "not available yet" path → capture to waitlist + offer content. Never strand the user.
+
+Pages (Phase 1):
+- NEW /comparar-desconto — the estimate calculator (inputs + indicative output + "Enviar conta para confirmar" CTA).
+- NEW /enviar-conta — bill upload + mandatory WhatsApp + both consents + submit.
+- MODIFY / (Home) — primary CTA "Ver desconto disponível", secondary "Enviar conta de luz". Hero: "Compare descontos na sua conta de luz em poucos minutos." Sub: "Para residências, a economia hoje normalmente vem por geração distribuída. Para empresas elegíveis, também avaliamos o Mercado Livre de Energia."
+- MODIFY /para-sua-casa — main residential conversion hub: embed the calculator above the fold; add EV section "Sua conta subiu depois do carro elétrico?"; explain GD now + residential free market later.
+
+DB (Phase 1):
+- switch_requests: id, public_id, lead_id (nullable), track (default AUTO_GD_RESIDENTIAL), status, name, whatsapp, email (nullable), customer_type, property_type, has_ev, cep, state, distributor, monthly_bill_value, estimated_discount_min/max, estimated_savings_min/max, bill_file_url (secure), source, campaign, partner_code (nullable), lgpd_consent, partner_share_consent, whatsapp_consent, created_at, updated_at, proposal_valid_until (nullable).
+- switch_request_events: id, switch_request_id, event_type, event_payload (jsonb), created_at.
+- partners: id, name, coverage (state/distribuidora), active, contact route.
+
+Endpoints (Phase 1):
+- POST /api/savings-estimate → indicative range + eligibility + nextStep + disclaimer. Rate-limited.
+- POST /api/switch-requests → requires WhatsApp + both consents + bill; creates request + event; fires integration hook + confirmation template. Rate-limited / captcha.
+- GET /api/switch-requests/:public_id/status → safe customer-facing status only.
+
+Anti-abuse: rate-limit + captcha on public POST endpoints.
+
+WhatsApp (Phase 1) — approved template:
+"Recebemos sua solicitação na TrocarLuz. Vamos analisar sua conta e verificar opções disponíveis para sua região. Se houver proposta disponível, enviaremos por aqui."
+
+============================================================
+PHASE 1 — CONTENT (in parallel, low-engineering, uses existing articles/CMS)
+============================================================
+- Positioning copy updates on /geracao-distribuida (add calculator CTA near top; "GD não é trocar de distribuidora..."), /mercado-livre-energia ("Enquanto o Mercado Livre residencial não abre totalmente, veja opções disponíveis hoje"), /energia-2028 (add "ver opções disponíveis hoje").
+- NEW /carro-eletrico — EV-owner landing (SEO: reduce electricity bill after buying an EV; generic EV-brand use case; CTA to calculator).
+- NEW /parceiros/veiculos-eletricos — partner page for EV brands, dealerships, e-bike brands, charger installers (value prop: EV customers' bills rise; TrocarLuz helps them compare GD savings; CTA: partner enquiry).
+- Seed guide articles (Q&A-structured, SSR/prerendered): "Como reduzir a conta de luz depois de comprar um carro elétrico" · "Geração distribuída para residências: como funciona" · "Energia por assinatura vale a pena?" · "Posso trocar de fornecedor de energia em casa?" · "Mercado Livre de Energia residencial: quando começa?" · "Quanto custa carregar um carro elétrico em casa?" · "GD vs Mercado Livre: qual é a diferença?" · "Conta de luz alta em apartamento: tenho opção?"
+- Add calculator CTA to /estados/:estado pages.
+
+============================================================
+PHASE 2 — ENGINEERING (only after GD partners reliably return proposals)
+============================================================
+- partner_proposals table: id, switch_request_id, partner_id, partner_name, status (accepted/rejected), proposed_discount, estimated_monthly_saving, contract_term, proposal_file_url, valid_until, notes, rejection_reason, created_at.
+- Partner submission form / secure link (token-protected) → POST /api/partner-proposals → sets status PARTNER_PROPOSAL_RECEIVED, proposal_valid_until = 48h from receipt.
+- POST /api/switch-requests/:id/customer-response (yes/no) — driven by the WhatsApp inbound webhook → CUSTOMER_ACCEPTED / CUSTOMER_DECLINED.
+- Scheduled job / POST /api/switch-requests/:id/expire → if proposal_valid_until passed with no response → PROPOSAL_EXPIRED / REVALIDATION_REQUIRED.
+- NEW /status/:public_id — customer status page (received → em análise → enviada ao parceiro → proposta pronta → aguardando resposta → expirada → documentos solicitados → em contratação → concluído → não elegível).
+- WhatsApp templates (approved): proposal-ready, 24h reminder, expired (use the Portuguese copy below).
+
+Status state machine: ESTIMATE_SHOWN · WHATSAPP_CAPTURED · BILL_UPLOADED · SWITCH_REQUEST_SUBMITTED · AUTO_ELIGIBILITY_CHECK · SENT_TO_GD_PARTNER · PARTNER_REVIEWING · PARTNER_PROPOSAL_RECEIVED · PROPOSAL_SENT_TO_CUSTOMER · CUSTOMER_ACCEPTED · CUSTOMER_DECLINED · PROPOSAL_EXPIRED · REVALIDATION_REQUIRED · DOCUMENTS_REQUESTED · CONTRACTING · SWITCHED_CLOSED_WON · REJECTED_NOT_ELIGIBLE. System owns all transitions except partner review and final contracting; humans handle exceptions only.
+
+WhatsApp templates (Phase 2, approved utility templates):
+- Proposal ready: "Sua proposta de economia está pronta. Economia estimada: {discount}% ou cerca de R${saving}/mês. A proposta fica válida por 48 horas porque disponibilidade e condições do parceiro podem mudar. Responda SIM para seguir ou NÃO para encerrar."
+- 24h reminder: "Lembrete: sua proposta TrocarLuz fica válida até {validUntil}. Depois desse prazo, será necessário revalidar as condições com o parceiro."
+- Expired: "O prazo da proposta expirou. Se ainda quiser seguir, podemos solicitar uma nova validação, sujeita à disponibilidade."
+
+DO NOT BUILD (any phase): full customer account system · full partner portal/login · payments · supplier marketplace/auction · mobile app · Clube TT/rewards · full TrocarTudo multi-category · CRM replacement · GD contract automation.
+
+ACCEPTANCE CRITERIA
+Phase 1: estimate works on /comparar-desconto; switch request submits with both consents + secure bill upload; saved to TrocarLuz DB; integration hook fires; confirmation WhatsApp template sends; partner matching routes by region with a graceful no-partner→waitlist path; public endpoints rate-limited; content pages SSR/prerendered with meta + schema + sitemap; no claim of changing distributor for GD; no guaranteed-savings claim; all copy pt-BR.
+Phase 2: partner proposal submission → 48h validity → customer SIM/NÃO via WhatsApp webhook → status transitions → status page → expiry job.
+
+Tracking: capture source / campaign / partner_code on every estimate and switch request (essential for BYD/GWM/Lev/dealer attribution).

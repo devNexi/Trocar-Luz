@@ -1,0 +1,1 @@
+- [GD Engine build](gd-engine-build.md) — switch-request flow, DB tables, route patterns, and critical gotchas for this codebase.

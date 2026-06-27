@@ -18,6 +18,10 @@ tags:
     description: Frequently asked questions
   - name: states
     description: Brazilian states energy data
+  - name: switchRequests
+    description: GD switch request flow
+  - name: Storage
+    description: Object storage upload and serving endpoints
 
 paths:
   /healthz:
@@ -53,6 +57,93 @@ paths:
                 $ref: "#/components/schemas/Lead"
         "400":
           description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /savings-estimate:
+    post:
+      operationId: getSavingsEstimate
+      tags: [switchRequests]
+      summary: Get indicative GD savings estimate for a region
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavingsEstimateInput"
+      responses:
+        "200":
+          description: Indicative savings estimate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavingsEstimateResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /switch-requests:
+    post:
+      operationId: createSwitchRequest
+      tags: [switchRequests]
+      summary: Submit a GD switch request with bill and LGPD consents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SwitchRequestInput"
+      responses:
+        "201":
+          description: Switch request created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SwitchRequestCreated"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /switch-requests/{publicId}/status:
+    get:
+      operationId: getSwitchRequestStatus
+      tags: [switchRequests]
+      summary: Get public-safe status of a switch request
+      parameters:
+        - name: publicId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Switch request status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SwitchRequestStatus"
+        "404":
+          description: Not found
           content:
             application/json:
               schema:
@@ -227,6 +318,89 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /storage/uploads/request-url:
+    post:
+      tags: [Storage]
+      operationId: requestUploadUrl
+      summary: Request a presigned URL for file upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadUrlRequest'
+      responses:
+        '200':
+          description: Presigned upload URL generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadUrlResponse'
+        '400':
+          description: Missing or invalid required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to generate upload URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /storage/public-objects/{filePath}:
+    get:
+      tags: [Storage]
+      operationId: getPublicObject
+      summary: Serve a public asset
+      parameters:
+        - name: filePath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object content streamed
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /storage/objects/{objectPath}:
+    get:
+      tags: [Storage]
+      operationId: getStorageObject
+      summary: Serve a private object entity
+      parameters:
+        - name: objectPath
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object content streamed
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Object not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -333,6 +507,161 @@ components:
         - nome
         - whatsapp
         - estado
+
+    SavingsEstimateInput:
+      type: object
+      properties:
+        cep:
+          type: string
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+        distributor:
+          type: string
+        monthlyBillValue:
+          type: number
+          minimum: 0
+        customerType:
+          type: string
+          enum: [residential, business]
+        propertyType:
+          type: string
+        hasEv:
+          type: boolean
+        source:
+          type: string
+        campaign:
+          type: string
+        partnerCode:
+          type: string
+      required:
+        - state
+        - monthlyBillValue
+        - customerType
+
+    SavingsEstimateResponse:
+      type: object
+      properties:
+        eligible:
+          type: boolean
+        discountMin:
+          type: number
+        discountMax:
+          type: number
+        savingsMinBrl:
+          type: number
+        savingsMaxBrl:
+          type: number
+        nextStep:
+          type: string
+          enum: [upload_bill, join_waitlist]
+        disclaimer:
+          type: string
+        partnerAvailable:
+          type: boolean
+      required:
+        - eligible
+        - discountMin
+        - discountMax
+        - savingsMinBrl
+        - savingsMaxBrl
+        - nextStep
+        - disclaimer
+        - partnerAvailable
+
+    SwitchRequestInput:
+      type: object
+      properties:
+        nome:
+          type: string
+          minLength: 2
+        whatsapp:
+          type: string
+          minLength: 8
+        email:
+          type: string
+        customerType:
+          type: string
+          enum: [residential, business]
+        propertyType:
+          type: string
+        hasEv:
+          type: boolean
+        cep:
+          type: string
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+        distributor:
+          type: string
+        monthlyBillValue:
+          type: number
+        estimatedDiscountMin:
+          type: number
+        estimatedDiscountMax:
+          type: number
+        estimatedSavingsMin:
+          type: number
+        estimatedSavingsMax:
+          type: number
+        billFileUrl:
+          type: string
+        source:
+          type: string
+        campaign:
+          type: string
+        partnerCode:
+          type: string
+        lgpdConsent:
+          type: boolean
+        partnerShareConsent:
+          type: boolean
+        whatsappConsent:
+          type: boolean
+      required:
+        - nome
+        - whatsapp
+        - customerType
+        - state
+        - lgpdConsent
+        - partnerShareConsent
+        - whatsappConsent
+
+    SwitchRequestCreated:
+      type: object
+      properties:
+        publicId:
+          type: string
+        status:
+          type: string
+        statusLabel:
+          type: string
+        trackingUrl:
+          type: string
+      required:
+        - publicId
+        - status
+        - statusLabel
+        - trackingUrl
+
+    SwitchRequestStatus:
+      type: object
+      properties:
+        publicId:
+          type: string
+        status:
+          type: string
+        statusLabel:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - publicId
+        - status
+        - statusLabel
+        - updatedAt
 
     ArticleSummary:
       type: object
@@ -522,3 +851,29 @@ components:
         - distributor
         - gdAvailable
         - aclAvailable2028
+
+    UploadUrlRequest:
+      type: object
+      required: [name, size, contentType]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        size:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          minLength: 1
+
+    UploadUrlResponse:
+      type: object
+      required: [uploadURL, objectPath]
+      properties:
+        uploadURL:
+          type: string
+          format: uri
+        objectPath:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/UploadUrlRequest'

@@ -46,6 +46,93 @@ export const CreateLeadBody = zod.object({
 
 
 /**
+ * @summary Get indicative GD savings estimate for a region
+ */
+export const getSavingsEstimateBodyStateMin = 2;
+export const getSavingsEstimateBodyStateMax = 2;
+
+export const getSavingsEstimateBodyMonthlyBillValueMin = 0;
+
+
+
+export const GetSavingsEstimateBody = zod.object({
+  "cep": zod.string().optional(),
+  "state": zod.string().min(getSavingsEstimateBodyStateMin).max(getSavingsEstimateBodyStateMax),
+  "distributor": zod.string().optional(),
+  "monthlyBillValue": zod.number().min(getSavingsEstimateBodyMonthlyBillValueMin),
+  "customerType": zod.enum(['residential', 'business']),
+  "propertyType": zod.string().optional(),
+  "hasEv": zod.boolean().optional(),
+  "source": zod.string().optional(),
+  "campaign": zod.string().optional(),
+  "partnerCode": zod.string().optional()
+})
+
+export const GetSavingsEstimateResponse = zod.object({
+  "eligible": zod.boolean(),
+  "discountMin": zod.number(),
+  "discountMax": zod.number(),
+  "savingsMinBrl": zod.number(),
+  "savingsMaxBrl": zod.number(),
+  "nextStep": zod.enum(['upload_bill', 'join_waitlist']),
+  "disclaimer": zod.string(),
+  "partnerAvailable": zod.boolean()
+})
+
+
+/**
+ * @summary Submit a GD switch request with bill and LGPD consents
+ */
+export const createSwitchRequestBodyNomeMin = 2;
+
+export const createSwitchRequestBodyWhatsappMin = 8;
+
+export const createSwitchRequestBodyStateMin = 2;
+export const createSwitchRequestBodyStateMax = 2;
+
+
+
+export const CreateSwitchRequestBody = zod.object({
+  "nome": zod.string().min(createSwitchRequestBodyNomeMin),
+  "whatsapp": zod.string().min(createSwitchRequestBodyWhatsappMin),
+  "email": zod.string().optional(),
+  "customerType": zod.enum(['residential', 'business']),
+  "propertyType": zod.string().optional(),
+  "hasEv": zod.boolean().optional(),
+  "cep": zod.string().optional(),
+  "state": zod.string().min(createSwitchRequestBodyStateMin).max(createSwitchRequestBodyStateMax),
+  "distributor": zod.string().optional(),
+  "monthlyBillValue": zod.number().optional(),
+  "estimatedDiscountMin": zod.number().optional(),
+  "estimatedDiscountMax": zod.number().optional(),
+  "estimatedSavingsMin": zod.number().optional(),
+  "estimatedSavingsMax": zod.number().optional(),
+  "billFileUrl": zod.string().optional(),
+  "source": zod.string().optional(),
+  "campaign": zod.string().optional(),
+  "partnerCode": zod.string().optional(),
+  "lgpdConsent": zod.boolean(),
+  "partnerShareConsent": zod.boolean(),
+  "whatsappConsent": zod.boolean()
+})
+
+
+/**
+ * @summary Get public-safe status of a switch request
+ */
+export const GetSwitchRequestStatusParams = zod.object({
+  "publicId": zod.coerce.string()
+})
+
+export const GetSwitchRequestStatusResponse = zod.object({
+  "publicId": zod.string(),
+  "status": zod.string(),
+  "statusLabel": zod.string(),
+  "updatedAt": zod.string()
+})
+
+
+/**
  * @summary List published articles
  */
 export const listArticlesQueryLimitDefault = 10;
@@ -198,6 +285,52 @@ export const GetStateResponse = zod.object({
   "gdAvailable": zod.boolean(),
   "aclAvailable2028": zod.boolean(),
   "description": zod.string().nullish()
+})
+
+
+/**
+ * @summary Request a presigned URL for file upload
+ */
+
+
+
+
+
+export const RequestUploadUrlBody = zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+})
+
+
+
+
+
+
+export const RequestUploadUrlResponse = zod.object({
+  "uploadURL": zod.string().url(),
+  "objectPath": zod.string(),
+  "metadata": zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+}).optional()
+})
+
+
+/**
+ * @summary Serve a public asset
+ */
+export const GetPublicObjectParams = zod.object({
+  "filePath": zod.coerce.string()
+})
+
+
+/**
+ * @summary Serve a private object entity
+ */
+export const GetStorageObjectParams = zod.object({
+  "objectPath": zod.coerce.string()
 })
 
 

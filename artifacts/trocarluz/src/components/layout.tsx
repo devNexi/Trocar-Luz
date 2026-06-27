@@ -21,12 +21,12 @@ export function Layout({ children }: { children: ReactNode }) {
   }, [isHome]);
 
   const navLinks = [
+    { href: "/comparar-desconto", label: "Ver desconto" },
     { href: "/para-sua-casa", label: "Para sua casa" },
     { href: "/para-sua-empresa", label: "Para sua empresa" },
     { href: "/geracao-distribuida", label: "Geração Distribuída" },
-    { href: "/energia-2028", label: "Energia 2028" },
+    { href: "/carro-eletrico", label: "Carro Elétrico" },
     { href: "/guias", label: "Guias" },
-    { href: "/estados", label: "Por Estado" },
     { href: "/perguntas-frequentes", label: "Dúvidas" },
   ];
 
@@ -110,16 +110,19 @@ export function Layout({ children }: { children: ReactNode }) {
             <div>
               <h4 className="font-display font-semibold text-lg mb-4">Serviços</h4>
               <ul className="space-y-2">
+                <li><Link href="/comparar-desconto" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Ver desconto disponível</Link></li>
+                <li><Link href="/enviar-conta" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Enviar conta de luz</Link></li>
                 <li><Link href="/para-sua-casa" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Para residências</Link></li>
                 <li><Link href="/para-sua-empresa" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Para empresas</Link></li>
-                <li><Link href="/geracao-distribuida" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Geração Distribuída</Link></li>
-                <li><Link href="/mercado-livre-energia" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Mercado Livre</Link></li>
+                <li><Link href="/carro-eletrico" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Carro Elétrico</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-display font-semibold text-lg mb-4">Recursos</h4>
               <ul className="space-y-2">
+                <li><Link href="/geracao-distribuida" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Geração Distribuída</Link></li>
+                <li><Link href="/mercado-livre-energia" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Mercado Livre</Link></li>
                 <li><Link href="/estados" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Por Estado</Link></li>
                 <li><Link href="/energia-2028" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Energia 2028</Link></li>
                 <li><Link href="/guias" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Guias</Link></li>
@@ -131,13 +134,18 @@ export function Layout({ children }: { children: ReactNode }) {
               <h4 className="font-display font-semibold text-lg mb-4">Empresa</h4>
               <ul className="space-y-2">
                 <li><Link href="/sobre" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Sobre nós</Link></li>
+                <li><Link href="/parceiros/veiculos-eletricos" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Parceiros EV</Link></li>
+                <li><Link href="/politica-de-privacidade" className="text-[#9EA3B0] hover:text-white text-sm transition-colors">Política de Privacidade</Link></li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-[#2a3047] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-[#6B7080]">
-            <p>© {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados.</p>
-            <p>Ajudando o Brasil a comparar melhor e economizar.</p>
+            <p>© {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados. Broker certificado CCEE.</p>
+            <div className="flex gap-4">
+              <Link href="/politica-de-privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link>
+              <span>Ajudando o Brasil a comparar melhor e economizar.</span>
+            </div>
           </div>
         </div>
       </footer>

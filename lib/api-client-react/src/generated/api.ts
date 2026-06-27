@@ -31,7 +31,14 @@ import type {
   LeadInput,
   ListArticlesParams,
   ListFaqsParams,
-  State
+  SavingsEstimateInput,
+  SavingsEstimateResponse,
+  State,
+  SwitchRequestCreated,
+  SwitchRequestInput,
+  SwitchRequestStatus,
+  UploadUrlRequest,
+  UploadUrlResponse
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -193,6 +200,225 @@ export const useCreateLead = <TError = ErrorType<ErrorResponse>,
       > => {
       return useMutation(getCreateLeadMutationOptions(options));
     }
+
+export const getGetSavingsEstimateUrl = () => {
+
+
+
+
+  return `/api/savings-estimate`
+}
+
+/**
+ * @summary Get indicative GD savings estimate for a region
+ */
+export const getSavingsEstimate = async (savingsEstimateInput: SavingsEstimateInput, options?: RequestInit): Promise<SavingsEstimateResponse> => {
+
+  return customFetch<SavingsEstimateResponse>(getGetSavingsEstimateUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      savingsEstimateInput,)
+  }
+);}
+
+
+
+
+export const getGetSavingsEstimateMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSavingsEstimate>>, TError,{data: BodyType<SavingsEstimateInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof getSavingsEstimate>>, TError,{data: BodyType<SavingsEstimateInput>}, TContext> => {
+
+const mutationKey = ['getSavingsEstimate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getSavingsEstimate>>, {data: BodyType<SavingsEstimateInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  getSavingsEstimate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetSavingsEstimateMutationResult = NonNullable<Awaited<ReturnType<typeof getSavingsEstimate>>>
+    export type GetSavingsEstimateMutationBody = BodyType<SavingsEstimateInput>
+    export type GetSavingsEstimateMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Get indicative GD savings estimate for a region
+ */
+export const useGetSavingsEstimate = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getSavingsEstimate>>, TError,{data: BodyType<SavingsEstimateInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof getSavingsEstimate>>,
+        TError,
+        {data: BodyType<SavingsEstimateInput>},
+        TContext
+      > => {
+      return useMutation(getGetSavingsEstimateMutationOptions(options));
+    }
+
+export const getCreateSwitchRequestUrl = () => {
+
+
+
+
+  return `/api/switch-requests`
+}
+
+/**
+ * @summary Submit a GD switch request with bill and LGPD consents
+ */
+export const createSwitchRequest = async (switchRequestInput: SwitchRequestInput, options?: RequestInit): Promise<SwitchRequestCreated> => {
+
+  return customFetch<SwitchRequestCreated>(getCreateSwitchRequestUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      switchRequestInput,)
+  }
+);}
+
+
+
+
+export const getCreateSwitchRequestMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSwitchRequest>>, TError,{data: BodyType<SwitchRequestInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createSwitchRequest>>, TError,{data: BodyType<SwitchRequestInput>}, TContext> => {
+
+const mutationKey = ['createSwitchRequest'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSwitchRequest>>, {data: BodyType<SwitchRequestInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createSwitchRequest(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateSwitchRequestMutationResult = NonNullable<Awaited<ReturnType<typeof createSwitchRequest>>>
+    export type CreateSwitchRequestMutationBody = BodyType<SwitchRequestInput>
+    export type CreateSwitchRequestMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Submit a GD switch request with bill and LGPD consents
+ */
+export const useCreateSwitchRequest = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSwitchRequest>>, TError,{data: BodyType<SwitchRequestInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createSwitchRequest>>,
+        TError,
+        {data: BodyType<SwitchRequestInput>},
+        TContext
+      > => {
+      return useMutation(getCreateSwitchRequestMutationOptions(options));
+    }
+
+export const getGetSwitchRequestStatusUrl = (publicId: string,) => {
+
+
+
+
+  return `/api/switch-requests/${publicId}/status`
+}
+
+/**
+ * @summary Get public-safe status of a switch request
+ */
+export const getSwitchRequestStatus = async (publicId: string, options?: RequestInit): Promise<SwitchRequestStatus> => {
+
+  return customFetch<SwitchRequestStatus>(getGetSwitchRequestStatusUrl(publicId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetSwitchRequestStatusQueryKey = (publicId: string,) => {
+    return [
+    `/api/switch-requests/${publicId}/status`
+    ] as const;
+    }
+
+
+export const getGetSwitchRequestStatusQueryOptions = <TData = Awaited<ReturnType<typeof getSwitchRequestStatus>>, TError = ErrorType<ErrorResponse>>(publicId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSwitchRequestStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetSwitchRequestStatusQueryKey(publicId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSwitchRequestStatus>>> = ({ signal }) => getSwitchRequestStatus(publicId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(publicId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSwitchRequestStatus>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetSwitchRequestStatusQueryResult = NonNullable<Awaited<ReturnType<typeof getSwitchRequestStatus>>>
+export type GetSwitchRequestStatusQueryError = ErrorType<ErrorResponse>
+
+
+/**
+ * @summary Get public-safe status of a switch request
+ */
+
+export function useGetSwitchRequestStatus<TData = Awaited<ReturnType<typeof getSwitchRequestStatus>>, TError = ErrorType<ErrorResponse>>(
+ publicId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getSwitchRequestStatus>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetSwitchRequestStatusQueryOptions(publicId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 
 export const getListArticlesUrl = (params?: ListArticlesParams,) => {
   const normalizedParams = new URLSearchParams();
@@ -723,6 +949,231 @@ export function useGetState<TData = Awaited<ReturnType<typeof getState>>, TError
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
   const queryOptions = getGetStateQueryOptions(slug,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getRequestUploadUrlUrl = () => {
+
+
+
+
+  return `/api/storage/uploads/request-url`
+}
+
+/**
+ * @summary Request a presigned URL for file upload
+ */
+export const requestUploadUrl = async (uploadUrlRequest: UploadUrlRequest, options?: RequestInit): Promise<UploadUrlResponse> => {
+
+  return customFetch<UploadUrlResponse>(getRequestUploadUrlUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      uploadUrlRequest,)
+  }
+);}
+
+
+
+
+export const getRequestUploadUrlMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestUploadUrl>>, TError,{data: BodyType<UploadUrlRequest>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof requestUploadUrl>>, TError,{data: BodyType<UploadUrlRequest>}, TContext> => {
+
+const mutationKey = ['requestUploadUrl'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof requestUploadUrl>>, {data: BodyType<UploadUrlRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  requestUploadUrl(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestUploadUrlMutationResult = NonNullable<Awaited<ReturnType<typeof requestUploadUrl>>>
+    export type RequestUploadUrlMutationBody = BodyType<UploadUrlRequest>
+    export type RequestUploadUrlMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Request a presigned URL for file upload
+ */
+export const useRequestUploadUrl = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof requestUploadUrl>>, TError,{data: BodyType<UploadUrlRequest>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof requestUploadUrl>>,
+        TError,
+        {data: BodyType<UploadUrlRequest>},
+        TContext
+      > => {
+      return useMutation(getRequestUploadUrlMutationOptions(options));
+    }
+
+export const getGetPublicObjectUrl = (filePath: string,) => {
+
+
+
+
+  return `/api/storage/public-objects/${filePath}`
+}
+
+/**
+ * @summary Serve a public asset
+ */
+export const getPublicObject = async (filePath: string, options?: RequestInit): Promise<Blob> => {
+
+  return customFetch<Blob>(getGetPublicObjectUrl(filePath),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetPublicObjectQueryKey = (filePath: string,) => {
+    return [
+    `/api/storage/public-objects/${filePath}`
+    ] as const;
+    }
+
+
+export const getGetPublicObjectQueryOptions = <TData = Awaited<ReturnType<typeof getPublicObject>>, TError = ErrorType<ErrorResponse>>(filePath: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPublicObject>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPublicObjectQueryKey(filePath);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicObject>>> = ({ signal }) => getPublicObject(filePath, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(filePath), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPublicObject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPublicObjectQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicObject>>>
+export type GetPublicObjectQueryError = ErrorType<ErrorResponse>
+
+
+/**
+ * @summary Serve a public asset
+ */
+
+export function useGetPublicObject<TData = Awaited<ReturnType<typeof getPublicObject>>, TError = ErrorType<ErrorResponse>>(
+ filePath: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPublicObject>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetPublicObjectQueryOptions(filePath,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetStorageObjectUrl = (objectPath: string,) => {
+
+
+
+
+  return `/api/storage/objects/${objectPath}`
+}
+
+/**
+ * @summary Serve a private object entity
+ */
+export const getStorageObject = async (objectPath: string, options?: RequestInit): Promise<Blob> => {
+
+  return customFetch<Blob>(getGetStorageObjectUrl(objectPath),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetStorageObjectQueryKey = (objectPath: string,) => {
+    return [
+    `/api/storage/objects/${objectPath}`
+    ] as const;
+    }
+
+
+export const getGetStorageObjectQueryOptions = <TData = Awaited<ReturnType<typeof getStorageObject>>, TError = ErrorType<ErrorResponse>>(objectPath: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStorageObject>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetStorageObjectQueryKey(objectPath);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStorageObject>>> = ({ signal }) => getStorageObject(objectPath, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(objectPath), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getStorageObject>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetStorageObjectQueryResult = NonNullable<Awaited<ReturnType<typeof getStorageObject>>>
+export type GetStorageObjectQueryError = ErrorType<ErrorResponse>
+
+
+/**
+ * @summary Serve a private object entity
+ */
+
+export function useGetStorageObject<TData = Awaited<ReturnType<typeof getStorageObject>>, TError = ErrorType<ErrorResponse>>(
+ objectPath: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStorageObject>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetStorageObjectQueryOptions(objectPath,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

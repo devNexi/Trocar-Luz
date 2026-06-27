@@ -69,7 +69,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link
-                href="/para-sua-casa"
+                href="/comparar-desconto"
                 className="text-center text-white font-display font-semibold transition-opacity hover:opacity-90"
                 style={{
                   backgroundColor: '#00B86B',
@@ -79,10 +79,10 @@ export default function Home() {
                   textDecoration: 'none',
                 }}
               >
-                Quero economizar em casa
+                Ver desconto disponível
               </Link>
               <Link
-                href="/para-sua-empresa"
+                href="/enviar-conta"
                 className="text-center text-white font-display font-semibold transition-colors hover:bg-white/10"
                 style={{
                   border: '2px solid rgba(255,255,255,0.9)',
@@ -92,7 +92,7 @@ export default function Home() {
                   textDecoration: 'none',
                 }}
               >
-                Para minha empresa
+                Enviar conta de luz
               </Link>
             </div>
             <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>

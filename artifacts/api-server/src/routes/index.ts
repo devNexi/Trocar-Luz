@@ -4,6 +4,9 @@ import leadsRouter from "./leads";
 import articlesRouter from "./articles";
 import faqsRouter from "./faqs";
 import statesRouter from "./states";
+import switchRequestsRouter from "./switch-requests";
+import storageRouter from "./storage";
+import sitemapRouter from "./sitemap";
 
 const router: IRouter = Router();
 
@@ -12,5 +15,8 @@ router.use(leadsRouter);
 router.use(articlesRouter);
 router.use(faqsRouter);
 router.use(statesRouter);
+router.use(switchRequestsRouter);
+router.use(storageRouter);
+router.use(sitemapRouter);
 
 export default router;
