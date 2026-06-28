@@ -510,8 +510,11 @@ function FaqSection() {
 /* ══════════════════════════════════════════════════════════════════ */
 export default function Home() {
   /* ── Hero card hover state (to nudge internal image) ─── */
+  const prefersReduced = useReducedMotion();
   const [casaHover, setCasaHover] = useState(false);
   const [empresaHover, setEmpresaHover] = useState(false);
+  const [gdHover, setGdHover] = useState(false);
+  const [mercadoHover, setMercadoHover] = useState(false);
 
   /* ── Giant-word parallax refs ──────────────────────────── */
   const compareSectionRef = useRef<HTMLElement>(null);
@@ -843,18 +846,18 @@ export default function Home() {
                       alignItems: "center",
                       justifyContent: "center",
                       padding: "16px",
-                      transition: "transform 0.3s ease",
+                      transition: "transform 0.2s ease-out",
                       transform: casaHover ? "translateY(-5px)" : "translateY(0)",
                     }}
                   >
-                    <FloatImg
+                    <motion.img
                       src="/img/hero-casa.webp"
                       alt=""
-                      floatVariant="b"
-                      animDelay="0.9s"
-                      parallaxStrength={10}
                       loading="eager"
-                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
+                      decoding="async"
+                      animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+                      transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity, delay: 0 }}
+                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1", objectFit: "contain", display: "block" }}
                     />
                   </div>
                 </article>
@@ -967,18 +970,18 @@ export default function Home() {
                       alignItems: "center",
                       justifyContent: "center",
                       padding: "16px",
-                      transition: "transform 0.3s ease",
+                      transition: "transform 0.2s ease-out",
                       transform: empresaHover ? "translateY(-5px)" : "translateY(0)",
                     }}
                   >
-                    <FloatImg
+                    <motion.img
                       src="/img/hero-empresa.webp"
                       alt=""
-                      floatVariant="c"
-                      animDelay="1.5s"
-                      parallaxStrength={10}
                       loading="eager"
-                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
+                      decoding="async"
+                      animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+                      transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity, delay: 0.6 }}
+                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1", objectFit: "contain", display: "block" }}
                     />
                   </div>
                 </article>
@@ -1108,11 +1111,13 @@ export default function Home() {
                     flexDirection: "column",
                   }}
                   onMouseEnter={(e) => {
+                    setGdHover(true);
                     const el = e.currentTarget as HTMLElement;
-                    el.style.transform = "translateY(-3px)";
+                    el.style.transform = "translateY(-4px)";
                     el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
+                    setGdHover(false);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "";
                     el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.06)";
@@ -1160,24 +1165,32 @@ export default function Home() {
                       Disponível agora
                     </span>
                   </div>
-                  {/* Body: text constrained to ~65%; obj-solar in its own right zone */}
+                  {/* Body: text constrained to ~65%; render in its own right zone */}
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
-                    {/* hero-casa — right zone, below badge, not over text */}
-                    <FloatImg
-                      src="/img/hero-casa.webp"
-                      alt=""
-                      width={110}
-                      height={110}
-                      floatVariant="a"
-                      animDelay="0.5s"
-                      parallaxStrength={12}
+                    {/* hero-casa — right zone, y-only calm float + nudge on card hover */}
+                    <div
+                      aria-hidden="true"
                       style={{
                         position: "absolute",
                         top: "12px",
                         right: "20px",
+                        width: 110,
+                        height: 110,
                         pointerEvents: "none",
+                        transition: "transform 0.2s ease-out",
+                        transform: gdHover ? "translateY(-5px)" : "translateY(0)",
                       }}
-                    />
+                    >
+                      <motion.img
+                        src="/img/hero-casa.webp"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+                        transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity, delay: 1.2 }}
+                        style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                      />
+                    </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Sun size={20} weight="bold" style={{ color: "var(--green)", flexShrink: 0 }} />
                       <h3
@@ -1245,11 +1258,13 @@ export default function Home() {
                     flexDirection: "column",
                   }}
                   onMouseEnter={(e) => {
+                    setMercadoHover(true);
                     const el = e.currentTarget as HTMLElement;
-                    el.style.transform = "translateY(-3px)";
+                    el.style.transform = "translateY(-4px)";
                     el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
+                    setMercadoHover(false);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "";
                     el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.06)";
@@ -1299,22 +1314,30 @@ export default function Home() {
                   </div>
                   {/* Body: text constrained to ~65%; obj-mercado in its own right zone */}
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
-                    {/* obj-mercado — right zone, below badge, not over text */}
-                    <FloatImg
-                      src="/img/obj-mercado.webp"
-                      alt=""
-                      width={110}
-                      height={110}
-                      floatVariant="b"
-                      animDelay="1.2s"
-                      parallaxStrength={12}
+                    {/* obj-mercado — right zone, y-only calm float + nudge on card hover */}
+                    <div
+                      aria-hidden="true"
                       style={{
                         position: "absolute",
                         top: "12px",
                         right: "20px",
+                        width: 110,
+                        height: 110,
                         pointerEvents: "none",
+                        transition: "transform 0.2s ease-out",
+                        transform: mercadoHover ? "translateY(-5px)" : "translateY(0)",
                       }}
-                    />
+                    >
+                      <motion.img
+                        src="/img/obj-raio.webp"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+                        transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity, delay: 1.8 }}
+                        style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                      />
+                    </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Lightning size={20} weight="bold" style={{ color: "var(--green-text)", flexShrink: 0 }} />
                       <h3
@@ -1398,7 +1421,7 @@ export default function Home() {
                   Como funciona
                 </h2>
               </Reveal>
-              {/* obj-fazenda — fills the large render box */}
+              {/* obj-fazenda — fills the large render box, static */}
               <Reveal delay={0.08}>
                 <div
                   style={{
@@ -1412,16 +1435,17 @@ export default function Home() {
                   }}
                   aria-hidden="true"
                 >
-                  <FloatImg
+                  <img
                     src="/img/obj-fazenda.webp"
                     alt=""
-                    floatVariant="c"
-                    animDelay="0.8s"
-                    parallaxStrength={18}
+                    loading="lazy"
+                    decoding="async"
                     style={{
                       width: "90%",
                       height: "90%",
+                      objectFit: "contain",
                       padding: "16px",
+                      display: "block",
                     }}
                   />
                 </div>
