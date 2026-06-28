@@ -112,6 +112,10 @@
   --hero-green:    #0E4A2C;
   --hero-green-2:  #12603A;
   --bg-green-tint: #E8F7EF;
+  --hero-env:      #F4EAA6;
+  --hero-env-soft: rgba(26,36,16,0.30);
+  --ink-on-env:    #1A2410;
+  --signal:        #F3E25C;
 
   /* ── Spacing */
   --container: 1240px;

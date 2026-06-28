@@ -1,0 +1,54 @@
+Make the home page structurally match a flat-color, spacious, Payard-style layout. The #1 fix: the hero must become a FLAT background color with NO illustration. Keep pt-BR copy, logo, section order, green CTAs, Lenis motion. Report files touched in one line, then apply all of this.
+TOKENS:
+
+--hero-env: #F4EAA6 (flat soft yellow — hero + CTA-band background)
+--hero-env-soft: rgba(26,36,16,0.30) (the translucent dark for ghost-text line 2)
+--ink-on-env: #1A2410 (all text on yellow; never white)
+--signal: #F3E25C (bright accent: urgency bar, 01/02/03 numbers, ≤1 emphasis word — NEVER a button or hero bg)
+
+Keep --green #1FA459 (CTA fill, white text), --bg-alt cream, --bg-green-tint, --bg-invert navy.
+
+
+HERO — flat color, NO illustration (the critical change):
+
+
+DELETE the lightning/geometric background image from the hero entirely. The hero background is FLAT --hero-env. Do not composite, tint, or fade the old art — remove it. (The art may be reused later elsewhere, but NOT in the hero.)
+Add a subtle dot texture over the flat color: pure-CSS radial-gradient(circle, rgba(26,36,16,0.06) 1px, transparent 1px) at ~22px spacing, very faint. No other texture.
+Heading: full container width, clamp(3.5rem,8.5vw,6.5rem), weight 800, line-height .95, -0.02em. TWO lines: line 1 "Compare e economize na sua conta" in solid --ink-on-env; line 2 "de energia." in --hero-env-soft (same-hue translucent ghost — the Payard "made simple" effect). Verify solid ≥4.5:1; ghost is decorative.
+Subhead: --ink-on-env at ~75%, max-width ~560px.
+CTAs: primary = white fill + --green text "Ver desconto disponível"; secondary = --ink-on-env 1.5px outline + --ink-on-env text "Enviar conta de luz". Pills, flat.
+CCEE trust line below, --ink-on-env with green shield.
+
+
+HERO CARD-OVERLAP (Payard signature — currently missing):
+
+
+Immediately after the hero text, add TWO large rounded cards (radius 20px) in a row that VISUALLY OVERLAP the bottom of the hero — i.e. the hero color extends down and the cards sit on top, their top half over the yellow, bottom half over the next (white) section. Use negative margin / overlapping containers so the cards "rise into" the hero.
+These are the existing "Para sua casa / Residências" and "Para sua empresa / Empresas" cards — MOVE them here from wherever they are now. Left card label "PARA SUA CASA" + "Residências"; right "PARA SUA EMPRESA" + "Empresas", existing descriptions, green CTA pills ("Quero economizar →" / "Analisar minha empresa →"). One card can have a soft green-tint bg, the other a soft blue/neutral-tint bg (like Payard's mint/blue split), both with dark text.
+
+
+NAV — white pill (Payard):
+
+
+Floating WHITE pill on home from initial load. Centered links inside the pill. The "Ver desconto" CTA is a --green chip INSIDE the pill (right end), white text. Keep condense-on-scroll (zero layout shift) + mobile sheet (focus trap, Esc).
+
+
+SECTION RHYTHM — alternate flat-color and clean white (Payard's core move):
+
+
+Hero: flat --hero-env. → (cards overlap into white) → Urgency bar: --signal. → "O que você quer comparar?" tiles: white. → "Como funciona": white, 01/02/03 in --signal. → Stats: --bg-green-tint, numbers navy. → Lead form: cream. → "Pronto para pagar menos?" CTA band: flat --hero-env, dark text, white-fill/green-text button. → FAQ: white. → Footer: navy.
+NO full-bleed navy mid-page (footer excepted). Generous vertical padding everywhere — clamp(5rem,11vw,9rem) — Payard is SPACIOUS; increase whitespace.
+
+
+ONE oversized two-tone single-WORD heading (Payard "Services" style): pick ONE section (the CTA band) and render its key word huge with one part in --ink-on-env and part in a lighter tint. Exactly once. Remove any other oversized word (no "Economia" above the form).
+Buttons: flat --green fill + white text (or white fill + green text on yellow sections). No gradients.
+Motion unchanged: Lenis; reveals fire once at ~15%; reduced-motion disables all.
+
+ACCESSIBILITY (report): solid hero heading on --hero-env ≥4.5:1; white-on-green ≥4.5:1; --signal-ink (#2A2603) on --signal urgency bar ≥4.5:1; white nav links ≥4.5:1; navy stats numbers on --bg-green-tint ≥4.5:1. Adjust failing tokens, state changes. One h1, keyboard operable, no horizontal scroll at 320px.
+ACCEPTANCE:
+
+Hero is FLAT yellow with a faint dot texture and NO illustration — the lightning art is gone from the hero.
+Two cards overlap the hero/white boundary (rise into the hero).
+Nav is a white pill with links inside and a green CTA chip inside.
+Sections alternate flat-color / clean-white; mid-page has no navy; whitespace is generous.
+Exactly one oversized two-tone word; no gradient buttons; reported contrasts pass.

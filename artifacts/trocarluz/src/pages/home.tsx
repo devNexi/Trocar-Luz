@@ -240,7 +240,6 @@ const schema = {
 };
 
 export default function Home() {
-  const parallaxOffset = useParallax(0.28);
 
   return (
     <Layout>
@@ -250,104 +249,56 @@ export default function Home() {
         schema={schema}
       />
 
-      {/* ── A. HERO ────────────────────────────────────────────────── */}
+      {/* ── A. HERO ── flat yellow, no illustration */}
       <section
         aria-labelledby="hero-heading"
-        className="relative overflow-hidden text-white"
-        style={{ minHeight: "100svh", backgroundColor: "var(--hero-green)" }}
+        className="relative overflow-hidden"
+        style={{
+          backgroundColor: "var(--hero-env)",
+          padding: "0 var(--gutter)",
+          paddingTop: "120px",
+          paddingBottom: "clamp(9rem, 20vw, 15rem)",
+        }}
       >
-        {/* Dot/halftone texture — pure CSS, ~7% opacity */}
+        {/* Faint dot texture */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
+            backgroundImage: "radial-gradient(circle, rgba(26,36,16,0.06) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
             pointerEvents: "none",
-            zIndex: 0,
           }}
         />
 
-        {/* Illustration — right-anchored, full vibrancy, parallax */}
-        <div
-          className="hero-illustration"
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "-10%",
-            width: "62%",
-            height: "120%",
-            transform: `translateY(${parallaxOffset}px)`,
-            willChange: "transform",
-            zIndex: 0,
-          }}
-        >
-          <img
-            src="/illustrations/heroes/trocarluz-hero.png"
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "left center",
-              display: "block",
-            }}
-          />
-        </div>
-
-        {/* Left-edge green blend — keeps text area clean, NOT a dark scrim */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to right, #0E4A2C 38%, rgba(14,74,44,0) 72%)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Hero content */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            maxWidth: "var(--container)",
-            margin: "0 auto",
-            padding: "0 var(--gutter)",
-            minHeight: "100svh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingTop: "120px",
-            paddingBottom: "80px",
-          }}
-        >
+        <div style={{ position: "relative", zIndex: 1, maxWidth: "var(--container)", margin: "0 auto" }}>
           <h1
             id="hero-heading"
             style={{
               fontFamily: "var(--app-font-display)",
-              fontWeight: 700,
-              fontSize: "clamp(3.5rem, 9vw, 7rem)",
+              fontWeight: 800,
+              fontSize: "clamp(3.5rem, 8.5vw, 6.5rem)",
               lineHeight: 0.95,
               letterSpacing: "-0.02em",
               marginBottom: "28px",
             }}
           >
-            <span style={{ display: "block", color: "#fff" }}>Compare e economize</span>
-            <span style={{ display: "block", color: "rgba(255,255,255,0.60)" }}>na sua conta de energia.</span>
+            <span style={{ display: "block", color: "var(--ink-on-env)" }}>
+              Compare e economize na sua conta
+            </span>
+            <span style={{ display: "block", color: "var(--hero-env-soft)" }}>
+              de energia.
+            </span>
           </h1>
+
           <p
             style={{
               fontFamily: "var(--app-font-sans)",
               fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
               lineHeight: 1.6,
-              color: "rgba(255,255,255,0.88)",
-              maxWidth: "520px",
+              color: "rgba(26,36,16,0.75)",
+              maxWidth: "560px",
               marginBottom: "40px",
             }}
           >
@@ -370,10 +321,11 @@ export default function Home() {
                 borderRadius: "999px",
                 textDecoration: "none",
                 transition: "background 0.15s ease, transform 0.1s ease",
+                boxShadow: "0 2px 8px rgba(26,36,16,0.10)",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "#F0F0EE";
+                el.style.background = "#F5F5F0";
                 el.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
@@ -384,16 +336,225 @@ export default function Home() {
             >
               Ver desconto disponível
             </Link>
-            <Link href="/enviar-conta" className="btn-ghost" style={{ fontSize: "15px", padding: "15px 32px" }}>
+            <Link
+              href="/enviar-conta"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "transparent",
+                color: "var(--ink-on-env)",
+                border: "1.5px solid var(--ink-on-env)",
+                fontFamily: "var(--app-font-sans)",
+                fontWeight: 600,
+                fontSize: "15px",
+                padding: "15px 32px",
+                borderRadius: "999px",
+                textDecoration: "none",
+                transition: "background 0.15s ease, transform 0.1s ease",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "rgba(26,36,16,0.08)";
+                el.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "transparent";
+                el.style.transform = "";
+              }}
+            >
               Enviar conta de luz
             </Link>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.80)" }}>
-            <ShieldCheck size={18} weight="fill" style={{ color: "var(--lime)", flexShrink: 0 }} />
-            <span style={{ fontFamily: "var(--app-font-sans)", fontSize: "14px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <ShieldCheck size={18} weight="fill" style={{ color: "var(--green)", flexShrink: 0 }} />
+            <span style={{ fontFamily: "var(--app-font-sans)", fontSize: "14px", color: "rgba(26,36,16,0.70)" }}>
               Broker certificado CCEE · Mais de 12 mil comparações feitas
             </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── A2. OVERLAP CARDS ── rise into hero/white boundary */}
+      <section
+        style={{
+          position: "relative",
+          zIndex: 10,
+          marginTop: "calc(clamp(120px, 18vw, 180px) * -1)",
+          padding: "0 var(--gutter)",
+          paddingBottom: "var(--section-y)",
+          background: "transparent",
+        }}
+      >
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <div className="grid md:grid-cols-2 gap-5">
+            <Reveal delay={0.05}>
+              <Link href="/para-sua-casa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
+                <article
+                  style={{
+                    backgroundColor: "var(--bg-green-tint)",
+                    borderRadius: "20px",
+                    padding: "clamp(28px, 4vw, 44px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                    boxShadow: "0 20px 56px rgba(14,21,37,0.12)",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    height: "100%",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "translateY(-4px)";
+                    el.style.boxShadow = "0 28px 72px rgba(14,21,37,0.18)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "";
+                    el.style.boxShadow = "0 20px 56px rgba(14,21,37,0.12)";
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <House size={18} weight="bold" style={{ color: "var(--green)" }} />
+                    <span
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "11px",
+                        letterSpacing: "0.10em",
+                        textTransform: "uppercase",
+                        color: "var(--green-text)",
+                      }}
+                    >
+                      Para sua casa
+                    </span>
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "var(--app-font-display)",
+                      fontWeight: 700,
+                      fontSize: "clamp(22px, 3vw, 30px)",
+                      color: "var(--text)",
+                      margin: 0,
+                    }}
+                  >
+                    Residências
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: "var(--app-font-sans)",
+                      fontSize: "15px",
+                      color: "var(--text-muted)",
+                      lineHeight: 1.65,
+                      margin: 0,
+                      flex: 1,
+                    }}
+                  >
+                    Geração Distribuída já disponível para reduzir sua conta sem obras ou instalações. Conectamos você a energia solar de fazendas parceiras.
+                  </p>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignSelf: "flex-start",
+                      padding: "11px 22px",
+                      borderRadius: "999px",
+                      backgroundColor: "var(--green)",
+                      color: "#fff",
+                      fontFamily: "var(--app-font-sans)",
+                      fontWeight: 600,
+                      fontSize: "14px",
+                    }}
+                  >
+                    Quero economizar →
+                  </span>
+                </article>
+              </Link>
+            </Reveal>
+
+            <Reveal delay={0.12}>
+              <Link href="/para-sua-empresa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
+                <article
+                  style={{
+                    backgroundColor: "#EAF0F7",
+                    borderRadius: "20px",
+                    padding: "clamp(28px, 4vw, 44px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                    boxShadow: "0 20px 56px rgba(14,21,37,0.12)",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    height: "100%",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "translateY(-4px)";
+                    el.style.boxShadow = "0 28px 72px rgba(14,21,37,0.18)";
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "";
+                    el.style.boxShadow = "0 20px 56px rgba(14,21,37,0.12)";
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <Buildings size={18} weight="bold" style={{ color: "#2C5F8A" }} />
+                    <span
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "11px",
+                        letterSpacing: "0.10em",
+                        textTransform: "uppercase",
+                        color: "#2C5F8A",
+                      }}
+                    >
+                      Para sua empresa
+                    </span>
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "var(--app-font-display)",
+                      fontWeight: 700,
+                      fontSize: "clamp(22px, 3vw, 30px)",
+                      color: "var(--text)",
+                      margin: 0,
+                    }}
+                  >
+                    Empresas
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: "var(--app-font-sans)",
+                      fontSize: "15px",
+                      color: "var(--text-muted)",
+                      lineHeight: 1.65,
+                      margin: 0,
+                      flex: 1,
+                    }}
+                  >
+                    GD + Mercado Livre de Energia para reduzir custos operacionais. Análise gratuita do seu perfil de consumo e gestão completa da migração.
+                  </p>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignSelf: "flex-start",
+                      padding: "11px 22px",
+                      borderRadius: "999px",
+                      backgroundColor: "var(--green)",
+                      color: "#fff",
+                      fontFamily: "var(--app-font-sans)",
+                      fontWeight: 600,
+                      fontSize: "14px",
+                    }}
+                  >
+                    Analisar minha empresa →
+                  </span>
+                </article>
+              </Link>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -401,7 +562,7 @@ export default function Home() {
       {/* ── B. URGENCY BAR ─────────────────────────────────────────── */}
       <section
         aria-label="Aviso sobre abertura do mercado livre"
-        style={{ backgroundColor: "var(--yellow)" }}
+        style={{ backgroundColor: "var(--signal)" }}
       >
         <div
           style={{
@@ -582,7 +743,7 @@ export default function Home() {
                       fontFamily: "var(--app-font-display)",
                       fontWeight: 700,
                       fontSize: "clamp(64px, 9vw, 96px)",
-                      color: "var(--yellow)",
+                      color: "var(--signal)",
                       lineHeight: 1,
                       marginBottom: "20px",
                       letterSpacing: "-0.02em",
@@ -637,141 +798,6 @@ export default function Home() {
             <Reveal delay={0.21}>
               <StatItem value={100} suffix="%" label="Parceiros verificados" />
             </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ── F. AUDIENCE CARDS ──────────────────────────────────────── */}
-      <section
-        aria-labelledby="audience-heading"
-        style={{ backgroundColor: "var(--bg-alt)", padding: "var(--section-y) var(--gutter)" }}
-      >
-        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          <Reveal>
-            <h2
-              id="audience-heading"
-              style={{
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(2rem, 4vw, 3rem)",
-                color: "var(--text)",
-                textAlign: "center",
-                marginBottom: "clamp(40px, 6vw, 56px)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Para quem é a TrocarLuz?
-            </h2>
-          </Reveal>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                Icon: House,
-                accentColor: "var(--green)",
-                label: "Para sua casa",
-                title: "Residências",
-                description:
-                  "Geração Distribuída já disponível para reduzir sua conta sem obras ou instalações. Conectamos você a energia solar de fazendas parceiras.",
-                cta: "Quero economizar →",
-                href: "/para-sua-casa",
-              },
-              {
-                Icon: Buildings,
-                accentColor: "var(--lime)",
-                label: "Para sua empresa",
-                title: "Empresas",
-                description:
-                  "GD + Mercado Livre de Energia para reduzir custos operacionais. Análise gratuita do seu perfil de consumo e gestão completa da migração.",
-                cta: "Analisar minha empresa →",
-                href: "/para-sua-empresa",
-              },
-            ].map(({ Icon, accentColor, label, title, description, cta, href }, i) => (
-              <Reveal key={href} delay={i * 0.1}>
-                <Link href={href} style={{ textDecoration: "none", display: "block" }}>
-                  <article
-                    style={{
-                      backgroundColor: "var(--surface-invert)",
-                      border: "1px solid var(--border-invert)",
-                      borderLeft: `4px solid ${accentColor}`,
-                      borderRadius: "var(--r-card)",
-                      padding: "clamp(28px, 4vw, 40px)",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "16px",
-                      transition: "background 0.2s ease, box-shadow 0.2s ease",
-                      cursor: "pointer",
-                      boxShadow: "none",
-                    }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.background = "rgba(255,255,255,0.06)";
-                      el.style.boxShadow = "0 12px 32px rgba(0,0,0,0.25)";
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.background = "var(--surface-invert)";
-                      el.style.boxShadow = "none";
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      <Icon size={22} weight="bold" style={{ color: accentColor }} />
-                      <span
-                        style={{
-                          fontFamily: "var(--app-font-sans)",
-                          fontWeight: 600,
-                          fontSize: "12px",
-                          color: accentColor,
-                          letterSpacing: "0.06em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                    <h3
-                      style={{
-                        fontFamily: "var(--app-font-display)",
-                        fontWeight: 600,
-                        fontSize: "clamp(20px, 2.5vw, 26px)",
-                        color: "#fff",
-                        margin: 0,
-                      }}
-                    >
-                      {title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: "var(--app-font-sans)",
-                        fontSize: "15px",
-                        color: "var(--text-invert-muted)",
-                        lineHeight: "1.65",
-                        margin: 0,
-                        flex: 1,
-                      }}
-                    >
-                      {description}
-                    </p>
-                    <span
-                      style={{
-                        display: "inline-flex",
-                        alignSelf: "flex-start",
-                        padding: "12px 24px",
-                        borderRadius: "999px",
-                        backgroundColor: "var(--green)",
-                        color: "#fff",
-                        fontFamily: "var(--app-font-sans)",
-                        fontWeight: 500,
-                        fontSize: "14px",
-                        transition: "background 0.15s ease",
-                      }}
-                    >
-                      {cta}
-                    </span>
-                  </article>
-                </Link>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
@@ -881,51 +907,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── I. CTA BAND ────────────────────────────────────────────── */}
+      {/* ── I. CTA BAND ── flat hero-env, oversized two-tone word */}
       <section
         aria-labelledby="cta-heading"
         className="relative overflow-hidden"
-        style={{ backgroundColor: "var(--green)", padding: "var(--section-y) var(--gutter)", textAlign: "center" }}
+        style={{
+          backgroundColor: "var(--hero-env)",
+          padding: "var(--section-y) var(--gutter)",
+          textAlign: "center",
+        }}
       >
-        {/* Background texture */}
-        <img
-          src="/illustrations/heroes/trocarluz-hero.png"
-          alt=""
+        {/* Dot texture matching hero */}
+        <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            opacity: 0.18,
-            mixBlendMode: "multiply",
+            backgroundImage: "radial-gradient(circle, rgba(26,36,16,0.06) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
             pointerEvents: "none",
           }}
         />
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            maxWidth: "720px",
-            margin: "0 auto",
-          }}
-        >
+        <div style={{ position: "relative", zIndex: 1, maxWidth: "720px", margin: "0 auto" }}>
           <Reveal>
             <h2
               id="cta-heading"
               style={{
                 fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
-                lineHeight: 1.02,
+                fontWeight: 800,
                 letterSpacing: "-0.02em",
-                color: "#fff",
-                marginBottom: "16px",
+                marginBottom: "20px",
               }}
             >
-              Pronto para{" "}
-              <span style={{ color: "rgba(255,255,255,0.70)" }}>pagar menos?</span>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "clamp(5rem, 14vw, 11rem)",
+                  color: "var(--ink-on-env)",
+                  lineHeight: 0.88,
+                }}
+              >
+                Pronto
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                  color: "rgba(26,36,16,0.45)",
+                  lineHeight: 1.15,
+                  marginTop: "12px",
+                }}
+              >
+                para pagar menos?
+              </span>
             </h2>
           </Reveal>
           <Reveal delay={0.08}>
@@ -933,7 +967,7 @@ export default function Home() {
               style={{
                 fontFamily: "var(--app-font-sans)",
                 fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
-                color: "rgba(255,255,255,0.82)",
+                color: "rgba(26,36,16,0.70)",
                 lineHeight: "1.6",
                 marginBottom: "36px",
               }}
@@ -955,18 +989,18 @@ export default function Home() {
                 fontWeight: 600,
                 fontSize: "16px",
                 textDecoration: "none",
-                boxShadow: "0 4px 16px rgba(14,21,37,0.15)",
+                boxShadow: "0 4px 16px rgba(26,36,16,0.12)",
                 transition: "transform 0.15s ease, box-shadow 0.15s ease",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "translateY(-2px)";
-                el.style.boxShadow = "0 8px 24px rgba(14,21,37,0.20)";
+                el.style.boxShadow = "0 8px 24px rgba(26,36,16,0.18)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "";
-                el.style.boxShadow = "0 4px 16px rgba(14,21,37,0.15)";
+                el.style.boxShadow = "0 4px 16px rgba(26,36,16,0.12)";
               }}
             >
               Comparar agora
