@@ -1,18 +1,224 @@
+import { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
+import { Lightning, ShieldCheck, House, Buildings } from "@phosphor-icons/react";
 import { Layout } from "@/components/layout";
 import { SEOHead } from "@/components/seo-head";
 import { LeadForm } from "@/components/lead-form";
-import { Link } from "wouter";
-import { Lightning, ShieldCheck } from "@phosphor-icons/react";
+import { Reveal } from "@/components/reveal";
+
+/* ── Parallax hook ───────────────────────────────────────────────── */
+function useParallax(factor = 0.3) {
+  const [offset, setOffset] = useState(0);
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+    const onScroll = () => setOffset(window.scrollY * factor);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [factor]);
+  return offset;
+}
+
+/* ── Count-up hook ───────────────────────────────────────────────── */
+function useCountUp(target: number, duration = 1400) {
+  const [value, setValue] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) { setValue(target); return; }
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const start = performance.now();
+          const tick = (now: number) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setValue(Math.round(eased * target));
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [target, duration]);
+  return { value, ref };
+}
+
+/* ── Stat item ───────────────────────────────────────────────────── */
+function StatItem({ value, suffix, label }: { value: number; suffix: string; label: string }) {
+  const { value: count, ref } = useCountUp(value);
+  return (
+    <div ref={ref} className="text-center">
+      <div
+        style={{
+          fontFamily: "var(--app-font-display)",
+          fontWeight: 700,
+          fontSize: "clamp(52px, 7vw, 80px)",
+          lineHeight: 1,
+          color: "#fff",
+          letterSpacing: "-0.02em",
+          marginBottom: "12px",
+        }}
+      >
+        {count}
+        {suffix}
+      </div>
+      <div
+        style={{
+          fontFamily: "var(--app-font-sans)",
+          fontWeight: 500,
+          fontSize: "15px",
+          color: "var(--text-invert-muted)",
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+}
+
+/* ── Squircle tile card ──────────────────────────────────────────── */
+function TileCard({
+  href,
+  discount,
+  badge,
+  title,
+  description,
+  cta,
+  accentColor,
+  Icon,
+}: {
+  href: string;
+  discount: string;
+  badge: string;
+  title: string;
+  description: string;
+  cta: string;
+  accentColor: string;
+  Icon: React.ElementType;
+}) {
+  return (
+    <Link href={href} style={{ textDecoration: "none", display: "block" }}>
+      <article
+        className="tile-card flex flex-col h-full cursor-pointer"
+        style={{ borderLeft: `4px solid ${accentColor}` }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-sm)"; }}
+      >
+        {/* Header band */}
+        <div
+          style={{
+            background: `${accentColor}12`,
+            padding: "28px 28px 20px",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: "12px",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--app-font-display)",
+              fontWeight: 700,
+              fontSize: "clamp(36px, 5vw, 52px)",
+              color: accentColor,
+              lineHeight: 1,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {discount}
+          </div>
+          <span
+            style={{
+              flexShrink: 0,
+              fontFamily: "var(--app-font-sans)",
+              fontWeight: 600,
+              fontSize: "11px",
+              color: "#fff",
+              backgroundColor: accentColor,
+              borderRadius: "999px",
+              padding: "4px 12px",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.03em",
+              textTransform: "uppercase",
+            }}
+          >
+            {badge}
+          </span>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "20px 28px 28px", display: "flex", flexDirection: "column", flex: 1, gap: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Icon size={20} weight="bold" style={{ color: accentColor, flexShrink: 0 }} />
+            <h3
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 600,
+                fontSize: "20px",
+                color: "var(--text)",
+                margin: 0,
+              }}
+            >
+              {title}
+            </h3>
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--app-font-sans)",
+              fontSize: "15px",
+              color: "var(--text-muted)",
+              lineHeight: "1.6",
+              margin: 0,
+              flex: 1,
+            }}
+          >
+            {description}
+          </p>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "13px 24px",
+              borderRadius: "999px",
+              backgroundColor: "var(--green)",
+              color: "#fff",
+              fontFamily: "var(--app-font-sans)",
+              fontWeight: 500,
+              fontSize: "15px",
+              transition: "background 0.15s ease",
+              marginTop: "4px",
+            }}
+          >
+            {cta}
+          </div>
+        </div>
+      </article>
+    </Link>
+  );
+}
+
+/* ── Page ────────────────────────────────────────────────────────── */
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "TrocarLuz",
+  url: "https://trocarluz.com.br",
+  logo: "https://trocarluz.com.br/favicon.png",
+  description:
+    "Compare e economize na conta de energia. Geração distribuída e mercado livre no Brasil.",
+};
 
 export default function Home() {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "TrocarLuz",
-    "url": "https://trocarluz.com.br",
-    "logo": "https://trocarluz.com.br/favicon.png",
-    "description": "Compare e economize na conta de energia. Geração distribuída e mercado livre no Brasil."
-  };
+  const parallaxOffset = useParallax(0.28);
 
   return (
     <Layout>
@@ -22,82 +228,115 @@ export default function Home() {
         schema={schema}
       />
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      {/* ── A. HERO ────────────────────────────────────────────────── */}
       <section
+        aria-labelledby="hero-heading"
         className="relative overflow-hidden text-white"
-        style={{ minHeight: '85vh', marginTop: '-64px' }}
+        style={{ minHeight: "100svh", backgroundColor: "var(--bg-invert)" }}
       >
-        <img
-          src="/illustrations/heroes/trocarluz-hero.png"
-          alt=""
+        {/* Parallax background */}
+        <div
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-          style={{ opacity: 0.55 }}
-        />
-        {/* Dark veil on left third so text is always readable */}
+          style={{
+            position: "absolute",
+            inset: "-10% 0 -10% 0",
+            transform: `translateY(${parallaxOffset}px)`,
+            willChange: "transform",
+          }}
+        >
+          <img
+            src="/illustrations/heroes/trocarluz-hero.png"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            style={{
+              width: "100%",
+              height: "120%",
+              objectFit: "cover",
+              display: "block",
+              opacity: 0.45,
+            }}
+          />
+        </div>
+
+        {/* Left-to-right dark scrim — ensures ≥4.5:1 on white text */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(90deg, rgba(10,22,40,0.72) 0%, rgba(10,22,40,0.35) 55%, transparent 100%)' }}
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(90deg, rgba(14,21,37,0.82) 0%, rgba(14,21,37,0.52) 48%, rgba(14,21,37,0.15) 100%)",
+          }}
         />
-        {/* Top gradient — makes logo/nav text readable against the illustration */}
+        {/* Top scrim for nav area */}
         <div
-          className="absolute inset-x-0 top-0 pointer-events-none"
-          style={{ height: '25%', background: 'linear-gradient(to bottom, rgba(10,22,40,0.75) 0%, rgba(10,22,40,0) 100%)' }}
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: "0 0 auto 0",
+            height: "30%",
+            background:
+              "linear-gradient(to bottom, rgba(14,21,37,0.60) 0%, transparent 100%)",
+          }}
         />
 
+        {/* Hero content */}
         <div
-          className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center"
-          style={{ minHeight: '85vh', zIndex: 1, paddingTop: '80px' }}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            maxWidth: "var(--container)",
+            margin: "0 auto",
+            padding: "0 var(--gutter)",
+            minHeight: "100svh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            paddingTop: "120px",
+            paddingBottom: "80px",
+          }}
         >
-          <div style={{ maxWidth: '560px' }}>
+          <div style={{ maxWidth: "580px" }}>
             <h1
-              className="font-display font-extrabold text-white leading-[1.05] mb-6 tracking-tight"
-              style={{ fontSize: 'clamp(48px, 6vw, 72px)' }}
+              id="hero-heading"
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(2.75rem, 6.5vw, 5rem)",
+                lineHeight: 1.02,
+                letterSpacing: "-0.02em",
+                color: "#fff",
+                marginBottom: "24px",
+              }}
             >
               Compare e economize na sua conta de energia.
             </h1>
             <p
-              className="mb-10 leading-relaxed"
               style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: '20px',
-                color: 'rgba(255,255,255,0.90)',
-                maxWidth: '480px',
+                fontFamily: "var(--app-font-sans)",
+                fontSize: "clamp(1rem, 2vw, 1.25rem)",
+                lineHeight: 1.55,
+                color: "rgba(255,255,255,0.88)",
+                maxWidth: "480px",
+                marginBottom: "40px",
               }}
             >
               Geração distribuída já disponível para reduzir sua conta agora. E a partir de dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Link
-                href="/comparar-desconto"
-                className="text-center text-white font-display font-semibold transition-opacity hover:opacity-90"
-                style={{
-                  backgroundColor: '#00B86B',
-                  fontSize: '16px',
-                  padding: '16px 32px',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                }}
-              >
+
+            <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <Link href="/comparar-desconto" className="btn-primary" style={{ fontSize: "15px", padding: "15px 32px" }}>
                 Ver desconto disponível
               </Link>
-              <Link
-                href="/enviar-conta"
-                className="text-center text-white font-display font-semibold transition-colors hover:bg-white/10"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.9)',
-                  fontSize: '16px',
-                  padding: '16px 32px',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                }}
-              >
+              <Link href="/enviar-conta" className="btn-ghost" style={{ fontSize: "15px", padding: "15px 32px" }}>
                 Enviar conta de luz
               </Link>
             </div>
-            <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              <ShieldCheck size={20} weight="fill" style={{ color: '#00B86B' }} />
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '14px' }}>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.80)" }}>
+              <ShieldCheck size={18} weight="fill" style={{ color: "var(--lime)", flexShrink: 0 }} />
+              <span style={{ fontFamily: "var(--app-font-sans)", fontSize: "14px" }}>
                 Broker certificado CCEE · Mais de 12 mil comparações feitas
               </span>
             </div>
@@ -105,357 +344,735 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 2028 BANNER — #FFD000 ────────────────────────────────────────── */}
-      <section style={{ backgroundColor: '#FFD000' }} className="py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Lightning size={26} weight="fill" style={{ color: '#0A1628' }} className="shrink-0" />
-              <p className="font-display font-semibold" style={{ color: '#0A1628', fontSize: '17px' }}>
-                A partir de dezembro de 2027, consumidores residenciais poderão escolher seu fornecedor — mas só através de um broker certificado. Somos esse broker.
-              </p>
-            </div>
-            <Link
-              href="/energia-2028"
-              className="shrink-0 font-medium hover:opacity-70 transition-opacity"
-              style={{ color: '#0A1628', borderBottom: '2px solid #0A1628', paddingBottom: '2px', textDecoration: 'none', fontSize: '15px', whiteSpace: 'nowrap' }}
-            >
-              Saiba como →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── QUICK-ACTION CARDS — #0A1628 navy ────────────────────────────── */}
-      <section style={{ backgroundColor: '#0A1628' }} className="py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-4">
-            <Link href="/para-sua-casa" style={{ textDecoration: 'none' }}>
-              <div
-                className="flex items-center justify-between gap-4 transition-all duration-150 cursor-pointer"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.10)',
-                  borderLeft: '4px solid #00B86B',
-                  borderRadius: '12px',
-                  padding: '22px 28px',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.10)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)'; }}
-              >
-                <div>
-                  <div className="font-display font-bold mb-1" style={{ fontSize: '18px', color: '#FFFFFF' }}>
-                    Para sua casa
-                  </div>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.60)' }}>
-                    Geração Distribuída — economia solar sem instalação
-                  </div>
-                </div>
-                <div className="shrink-0 font-display font-semibold whitespace-nowrap" style={{ fontSize: '14px', color: '#00B86B' }}>
-                  Quero economizar →
-                </div>
-              </div>
-            </Link>
-
-            <Link href="/para-sua-empresa" style={{ textDecoration: 'none' }}>
-              <div
-                className="flex items-center justify-between gap-4 transition-all duration-150 cursor-pointer"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.06)',
-                  border: '1px solid rgba(255,255,255,0.10)',
-                  borderLeft: '4px solid #FFD000',
-                  borderRadius: '12px',
-                  padding: '22px 28px',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.10)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.06)'; }}
-              >
-                <div>
-                  <div className="font-display font-bold mb-1" style={{ fontSize: '18px', color: '#FFFFFF' }}>
-                    Para sua empresa
-                  </div>
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.60)' }}>
-                    Mercado Livre + GD — reduza custos operacionais
-                  </div>
-                </div>
-                <div className="shrink-0 font-display font-semibold whitespace-nowrap" style={{ fontSize: '14px', color: '#FFD000' }}>
-                  Analisar minha empresa →
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── GD LEAD CAPTURE — #F7F7F5 ────────────────────────────────────── */}
-      <section className="py-20" style={{ backgroundColor: '#F7F7F5' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-[55fr_45fr] gap-12 items-start">
-            <div className="pt-4">
-              <h2 className="font-display font-bold mb-4" style={{ fontSize: '40px', color: '#1A1F36', lineHeight: '1.15' }}>
-                Sua conta de luz está alta demais?
-              </h2>
-              <p className="mb-8 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif", fontSize: '18px', color: '#6B7080', lineHeight: '1.7' }}>
-                A Geração Distribuída (GD) permite que você use energia solar de fazendas parceiras e receba desconto direto na conta da sua distribuidora.
-              </p>
-              <ul className="space-y-5 mb-8">
-                {[
-                  'Zero investimento ou obras',
-                  'A energia continua chegando pela mesma rede',
-                  'Economia garantida todos os meses',
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <Lightning size={22} weight="fill" className="shrink-0 mt-0.5" style={{ color: '#6ABF4B' }} />
-                    <span style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: '#1A1F36', lineHeight: '1.6' }}>
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <span
-                className="inline-block font-display font-bold"
-                style={{ backgroundColor: '#6ABF4B', color: '#FFFFFF', borderRadius: '999px', padding: '8px 20px', fontSize: '15px' }}
-              >
-                Clientes economizam em média 18% na conta
-              </span>
-            </div>
-            <div style={{ borderRadius: '16px', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
-              <LeadForm type="residential" sourcePage="home" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS — #0A1628 navy ──────────────────────────────────── */}
-      <section className="py-24" style={{ backgroundColor: '#0A1628' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display font-bold text-white text-center mb-20" style={{ fontSize: '36px' }}>
-            Como funciona
-          </h2>
-          <div className="grid md:grid-cols-3 relative">
-            {/* Yellow connecting line at number baseline */}
-            <div
-              className="hidden md:block absolute left-[calc(16.67%)] right-[calc(16.67%)]"
-              style={{ top: '62px', height: '2px', backgroundColor: 'rgba(255,255,255,0.15)', zIndex: 0 }}
+      {/* ── B. URGENCY BAR ─────────────────────────────────────────── */}
+      <section
+        aria-label="Aviso sobre abertura do mercado livre"
+        style={{ backgroundColor: "var(--yellow)" }}
+      >
+        <div
+          style={{
+            maxWidth: "var(--container)",
+            margin: "0 auto",
+            padding: "18px var(--gutter)",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", flex: 1, minWidth: 0 }}>
+            <Lightning
+              size={22}
+              weight="fill"
+              style={{ color: "var(--yellow-ink)", flexShrink: 0, marginTop: "2px" }}
             />
-            {[
-              { n: '01', title: 'Informe', desc: 'Nos diga seu estado, sua distribuidora e seu consumo médio. Analisamos sua elegibilidade para GD agora e para o mercado livre em 2027.' },
-              { n: '02', title: 'Compare', desc: 'Mostramos as opções reais disponíveis para o seu perfil — economia garantida hoje via GD, e as melhores ofertas do mercado livre quando abrir para você.' },
-              { n: '03', title: 'Troque', desc: 'A TrocarLuz é seu broker certificado. Cuidamos de todo o processo de migração — da notificação à distribuidora até a assinatura com seu novo fornecedor.' },
-            ].map((step) => (
-              <div key={step.n} className="relative z-10 flex flex-col items-center text-center px-6 md:px-10">
-                <div
-                  className="font-display font-extrabold leading-none mb-5"
-                  style={{ fontSize: '96px', color: '#FFD000', lineHeight: '1' }}
-                >
-                  {step.n}
-                </div>
-                <h3 className="font-display font-bold text-white mb-3" style={{ fontSize: '28px' }}>
-                  {step.title}
-                </h3>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '16px', color: 'rgba(255,255,255,0.70)', lineHeight: '1.7' }}>
-                  {step.desc}
-                </p>
-              </div>
-            ))}
+            <p
+              style={{
+                fontFamily: "var(--app-font-sans)",
+                fontWeight: 500,
+                fontSize: "15px",
+                color: "var(--yellow-ink)",
+                lineHeight: "1.5",
+                margin: 0,
+              }}
+            >
+              A partir de dezembro de 2027, consumidores residenciais poderão escolher seu fornecedor — mas só através de um broker certificado. Somos esse broker.
+            </p>
           </div>
+          <Link
+            href="/energia-2028"
+            style={{
+              fontFamily: "var(--app-font-sans)",
+              fontWeight: 600,
+              fontSize: "14px",
+              color: "var(--yellow-ink)",
+              textDecoration: "underline",
+              textUnderlineOffset: "3px",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+            }}
+          >
+            Saiba como →
+          </Link>
         </div>
       </section>
 
-      {/* ── CATEGORY TILES — white ───────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display font-bold mb-10" style={{ fontSize: '36px', color: '#1A1F36' }}>
-            O que você quer comparar?
-          </h2>
+      {/* ── D. CATEGORY TILES ──────────────────────────────────────── */}
+      <section aria-labelledby="compare-heading" style={{ backgroundColor: "#fff", padding: "var(--section-y) var(--gutter)" }}>
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <Reveal>
+            <h2
+              id="compare-heading"
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                color: "var(--text)",
+                marginBottom: "clamp(32px, 5vw, 48px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              O que você quer comparar?
+            </h2>
+          </Reveal>
+
           <div className="grid md:grid-cols-2 gap-6">
-            {/* GD tile */}
-            <Link href="/para-sua-casa" style={{ textDecoration: 'none' }}>
-              <div
-                className="flex flex-col transition-all duration-200 cursor-pointer"
-                style={{
-                  border: '1px solid #E2E1DC',
-                  borderLeft: '4px solid #6ABF4B',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  minHeight: '300px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'; }}
-              >
-                <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(106,191,75,0.07)' }}>
-                  <div
-                    className="font-display font-extrabold leading-none"
-                    style={{ fontSize: '56px', color: '#6ABF4B' }}
-                  >
-                    até 35% off
-                  </div>
-                  <span
-                    className="shrink-0 font-display font-bold"
-                    style={{
-                      fontSize: '12px',
-                      color: '#FFFFFF',
-                      backgroundColor: '#6ABF4B',
-                      borderRadius: '999px',
-                      padding: '4px 12px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    Disponível agora
-                  </span>
-                </div>
-                <div className="px-8 pt-2 pb-8 flex flex-col flex-1">
-                  <h3 className="font-display font-bold mb-2" style={{ fontSize: '22px', color: '#1A1F36' }}>
-                    Geração Distribuída
-                  </h3>
-                  <p className="mb-6" style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#6B7080', lineHeight: '1.6' }}>
-                    Disponível agora para residências e empresas. Energia solar de fazendas parceiras com desconto direto na sua conta. Zero instalação, zero obras.
-                  </p>
-                  <div
-                    className="w-full text-center font-display font-bold mt-auto"
-                    style={{
-                      backgroundColor: '#6ABF4B',
-                      color: '#FFFFFF',
-                      fontSize: '16px',
-                      padding: '14px 24px',
-                      borderRadius: '8px',
-                    }}
-                  >
-                    Quero economizar →
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* ACL tile */}
-            <Link href="/para-sua-empresa" style={{ textDecoration: 'none' }}>
-              <div
-                className="flex flex-col transition-all duration-200 cursor-pointer"
-                style={{
-                  border: '1px solid #E2E1DC',
-                  borderLeft: '4px solid #00B86B',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  minHeight: '300px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.10)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)'; }}
-              >
-                <div className="p-8 pb-6 flex items-start justify-between" style={{ backgroundColor: 'rgba(0,184,107,0.06)' }}>
-                  <div
-                    className="font-display font-extrabold leading-none"
-                    style={{ fontSize: '56px', color: '#00B86B' }}
-                  >
-                    até 30% off
-                  </div>
-                  <span
-                    className="shrink-0 font-display font-bold"
-                    style={{
-                      fontSize: '12px',
-                      color: '#FFFFFF',
-                      backgroundColor: '#00B86B',
-                      borderRadius: '999px',
-                      padding: '4px 12px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    Para empresas
-                  </span>
-                </div>
-                <div className="px-8 pt-2 pb-8 flex flex-col flex-1">
-                  <h3 className="font-display font-bold mb-2" style={{ fontSize: '22px', color: '#1A1F36' }}>
-                    Mercado Livre de Energia
-                  </h3>
-                  <p className="mb-6" style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#6B7080', lineHeight: '1.6' }}>
-                    Aberto para empresas agora. Para residências a partir de dezembro de 2027. Como broker certificado CCEE, gerenciamos toda a sua migração.
-                  </p>
-                  <div
-                    className="w-full text-center font-display font-bold mt-auto"
-                    style={{
-                      backgroundColor: '#00B86B',
-                      color: '#FFFFFF',
-                      fontSize: '16px',
-                      padding: '14px 24px',
-                      borderRadius: '8px',
-                    }}
-                  >
-                    Analisar minha empresa →
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <Reveal delay={0.05}>
+              <TileCard
+                href="/para-sua-casa"
+                discount="até 35% off"
+                badge="Disponível agora"
+                title="Geração Distribuída"
+                description="Disponível agora para residências e empresas. Energia solar de fazendas parceiras com desconto direto na sua conta. Zero instalação, zero obras."
+                cta="Quero economizar →"
+                accentColor="var(--green)"
+                Icon={House}
+              />
+            </Reveal>
+            <Reveal delay={0.12}>
+              <TileCard
+                href="/para-sua-empresa"
+                discount="até 30% off"
+                badge="Para empresas"
+                title="Mercado Livre de Energia"
+                description="Aberto para empresas agora. Para residências a partir de dezembro de 2027. Como broker certificado CCEE, gerenciamos toda a sua migração."
+                cta="Analisar minha empresa →"
+                accentColor="var(--green)"
+                Icon={Buildings}
+              />
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ── TRUST STATS — #6ABF4B lime green ─────────────────────────────── */}
-      <section className="py-20" style={{ backgroundColor: '#0A1628' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {/* ── C. HOW IT WORKS ────────────────────────────────────────── */}
+      <section
+        aria-labelledby="como-funciona-heading"
+        style={{ backgroundColor: "var(--bg-invert)", padding: "var(--section-y) var(--gutter)" }}
+      >
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <Reveal>
+            <h2
+              id="como-funciona-heading"
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                color: "#fff",
+                textAlign: "center",
+                marginBottom: "clamp(48px, 8vw, 80px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Como funciona
+            </h2>
+          </Reveal>
+
+          <div className="grid md:grid-cols-3 relative">
+            {/* Connecting line */}
+            <div
+              aria-hidden="true"
+              className="hidden md:block absolute"
+              style={{
+                top: "72px",
+                left: "calc(100% / 6)",
+                right: "calc(100% / 6)",
+                height: "1px",
+                backgroundColor: "rgba(255,255,255,0.12)",
+              }}
+            />
+
             {[
-              { value: '12k+', label: 'Comparações feitas' },
-              { value: '18%', label: 'Economia média por cliente' },
-              { value: '27', label: 'Estados cobertos' },
-              { value: '100%', label: 'Parceiros verificados' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
+              {
+                n: "01",
+                title: "Informe",
+                desc: "Nos diga seu estado, sua distribuidora e seu consumo médio. Analisamos sua elegibilidade para GD agora e para o mercado livre em 2027.",
+              },
+              {
+                n: "02",
+                title: "Compare",
+                desc: "Mostramos as opções reais disponíveis para o seu perfil — economia garantida hoje via GD, e as melhores ofertas do mercado livre quando abrir para você.",
+              },
+              {
+                n: "03",
+                title: "Troque",
+                desc: "A TrocarLuz é seu broker certificado. Cuidamos de todo o processo de migração — da notificação à distribuidora até a assinatura com seu novo fornecedor.",
+              },
+            ].map((step, i) => (
+              <Reveal key={step.n} delay={i * 0.1}>
                 <div
-                  className="font-display font-extrabold leading-none mb-3"
-                  style={{ fontSize: '72px', color: '#FFFFFF' }}
+                  className="relative z-10 flex flex-col items-center text-center"
+                  style={{ padding: "0 clamp(16px, 3vw, 40px)" }}
                 >
-                  {stat.value}
+                  <div
+                    style={{
+                      fontFamily: "var(--app-font-display)",
+                      fontWeight: 700,
+                      fontSize: "clamp(64px, 9vw, 96px)",
+                      color: "var(--yellow)",
+                      lineHeight: 1,
+                      marginBottom: "20px",
+                      letterSpacing: "-0.02em",
+                    }}
+                  >
+                    {step.n}
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: "var(--app-font-display)",
+                      fontWeight: 600,
+                      fontSize: "clamp(20px, 2.5vw, 28px)",
+                      color: "#fff",
+                      marginBottom: "12px",
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: "var(--app-font-sans)",
+                      fontSize: "16px",
+                      color: "var(--text-invert-muted)",
+                      lineHeight: "1.65",
+                    }}
+                  >
+                    {step.desc}
+                  </p>
                 </div>
-                <div
-                  style={{ fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: '16px', color: 'rgba(255,255,255,0.82)' }}
-                >
-                  {stat.label}
-                </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FINAL CTA — hero illustration on green base ───────────────────── */}
-      <section className="relative py-24 text-center text-white overflow-hidden" style={{ backgroundColor: '#00B86B' }}>
+      {/* ── E. STATS BAND ──────────────────────────────────────────── */}
+      <section
+        aria-label="Números da TrocarLuz"
+        style={{ backgroundColor: "var(--surface-invert)", padding: "var(--section-y) var(--gutter)" }}
+      >
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <Reveal delay={0}>
+              <StatItem value={12000} suffix="+" label="Comparações feitas" />
+            </Reveal>
+            <Reveal delay={0.07}>
+              <StatItem value={18} suffix="%" label="Economia média por cliente" />
+            </Reveal>
+            <Reveal delay={0.14}>
+              <StatItem value={27} suffix="" label="Estados cobertos" />
+            </Reveal>
+            <Reveal delay={0.21}>
+              <StatItem value={100} suffix="%" label="Parceiros verificados" />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── F. AUDIENCE CARDS ──────────────────────────────────────── */}
+      <section
+        aria-labelledby="audience-heading"
+        style={{ backgroundColor: "var(--bg-invert)", padding: "var(--section-y) var(--gutter)" }}
+      >
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <Reveal>
+            <h2
+              id="audience-heading"
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+                color: "#fff",
+                textAlign: "center",
+                marginBottom: "clamp(40px, 6vw, 56px)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Para quem é a TrocarLuz?
+            </h2>
+          </Reveal>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              {
+                Icon: House,
+                accentColor: "var(--green)",
+                label: "Para sua casa",
+                title: "Residências",
+                description:
+                  "Geração Distribuída já disponível para reduzir sua conta sem obras ou instalações. Conectamos você a energia solar de fazendas parceiras.",
+                cta: "Quero economizar →",
+                href: "/para-sua-casa",
+              },
+              {
+                Icon: Buildings,
+                accentColor: "var(--lime)",
+                label: "Para sua empresa",
+                title: "Empresas",
+                description:
+                  "GD + Mercado Livre de Energia para reduzir custos operacionais. Análise gratuita do seu perfil de consumo e gestão completa da migração.",
+                cta: "Analisar minha empresa →",
+                href: "/para-sua-empresa",
+              },
+            ].map(({ Icon, accentColor, label, title, description, cta, href }, i) => (
+              <Reveal key={href} delay={i * 0.1}>
+                <Link href={href} style={{ textDecoration: "none", display: "block" }}>
+                  <article
+                    style={{
+                      backgroundColor: "var(--surface-invert)",
+                      border: "1px solid var(--border-invert)",
+                      borderLeft: `4px solid ${accentColor}`,
+                      borderRadius: "var(--r-card)",
+                      padding: "clamp(28px, 4vw, 40px)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "16px",
+                      transition: "background 0.2s ease, box-shadow 0.2s ease",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.background = "rgba(255,255,255,0.06)";
+                      el.style.boxShadow = "0 12px 32px rgba(0,0,0,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.background = "var(--surface-invert)";
+                      el.style.boxShadow = "none";
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <Icon size={22} weight="bold" style={{ color: accentColor }} />
+                      <span
+                        style={{
+                          fontFamily: "var(--app-font-sans)",
+                          fontWeight: 600,
+                          fontSize: "12px",
+                          color: accentColor,
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                    <h3
+                      style={{
+                        fontFamily: "var(--app-font-display)",
+                        fontWeight: 600,
+                        fontSize: "clamp(20px, 2.5vw, 26px)",
+                        color: "#fff",
+                        margin: 0,
+                      }}
+                    >
+                      {title}
+                    </h3>
+                    <p
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontSize: "15px",
+                        color: "var(--text-invert-muted)",
+                        lineHeight: "1.65",
+                        margin: 0,
+                        flex: 1,
+                      }}
+                    >
+                      {description}
+                    </p>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignSelf: "flex-start",
+                        padding: "12px 24px",
+                        borderRadius: "999px",
+                        backgroundColor: "var(--green)",
+                        color: "#fff",
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 500,
+                        fontSize: "14px",
+                        transition: "background 0.15s ease",
+                      }}
+                    >
+                      {cta}
+                    </span>
+                  </article>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── G. LEAD FORM ───────────────────────────────────────────── */}
+      <section
+        aria-labelledby="lead-form-heading"
+        style={{ backgroundColor: "var(--bg-alt)", padding: "var(--section-y) var(--gutter)" }}
+      >
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
+          <div className="grid md:grid-cols-[55fr_45fr] gap-12 items-start">
+            {/* Left: copy */}
+            <div>
+              {/* H. ONE OVERSIZED TWO-TONE HEADING — used exactly once */}
+              <p
+                aria-hidden="true"
+                style={{
+                  fontFamily: "var(--app-font-display)",
+                  fontWeight: 700,
+                  fontSize: "clamp(3.5rem, 11vw, 9.5rem)",
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.02em",
+                  color: "var(--green)",
+                  marginBottom: "0",
+                  userSelect: "none",
+                }}
+              >
+                Economia
+              </p>
+              <Reveal>
+                <h2
+                  id="lead-form-heading"
+                  style={{
+                    fontFamily: "var(--app-font-display)",
+                    fontWeight: 700,
+                    fontSize: "clamp(2rem, 4vw, 3rem)",
+                    color: "var(--text)",
+                    lineHeight: 1.1,
+                    letterSpacing: "-0.02em",
+                    margin: "8px 0 20px",
+                  }}
+                >
+                  Sua conta de luz está alta demais?
+                </h2>
+              </Reveal>
+              <Reveal delay={0.06}>
+                <p
+                  style={{
+                    fontFamily: "var(--app-font-sans)",
+                    fontSize: "clamp(1rem, 1.5vw, 1.125rem)",
+                    color: "var(--text-muted)",
+                    lineHeight: "1.7",
+                    marginBottom: "28px",
+                  }}
+                >
+                  A Geração Distribuída (GD) permite que você use energia solar de fazendas parceiras e receba desconto direto na conta da sua distribuidora.
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.12}>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 28px", display: "flex", flexDirection: "column", gap: "16px" }}>
+                  {[
+                    "Zero investimento ou obras",
+                    "A energia continua chegando pela mesma rede",
+                    "Economia garantida todos os meses",
+                  ].map((item) => (
+                    <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                      <Lightning
+                        size={20}
+                        weight="fill"
+                        style={{ color: "var(--lime)", flexShrink: 0, marginTop: "2px" }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: "var(--app-font-sans)",
+                          fontSize: "16px",
+                          color: "var(--text)",
+                          lineHeight: "1.6",
+                        }}
+                      >
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+
+              <Reveal delay={0.18}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    backgroundColor: "var(--green)",
+                    color: "#fff",
+                    borderRadius: "999px",
+                    padding: "9px 20px",
+                    fontFamily: "var(--app-font-sans)",
+                    fontWeight: 600,
+                    fontSize: "14px",
+                    letterSpacing: "0.01em",
+                  }}
+                >
+                  Clientes economizam em média 18% na conta
+                </span>
+              </Reveal>
+            </div>
+
+            {/* Right: form card */}
+            <Reveal delay={0.08}>
+              <div
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: "var(--r-card)",
+                  boxShadow: "var(--shadow-md)",
+                  overflow: "hidden",
+                }}
+              >
+                <LeadForm type="residential" sourcePage="home" />
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── I. CTA BAND ────────────────────────────────────────────── */}
+      <section
+        aria-labelledby="cta-heading"
+        className="relative overflow-hidden"
+        style={{ backgroundColor: "var(--green)", padding: "var(--section-y) var(--gutter)", textAlign: "center" }}
+      >
+        {/* Background texture */}
         <img
           src="/illustrations/heroes/trocarluz-hero.png"
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
-          style={{ opacity: 0.5, mixBlendMode: 'multiply' }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: 0.18,
+            mixBlendMode: "multiply",
+            pointerEvents: "none",
+          }}
         />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" style={{ zIndex: 1 }}>
-          <h2
-            className="font-display font-extrabold text-white mb-5"
-            style={{ fontSize: 'clamp(40px, 5vw, 56px)', lineHeight: '1.05' }}
-          >
-            Pronto para pagar menos?
-          </h2>
-          <p
-            className="mb-10"
-            style={{ fontFamily: "'Inter', sans-serif", fontSize: '20px', color: 'rgba(255,255,255,0.82)', lineHeight: '1.6' }}
-          >
-            Compare suas opções agora. Sem custo, sem compromisso.
-          </p>
-          <Link
-            href="/para-sua-casa"
-            className="inline-block font-display font-bold transition-opacity hover:opacity-90"
-            style={{
-              backgroundColor: '#FFFFFF',
-              color: '#00B86B',
-              fontSize: '18px',
-              padding: '18px 52px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-            }}
-          >
-            Comparar agora
-          </Link>
+        <div
+          style={{
+            position: "relative",
+            zIndex: 1,
+            maxWidth: "720px",
+            margin: "0 auto",
+          }}
+        >
+          <Reveal>
+            <h2
+              id="cta-heading"
+              style={{
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(2.5rem, 5vw, 3.75rem)",
+                lineHeight: 1.02,
+                letterSpacing: "-0.02em",
+                color: "#fff",
+                marginBottom: "16px",
+              }}
+            >
+              Pronto para{" "}
+              <span style={{ color: "rgba(255,255,255,0.70)" }}>pagar menos?</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p
+              style={{
+                fontFamily: "var(--app-font-sans)",
+                fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
+                color: "rgba(255,255,255,0.82)",
+                lineHeight: "1.6",
+                marginBottom: "36px",
+              }}
+            >
+              Compare suas opções agora. Sem custo, sem compromisso.
+            </p>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <Link
+              href="/comparar-desconto"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "16px 48px",
+                borderRadius: "999px",
+                backgroundColor: "#fff",
+                color: "var(--green-text)",
+                fontFamily: "var(--app-font-sans)",
+                fontWeight: 600,
+                fontSize: "16px",
+                textDecoration: "none",
+                boxShadow: "0 4px 16px rgba(14,21,37,0.15)",
+                transition: "transform 0.15s ease, box-shadow 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.transform = "translateY(-2px)";
+                el.style.boxShadow = "0 8px 24px rgba(14,21,37,0.20)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.transform = "";
+                el.style.boxShadow = "0 4px 16px rgba(14,21,37,0.15)";
+              }}
+            >
+              Comparar agora
+            </Link>
+          </Reveal>
         </div>
       </section>
+
+      {/* ── J. FAQ ─────────────────────────────────────────────────── */}
+      <FaqSection />
     </Layout>
+  );
+}
+
+/* ── Accordion FAQ ───────────────────────────────────────────────── */
+const FAQ_ITEMS = [
+  {
+    q: "Como funciona a Geração Distribuída?",
+    a: "A GD permite que você consuma energia produzida por fazendas solares parceiras e receba o desconto diretamente na sua fatura da distribuidora. Não é necessária nenhuma instalação no seu imóvel.",
+  },
+  {
+    q: "Preciso trocar minha distribuidora?",
+    a: "Não. Sua distribuidora continua sendo a mesma. A TrocarLuz negocia com fornecedores de GD credenciados pela ANEEL e o desconto aparece na sua conta habitual.",
+  },
+  {
+    q: "Qual a economia média que posso esperar?",
+    a: "Clientes residenciais economizam em média 18% na conta de luz por mês. Para empresas, a economia pode chegar a 30% dependendo do volume de consumo e da modalidade contratada.",
+  },
+  {
+    q: "O que muda em 2027 para residências?",
+    a: "A partir de dezembro de 2027, consumidores residenciais poderão migrar para o Mercado Livre de Energia e escolher seu fornecedor. Como broker certificado CCEE, a TrocarLuz gerenciará todo o processo.",
+  },
+];
+
+function FaqSection() {
+  const [open, setOpen] = useState<number | null>(0);
+
+  return (
+    <section
+      id="duvidas"
+      aria-labelledby="faq-heading"
+      style={{ backgroundColor: "#fff", padding: "var(--section-y) var(--gutter)" }}
+    >
+      <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+        <Reveal>
+          <h2
+            id="faq-heading"
+            style={{
+              fontFamily: "var(--app-font-display)",
+              fontWeight: 700,
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              color: "var(--text)",
+              letterSpacing: "-0.02em",
+              marginBottom: "clamp(32px, 5vw, 48px)",
+            }}
+          >
+            Dúvidas frequentes
+          </h2>
+        </Reveal>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+          {FAQ_ITEMS.map((item, i) => {
+            const isOpen = open === i;
+            return (
+              <Reveal key={i} delay={i * 0.06}>
+                <div
+                  style={{
+                    border: "1px solid var(--border-light)",
+                    borderRadius: "var(--r-input)",
+                    overflow: "hidden",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <h3 style={{ margin: 0 }}>
+                    <button
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-panel-${i}`}
+                      id={`faq-btn-${i}`}
+                      onClick={() => setOpen(isOpen ? null : i)}
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: "12px",
+                        padding: "18px 20px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "16px",
+                        color: "var(--text)",
+                        minHeight: "44px",
+                      }}
+                    >
+                      <span>{item.q}</span>
+                      <svg
+                        aria-hidden="true"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                        style={{
+                          flexShrink: 0,
+                          transition: "transform 0.25s ease",
+                          transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                          color: "var(--text-muted)",
+                        }}
+                      >
+                        <path d="M4 7l5 5 5-5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </button>
+                  </h3>
+                  <div
+                    id={`faq-panel-${i}`}
+                    role="region"
+                    aria-labelledby={`faq-btn-${i}`}
+                    style={{
+                      maxHeight: isOpen ? "400px" : "0",
+                      overflow: "hidden",
+                      transition: "max-height 0.3s ease",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontSize: "15px",
+                        color: "var(--text-muted)",
+                        lineHeight: "1.65",
+                        padding: "0 20px 20px",
+                        margin: 0,
+                      }}
+                    >
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        <Reveal delay={0.1}>
+          <div style={{ marginTop: "32px", textAlign: "center" }}>
+            <Link
+              href="/perguntas-frequentes"
+              style={{
+                fontFamily: "var(--app-font-sans)",
+                fontWeight: 500,
+                fontSize: "15px",
+                color: "var(--green-text)",
+                textDecoration: "underline",
+                textUnderlineOffset: "3px",
+              }}
+            >
+              Ver todas as perguntas frequentes →
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+    </section>
   );
 }

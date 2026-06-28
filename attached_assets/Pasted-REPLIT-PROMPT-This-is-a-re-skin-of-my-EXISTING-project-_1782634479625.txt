@@ -1,0 +1,145 @@
+REPLIT PROMPT:
+
+This is a re-skin of my EXISTING project (the current Vite + React + Tailwind app in Replit). Do NOT rebuild from scratch and do NOT delete content. First, inspect the current project and report its stack (framework, styling, file structure) in one line. Then keep all existing copy, content, page structure, the logo, and the colour palette, and re-clothe the site in the new design system below. If something already exists (a section, a form, copy), restyle it in place — never replace its text with placeholders. Install lenis (smooth scroll) and framer-motion for reveal animations.
+
+SCOPE — VITE SPA (interim visual re-skin; read first):
+This is a VISUAL + INTERACTION re-skin of the existing client-rendered Vite app. It does NOT add SSR and does NOT fix SEO/GEO — server-rendering is a separate Next.js migration happening later. Therefore:
+- framer-motion and lenis are used as normal client-side React here. There is NO Server/Client component split (that's a Next.js concept; ignore it).
+- Keep the existing per-page meta handling (current SEOHead/client-side) AS-IS. Do NOT invest in SEO/meta in this pass — it's redone in the Next.js migration.
+- Build every component as clean, standard React + Tailwind so it PORTS to Next.js later with minimal rework. Avoid Vite-only hacks or exotic dependencies that would be painful to migrate.
+- Restyle existing sections in place; keep all real pt-BR copy. No placeholders except an explicitly-marked FAQ if none exists.
+
+GOAL:
+Elevate the visual craft and interaction layer to a premium, modern standard: a floating pill navigation that condenses on scroll, a top scroll-progress bar, site-wide smooth scroll, squircle radii, flat pill buttons, soft shadows, one oversized two-tone section heading, scroll-reveal motion, a subtle parallax hero, and an accordion FAQ. Keep my existing sections and pt-BR copy intact.
+
+CONTEXT:
+Brazilian energy-savings broker (CCEE certified). Lead-gen funnel: compare energy discounts → request/send bill → consultant. pt-BR throughout. Audience is cost-conscious and skeptical of "switch and save" pitches, so the design must read trustworthy and clear, not gimmicky. Existing palette stays: navy base, green action color, yellow as a signal color.
+
+DESIGN TOKENS (implement as BOTH CSS variables with these exact names AND Tailwind theme tokens, so colours are swappable):
+
+:root{
+  /* SURFACES */
+  --bg:            #FFFFFF;
+  --bg-alt:        #F5F4EF;
+  --bg-invert:     #0E1525;
+  --surface:       #FFFFFF;
+  --surface-invert:#16203A;
+
+  /* TEXT */
+  --text:          #0E1525;
+  --text-muted:    #515A68;
+  --text-invert:   #FFFFFF;
+  --text-invert-muted:#9AA6B8;
+
+  /* BRAND */
+  --green:         #1FA459;    /* SINGLE action color (button fills, white text). VERIFY white-on-green ≥4.5:1; darken toward #1B9C53 if it fails */
+  --green-hover:   #1A8F4D;
+  --green-text:    #157A3C;    /* green TEXT/links on light backgrounds */
+  --lime:          #8FD14F;    /* bright accent ONLY: logo bolt, focus glow, tiny highlights */
+  --yellow:        #F2C33C;    /* SIGNAL color: urgency bar, big stat numbers, one emphasis word */
+  --yellow-ink:    #2A2003;    /* dark text on yellow, ≥4.5:1 */
+
+  --border:        #E6E4DC;
+  --border-invert: #243149;
+
+  /* RADIUS */
+  --r-pill:  999px;
+  --r-card:  22px;
+  --r-input: 14px;
+
+  /* SHADOW */
+  --shadow-sm:  0 1px 2px rgba(14,21,37,.06);
+  --shadow-md:  0 10px 34px rgba(14,21,37,.10);
+  --shadow-nav: 0 8px 30px rgba(14,21,37,.12);
+
+  /* SPACING */
+  --container: 1240px;
+  --gutter:    clamp(20px, 4vw, 32px);
+  --section-y: clamp(4.5rem, 10vw, 8.5rem);
+
+  /* TYPE */
+  --font-display: "Clash Display", "Inter", system-ui, sans-serif;
+  --font-text:    "Inter", system-ui, sans-serif;
+}
+
+Type scale: oversized word clamp(3.5rem,11vw,9.5rem)/lh.9/-0.02em · h1 hero clamp(2.75rem,6.5vw,5rem)/lh1.02/-0.02em · h2 clamp(2rem,4vw,3rem) · h3 1.5rem · lead 1.25rem/lh1.55 · body 1.0625rem(17px)/lh1.6 · eyebrow .8125rem/ls.04em · nav+button .9375rem/500.
+
+DESIGN SYSTEM:
+Surfaces: bg #FFFFFF, bg-alt #F5F4EF, bg-invert #0E1525, surface #FFFFFF, surface-invert #16203A.
+Text: text #0E1525, text-muted #515A68, text-invert #FFFFFF, text-invert-muted #9AA6B8.
+Brand: green #1FA459 (single action color, button fills with WHITE text), green-hover #1A8F4D, green-text #157A3C, lime #8FD14F (logo bolt + accents only), yellow #F2C33C (signal only), yellow-ink #2A2003.
+Borders: border #E6E4DC (light), border-invert #243149 (navy).
+Radius: pill 999px (nav + ALL buttons), card 22px, input 14px.
+Shadows (soft only): sm 0 1px 2px rgba(14,21,37,.06), md 0 10px 34px rgba(14,21,37,.10), nav 0 8px 30px rgba(14,21,37,.12). No harsh/dark shadows.
+Spacing: 8px rhythm; section padding clamp(4.5rem,10vw,8.5rem); container max-width 1240px with clamp(20px,4vw,32px) gutters.
+Fonts: headings "Clash Display" from Fontshare (https://api.fontshare.com/v2/css?f[]=clash-display@600,500&display=swap), body "Inter" from Google Fonts (400/500/600). Preconnect both origins, font-display: swap, latin subset.
+Type scale: oversized word clamp(3.5rem,11vw,9.5rem)/lh.9/-0.02em; h1 clamp(2.75rem,6.5vw,5rem)/lh1.02; h2 clamp(2rem,4vw,3rem); body 17px/lh1.6.
+
+COLOR HIERARCHY RULE (enforce site-wide):
+GREEN is the ONLY primary-action color. Every primary CTA button is green with white text.
+YELLOW is a signal/highlight color ONLY: the urgency bar, the big 01/02/03 numbers, the big stat numbers, and at most one emphasized word per section. NEVER use yellow for a button or CTA link.
+Differentiate "Para sua casa" vs "Para sua empresa" by label and a small icon, NOT by button color. Both their CTAs are green.
+Remove all gradient fills from buttons; use flat green fills.
+
+GLOBAL SHELL (apply across the whole site):
+Floating pill navigation: a rounded pill bar (radius 999px) sitting just below the top edge with side margins, surface white on light pages / surface-invert on dark hero, shadow-nav, subtle border. Left: existing TROCARLUZ logo (keep the lightning bolt + lime). Center: existing links (Ver desconto, Para sua casa, Para sua empresa, Geração Distribuída, Carro Elétrico, Guias, Dúvidas); any with sub-items become hover/focus dropdowns. Right: the primary green pill CTA "Ver desconto disponível". On scroll past 48px, condense the nav (reduce vertical padding, increase background opacity + blur, tighten shadow) via transform/opacity only — reserve height so there is ZERO layout shift. Below 1024px collapse to a hamburger that opens a full-width sheet menu (same links + green CTA) that traps focus and closes on Esc/overlay tap.
+Top scroll-progress bar: 3px, lime color, fixed at the very top, width = scroll %, desktop only, hidden under prefers-reduced-motion.
+Lenis smooth scroll site-wide (lerp ~0.1); disable (instant scroll) under prefers-reduced-motion.
+Scroll-reveal motion on section blocks only: fade + 18–24px rise, 450ms ease-out, 70ms stagger for grouped items, trigger once at ~15% in view. Do not animate every element. Animate transform/opacity only.
+
+SECTION-BY-SECTION (keep all existing copy; restyle only):
+
+A. HERO ("Compare e economize na sua conta de energia."): KEEP the geometric lightning background as-is — it stays my brand asset, do not replace it with photos. FIX contrast: add a left-to-right dark scrim/overlay over the texture (navy, ~0.55→0.0 opacity left-to-right, or a radial dark pool behind the text) so the white headline and subhead always hit ≥4.5:1 regardless of the texture beneath. Add SUBTLE parallax: shift the hero background-position-y a small range on scroll (transform-based), disabled under reduced-motion. Restyle the two CTAs as pills: primary green "Ver desconto disponível", secondary outline (white border on dark) "Enviar conta de luz". Keep the trust line "Broker certificado CCEE · Mais de 12 mil comparações feitas" with the shield icon.
+
+B. URGENCY BAR (yellow, "A partir de dezembro de 2027… Somos esse broker." + "Saiba como →"): keep yellow background (correct signal use) and dark text (yellow-ink, ≥4.5:1). Tighten to the new spacing; keep the lightning icon; make "Saiba como →" an underlined dark text link, not a button.
+
+C. "Como funciona" (navy, 01/02/03 with Informe/Compare/Troque): keep. Keep the big numbers YELLOW (signal use). Refine to the new type scale and 8px rhythm; keep the thin connecting line between numbers; apply reveal-on-scroll stagger across the three steps.
+
+D. "O que você quer comparar?" (two cards: Geração Distribuída / Mercado Livre): restyle both as squircle cards (radius 22px, shadow-md, subtle left accent stripe in green). Keep the pill badges ("Disponível agora", "Para empresas") — badge backgrounds use green or neutral, NOT yellow. Both card CTAs are green pills ("Quero economizar →", "Analisar minha empresa →"). Keep the "até X% off" figure large in green — but ensure X matches the corrected calculator bands (do NOT display a higher % than the calculator actually returns; if the current card says 35%, lower it to match).
+
+E. STATS band (navy: 12k+, 18%, 27, 100%): keep white numbers on navy in the display font, oversized. Optional: count-up animation on first scroll into view (disabled under reduced-motion). Keep labels in text-invert-muted.
+
+F. AUDIENCE TABS ("Para sua casa" / "Para sua empresa"): restyle as two squircle cards on navy (surface-invert). APPLY THE COLOR RULE: both action links are GREEN ("Quero economizar →", "Analisar minha empresa →") — remove the yellow from "Analisar minha empresa". Distinguish empresa with a small building/briefcase icon and the label, not color. Keep a thin left accent stripe (green for casa, a neutral/lime stripe for empresa) if a visual distinction is wanted.
+
+G. LEAD FORM ("Sua conta de luz está alta demais?" + Nome completo / WhatsApp / Estado / Consumo médio → "Descobrir economia"): this is the conversion centerpiece — make it prominent. Put it in a white squircle card (radius 22px, shadow-md) on cream (bg-alt). Inputs: radius 14px, clear visible labels ABOVE each field (keep existing labels), generous 44px+ height, visible focus ring (lime glow + 2px outline). Keep the green benefit-pill "Clientes economizam em média 18% na conta" and the "Seus dados estão seguros. Sem complicação." microcopy. Submit is a full-width green pill "Descobrir economia". Mask the WhatsApp field as (11) 99999-9999. Optional craft touch: as this section scrolls into view, animate it from blur(8px)+opacity .0 to blur(0)+opacity 1 over ~600ms, disabled under reduced-motion.
+
+H. ONE OVERSIZED TWO-TONE HEADING (signature accent — use exactly once): pick a single section heading and render it as a giant two-tone word using the oversized type scale, e.g. part in --text and part in --green (or --text-muted). Suggested target: the "Pronto para pagar menos?" CTA section, OR add the word "Economia" oversized above the lead form. Do NOT apply this treatment to more than one heading.
+
+I. CTA band ("Pronto para pagar menos?" + "Comparar agora"): keep on green background; restyle the button as a WHITE pill with green-text label "Comparar agora"; keep subhead "Compare suas opções agora. Sem custo, sem compromisso."
+
+J. FAQ / "Dúvidas": if a FAQ section exists, restyle it as an accessible accordion (button + aria-expanded, region toggling, one open by default, chevron rotates, smooth height). If none exists, scaffold one with 4 Q/A clearly marked as PLACEHOLDER pt-BR for me to fill — do not invent real claims.
+
+K. FOOTER (navy, columns Serviços / Recursos / Empresa + "Parceiro de Ótima Energia" + "Parceiros verificados" pill): keep all links and content; restyle to the new spacing, type, and the verified-partners pill; keep the logo.
+
+RESPONSIVE BEHAVIOR:
+Mobile-first. Breakpoints base/640/768/1024/1280.
+Pill nav → hamburger sheet below 1024. Hero, comparison cards, audience cards, stats, and the lead-form section all stack to single column on mobile (form goes full-width below the heading). Oversized headings scale via clamp and NEVER cause horizontal scroll at 320px. Tap targets ≥44px.
+
+INTERACTIONS:
+Buttons: hover lift 1–2px + slight darken (green-hover), ≤150ms, visible focus ring (lime).
+Cards: hover lift + shadow-md.
+Nav condense, hero parallax, scroll reveals, count-up, and the form blur-in are all transform/opacity-based and all disabled under prefers-reduced-motion.
+
+ACCESSIBILITY (WCAG 2.2 AA):
+Semantic landmarks (header/nav/main/section/footer), exactly one h1, logical heading order.
+VERIFY contrast and adjust tokens if any pairing fails, then tell me what you changed: white-on-green button labels ≥4.5:1 (darken --green if needed); text-muted on white AND on cream ≥4.5:1; dark text on yellow ≥4.5:1; hero white text over the scrim ≥4.5:1.
+Full keyboard operability: nav dropdowns, sheet menu (focus trap + restore), accordion, and every form field. Inputs have associated <label>s. Visible focus everywhere.
+prefers-reduced-motion disables Lenis smoothing, parallax, blur-in, count-up, and large reveals; site stays fully usable.
+
+PERFORMANCE (Core Web Vitals):
+Preconnect to font origins; font-display: swap. Keep JS lean (lenis + one animation lib only).
+Lazy-load below-the-fold images; set explicit width/height or aspect-ratio on every image to prevent CLS. The hero geometric background must not cause layout shift; ensure the nav condense reserves height (no CLS).
+Optimize the hero texture (compressed WebP/AVIF). Hero LCP element should be the headline text or one optimized image, not a heavy asset.
+
+ACCEPTANCE CRITERIA:
+Stack reported; existing copy/content/logo preserved (no placeholders introduced except an explicitly-marked FAQ if none existed).
+Components built as clean, standard React + Tailwind so they port to a future Next.js migration with minimal rework.
+Floating pill nav condenses on scroll with ZERO layout shift; mobile sheet opens/closes, traps + restores focus.
+Scroll-progress bar tracks scroll on desktop; hidden under reduced-motion.
+Color rule holds: no yellow buttons/CTA links anywhere; all primary CTAs green with white text; the "Analisar minha empresa" CTA is now green.
+Hero white text passes ≥4.5:1 over the scrim across the full texture; subtle parallax works and disables under reduced-motion.
+Lead-form section sits in a prominent squircle card with labeled inputs, ≥44px targets, masked WhatsApp, visible focus.
+Exactly one oversized two-tone heading exists.
+Accordion expands/collapses via keyboard; pricing/comparison cards and audience cards are squircle with flat green CTAs.
+No horizontal scroll at 320px. Lighthouse: no CLS warnings, accessibility ≥95.
+All colors driven by the named tokens — changing --green recolors every CTA, changing --bg-invert recolors every dark section.

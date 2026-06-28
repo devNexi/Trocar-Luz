@@ -1,1 +1,2 @@
 - [Next.js firewall block](nextjs-firewall.md) — Replit package firewall blocks all next@15.x downloads with 403; stay on Vite SPA for trocarluz.
+- [Tailwind v4 responsive classes](tailwind-v4-responsive.md) — Tailwind v4 `lg:hidden` / `hidden lg:flex` break on fixed-position elements; use explicit CSS media queries instead.
