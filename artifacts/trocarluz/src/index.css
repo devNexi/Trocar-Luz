@@ -108,6 +108,11 @@
   --shadow-md:  0 10px 34px rgba(14,21,37,.10);
   --shadow-nav: 0 8px 30px rgba(14,21,37,.12);
 
+  /* ── Payard-style hero + light-section tokens */
+  --hero-green:    #0E4A2C;
+  --hero-green-2:  #12603A;
+  --bg-green-tint: #E8F7EF;
+
   /* ── Spacing */
   --container: 1240px;
   --gutter:    clamp(20px, 4vw, 32px);
@@ -399,6 +404,12 @@
   @media (prefers-reduced-motion: reduce) {
     .motion-safe\:animate-reveal { animation: none !important; }
   }
+}
+
+/* ── Hero illustration responsive ──────────────────────────────── */
+.hero-illustration { display: none !important; }
+@media (min-width: 768px) {
+  .hero-illustration { display: block !important; }
 }
 
 /* ── Nav responsive (can't rely on Tailwind responsive classes for fixed elements) */

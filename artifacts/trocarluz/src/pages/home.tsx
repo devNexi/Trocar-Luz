@@ -62,7 +62,7 @@ function StatItem({ value, suffix, label }: { value: number; suffix: string; lab
           fontWeight: 700,
           fontSize: "clamp(52px, 7vw, 80px)",
           lineHeight: 1,
-          color: "#fff",
+          color: "var(--bg-invert)",
           letterSpacing: "-0.02em",
           marginBottom: "12px",
         }}
@@ -75,7 +75,7 @@ function StatItem({ value, suffix, label }: { value: number; suffix: string; lab
           fontFamily: "var(--app-font-sans)",
           fontWeight: 500,
           fontSize: "15px",
-          color: "var(--text-invert-muted)",
+          color: "var(--text-muted)",
         }}
       >
         {label}
@@ -94,6 +94,7 @@ function TileCard({
   cta,
   accentColor,
   Icon,
+  svgBg,
 }: {
   href: string;
   discount: string;
@@ -103,6 +104,7 @@ function TileCard({
   cta: string;
   accentColor: string;
   Icon: React.ElementType;
+  svgBg?: React.ReactElement;
 }) {
   return (
     <Link href={href} style={{ textDecoration: "none", display: "block" }}>
@@ -121,8 +123,28 @@ function TileCard({
             alignItems: "flex-start",
             justifyContent: "space-between",
             gap: "12px",
+            minHeight: "160px",
+            position: "relative",
+            overflow: "hidden",
           }}
         >
+          {svgBg && (
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                bottom: "-4px",
+                right: "-4px",
+                width: "130px",
+                height: "100px",
+                color: accentColor,
+                opacity: 0.10,
+                pointerEvents: "none",
+              }}
+            >
+              {svgBg}
+            </div>
+          )}
           <div
             style={{
               fontFamily: "var(--app-font-display)",
@@ -232,16 +254,34 @@ export default function Home() {
       <section
         aria-labelledby="hero-heading"
         className="relative overflow-hidden text-white"
-        style={{ minHeight: "100svh", backgroundColor: "var(--bg-invert)" }}
+        style={{ minHeight: "100svh", backgroundColor: "var(--hero-green)" }}
       >
-        {/* Parallax background */}
+        {/* Dot/halftone texture — pure CSS, ~7% opacity */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
-            inset: "-10% 0 -10% 0",
+            inset: 0,
+            backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Illustration — right-anchored, full vibrancy, parallax */}
+        <div
+          className="hero-illustration"
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "-10%",
+            width: "62%",
+            height: "120%",
             transform: `translateY(${parallaxOffset}px)`,
             willChange: "transform",
+            zIndex: 0,
           }}
         >
           <img
@@ -251,33 +291,23 @@ export default function Home() {
             fetchPriority="high"
             style={{
               width: "100%",
-              height: "120%",
+              height: "100%",
               objectFit: "cover",
+              objectPosition: "left center",
               display: "block",
-              opacity: 0.45,
             }}
           />
         </div>
 
-        {/* Left-to-right dark scrim — ensures ≥4.5:1 on white text */}
+        {/* Left-edge green blend — keeps text area clean, NOT a dark scrim */}
         <div
           aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            background:
-              "linear-gradient(90deg, rgba(14,21,37,0.82) 0%, rgba(14,21,37,0.52) 48%, rgba(14,21,37,0.15) 100%)",
-          }}
-        />
-        {/* Top scrim for nav area */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: "0 0 auto 0",
-            height: "30%",
-            background:
-              "linear-gradient(to bottom, rgba(14,21,37,0.60) 0%, transparent 100%)",
+            background: "linear-gradient(to right, #0E4A2C 38%, rgba(14,74,44,0) 72%)",
+            pointerEvents: "none",
+            zIndex: 0,
           }}
         />
 
@@ -297,49 +327,73 @@ export default function Home() {
             paddingBottom: "80px",
           }}
         >
-          <div style={{ maxWidth: "580px" }}>
-            <h1
-              id="hero-heading"
+          <h1
+            id="hero-heading"
+            style={{
+              fontFamily: "var(--app-font-display)",
+              fontWeight: 700,
+              fontSize: "clamp(3.5rem, 9vw, 7rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.02em",
+              marginBottom: "28px",
+            }}
+          >
+            <span style={{ display: "block", color: "#fff" }}>Compare e economize</span>
+            <span style={{ display: "block", color: "rgba(255,255,255,0.60)" }}>na sua conta de energia.</span>
+          </h1>
+          <p
+            style={{
+              fontFamily: "var(--app-font-sans)",
+              fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
+              lineHeight: 1.6,
+              color: "rgba(255,255,255,0.88)",
+              maxWidth: "520px",
+              marginBottom: "40px",
+            }}
+          >
+            Geração distribuída já disponível para reduzir sua conta agora. E a partir de dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 mb-8">
+            <Link
+              href="/comparar-desconto"
               style={{
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(2.75rem, 6.5vw, 5rem)",
-                lineHeight: 1.02,
-                letterSpacing: "-0.02em",
-                color: "#fff",
-                marginBottom: "24px",
-              }}
-            >
-              Compare e economize na sua conta de energia.
-            </h1>
-            <p
-              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#fff",
+                color: "var(--green-text)",
                 fontFamily: "var(--app-font-sans)",
-                fontSize: "clamp(1rem, 2vw, 1.25rem)",
-                lineHeight: 1.55,
-                color: "rgba(255,255,255,0.88)",
-                maxWidth: "480px",
-                marginBottom: "40px",
+                fontWeight: 600,
+                fontSize: "15px",
+                padding: "15px 32px",
+                borderRadius: "999px",
+                textDecoration: "none",
+                transition: "background 0.15s ease, transform 0.1s ease",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "#F0F0EE";
+                el.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.background = "#fff";
+                el.style.transform = "";
               }}
             >
-              Geração distribuída já disponível para reduzir sua conta agora. E a partir de dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
-            </p>
+              Ver desconto disponível
+            </Link>
+            <Link href="/enviar-conta" className="btn-ghost" style={{ fontSize: "15px", padding: "15px 32px" }}>
+              Enviar conta de luz
+            </Link>
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 mb-8">
-              <Link href="/comparar-desconto" className="btn-primary" style={{ fontSize: "15px", padding: "15px 32px" }}>
-                Ver desconto disponível
-              </Link>
-              <Link href="/enviar-conta" className="btn-ghost" style={{ fontSize: "15px", padding: "15px 32px" }}>
-                Enviar conta de luz
-              </Link>
-            </div>
-
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.80)" }}>
-              <ShieldCheck size={18} weight="fill" style={{ color: "var(--lime)", flexShrink: 0 }} />
-              <span style={{ fontFamily: "var(--app-font-sans)", fontSize: "14px" }}>
-                Broker certificado CCEE · Mais de 12 mil comparações feitas
-              </span>
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255,255,255,0.80)" }}>
+            <ShieldCheck size={18} weight="fill" style={{ color: "var(--lime)", flexShrink: 0 }} />
+            <span style={{ fontFamily: "var(--app-font-sans)", fontSize: "14px" }}>
+              Broker certificado CCEE · Mais de 12 mil comparações feitas
+            </span>
           </div>
         </div>
       </section>
@@ -428,6 +482,16 @@ export default function Home() {
                 cta="Quero economizar →"
                 accentColor="var(--green)"
                 Icon={House}
+                svgBg={
+                  <svg viewBox="0 0 130 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="65" cy="50" r="48" opacity="0.4"/>
+                    <path d="M65 10 L55 30 L75 30 Z" opacity="0.7"/>
+                    <path d="M65 90 L55 70 L75 70 Z" opacity="0.7"/>
+                    <path d="M25 50 L45 40 L45 60 Z" opacity="0.7"/>
+                    <path d="M105 50 L85 40 L85 60 Z" opacity="0.7"/>
+                    <circle cx="65" cy="50" r="16" opacity="0.9"/>
+                  </svg>
+                }
               />
             </Reveal>
             <Reveal delay={0.12}>
@@ -440,6 +504,14 @@ export default function Home() {
                 cta="Analisar minha empresa →"
                 accentColor="var(--green)"
                 Icon={Buildings}
+                svgBg={
+                  <svg viewBox="0 0 130 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="30" width="50" height="55" rx="3" opacity="0.35"/>
+                    <rect x="30" y="20" width="30" height="65" rx="2" opacity="0.55"/>
+                    <rect x="40" y="10" width="10" height="75" rx="1" opacity="0.3"/>
+                    <path d="M80 25 L72 48 L82 48 L70 75 L90 45 L79 45 Z" opacity="0.85"/>
+                  </svg>
+                }
               />
             </Reveal>
           </div>
@@ -449,7 +521,7 @@ export default function Home() {
       {/* ── C. HOW IT WORKS ────────────────────────────────────────── */}
       <section
         aria-labelledby="como-funciona-heading"
-        style={{ backgroundColor: "var(--bg-invert)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "#fff", padding: "var(--section-y) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <Reveal>
@@ -459,7 +531,7 @@ export default function Home() {
                 fontFamily: "var(--app-font-display)",
                 fontWeight: 700,
                 fontSize: "clamp(2rem, 4vw, 3rem)",
-                color: "#fff",
+                color: "var(--text)",
                 textAlign: "center",
                 marginBottom: "clamp(48px, 8vw, 80px)",
                 letterSpacing: "-0.02em",
@@ -479,7 +551,7 @@ export default function Home() {
                 left: "calc(100% / 6)",
                 right: "calc(100% / 6)",
                 height: "1px",
-                backgroundColor: "rgba(255,255,255,0.12)",
+                backgroundColor: "rgba(14,21,37,0.12)",
               }}
             />
 
@@ -523,7 +595,7 @@ export default function Home() {
                       fontFamily: "var(--app-font-display)",
                       fontWeight: 600,
                       fontSize: "clamp(20px, 2.5vw, 28px)",
-                      color: "#fff",
+                      color: "var(--text)",
                       marginBottom: "12px",
                     }}
                   >
@@ -533,7 +605,7 @@ export default function Home() {
                     style={{
                       fontFamily: "var(--app-font-sans)",
                       fontSize: "16px",
-                      color: "var(--text-invert-muted)",
+                      color: "var(--text-muted)",
                       lineHeight: "1.65",
                     }}
                   >
@@ -549,7 +621,7 @@ export default function Home() {
       {/* ── E. STATS BAND ──────────────────────────────────────────── */}
       <section
         aria-label="Números da TrocarLuz"
-        style={{ backgroundColor: "var(--surface-invert)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "var(--bg-green-tint)", padding: "var(--section-y) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -572,7 +644,7 @@ export default function Home() {
       {/* ── F. AUDIENCE CARDS ──────────────────────────────────────── */}
       <section
         aria-labelledby="audience-heading"
-        style={{ backgroundColor: "var(--bg-invert)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "var(--bg-alt)", padding: "var(--section-y) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <Reveal>
@@ -582,7 +654,7 @@ export default function Home() {
                 fontFamily: "var(--app-font-display)",
                 fontWeight: 700,
                 fontSize: "clamp(2rem, 4vw, 3rem)",
-                color: "#fff",
+                color: "var(--text)",
                 textAlign: "center",
                 marginBottom: "clamp(40px, 6vw, 56px)",
                 letterSpacing: "-0.02em",
@@ -713,22 +785,6 @@ export default function Home() {
           <div className="grid md:grid-cols-[55fr_45fr] gap-12 items-start">
             {/* Left: copy */}
             <div>
-              {/* H. ONE OVERSIZED TWO-TONE HEADING — used exactly once */}
-              <p
-                aria-hidden="true"
-                style={{
-                  fontFamily: "var(--app-font-display)",
-                  fontWeight: 700,
-                  fontSize: "clamp(3.5rem, 11vw, 9.5rem)",
-                  lineHeight: 0.9,
-                  letterSpacing: "-0.02em",
-                  color: "var(--green)",
-                  marginBottom: "0",
-                  userSelect: "none",
-                }}
-              >
-                Economia
-              </p>
               <Reveal>
                 <h2
                   id="lead-form-heading"
@@ -739,7 +795,7 @@ export default function Home() {
                     color: "var(--text)",
                     lineHeight: 1.1,
                     letterSpacing: "-0.02em",
-                    margin: "8px 0 20px",
+                    margin: "0 0 20px",
                   }}
                 >
                   Sua conta de luz está alta demais?

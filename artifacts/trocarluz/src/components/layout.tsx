@@ -44,22 +44,10 @@ export function Layout({ children }: { children: ReactNode }) {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  const isDark = isHome;
-
-  const navBg = isDark
-    ? scrolled
-      ? "rgba(22,32,58,0.97)"
-      : "rgba(14,21,37,0.55)"
-    : "rgba(255,255,255,0.97)";
-
-  const navBorder = isDark
-    ? scrolled
-      ? "1px solid rgba(255,255,255,0.08)"
-      : "1px solid rgba(255,255,255,0.10)"
-    : "1px solid #E6E4DC";
-
-  const linkColor = isDark ? "rgba(255,255,255,0.88)" : "#0E1525";
-  const linkHoverColor = isDark ? "#fff" : "#1FA459";
+  const navBg = scrolled ? "rgba(255,255,255,0.98)" : "rgba(255,255,255,0.92)";
+  const navBorder = "1px solid #E6E4DC";
+  const linkColor = "#0E1525";
+  const linkHoverColor = "#1FA459";
 
   return (
     <div className="min-h-[100dvh] flex flex-col" style={{ backgroundColor: "var(--bg-alt)" }}>
@@ -145,7 +133,7 @@ export function Layout({ children }: { children: ReactNode }) {
               fontSize: "14px",
               padding: "10px 22px",
               borderRadius: "999px",
-              backgroundColor: "var(--green)",
+              backgroundColor: "var(--green-text)",
               color: "#fff",
               textDecoration: "none",
               whiteSpace: "nowrap",
@@ -154,12 +142,12 @@ export function Layout({ children }: { children: ReactNode }) {
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLAnchorElement;
-              el.style.background = "var(--green-hover)";
+              el.style.background = "var(--green)";
               el.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLAnchorElement;
-              el.style.background = "var(--green)";
+              el.style.background = "var(--green-text)";
               el.style.transform = "";
             }}
           >
@@ -179,7 +167,7 @@ export function Layout({ children }: { children: ReactNode }) {
               border: "none",
               cursor: "pointer",
               padding: "6px",
-              color: isDark ? "#fff" : "var(--text)",
+              color: "var(--text)",
               display: "flex",
               alignItems: "center",
             }}
