@@ -135,9 +135,9 @@ export function Layout({ children }: { children: ReactNode }) {
             style={{ flexShrink: 0, lineHeight: 0 }}
           >
             <img
-              src="/trocarluz-logo.png"
+              src="/img/logo-trocarluz.png"
               alt="TrocarLuz"
-              style={{ height: "28px", width: "auto", display: "block" }}
+              style={{ height: "38px", width: "auto", display: "block" }}
             />
           </Link>
 
@@ -491,13 +491,15 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      {/* ── Footer — cream background, ink text ─────────────────────── */}
+      {/* ── Footer — brand yellow background ────────────────────────── */}
       <footer
         aria-label="Rodapé"
         style={{
-          backgroundColor: "var(--cream)",
-          borderTop: "1px solid var(--border)",
-          color: "var(--ink)",
+          backgroundColor: "#F4EAA6",
+          backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
+          backgroundSize: "22px 22px",
+          borderTop: "1px solid rgba(26,36,16,0.12)",
+          color: "#1A2410",
         }}
       >
         <div
@@ -511,9 +513,9 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="md:col-span-1">
               <Link href="/" style={{ display: "block", lineHeight: 0, marginBottom: "16px" }}>
                 <img
-                  src="/trocarluz-logo.png"
+                  src="/img/logo-trocarluz.png"
                   alt="TrocarLuz"
-                  style={{ height: "28px", width: "auto", display: "block" }}
+                  style={{ height: "34px", width: "auto", display: "block" }}
                 />
               </Link>
               <p
@@ -532,14 +534,14 @@ export function Layout({ children }: { children: ReactNode }) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  background: "var(--tint)",
-                  border: "1px solid rgba(31,164,89,0.20)",
+                  background: "#fff",
+                  border: "1px solid rgba(26,36,16,0.20)",
                   borderRadius: "999px",
                   padding: "5px 14px",
                   fontFamily: "var(--app-font-sans)",
                   fontSize: "12px",
                   fontWeight: 500,
-                  color: "var(--green-text)",
+                  color: "#1A2410",
                 }}
               >
                 ✓ Parceiros verificados
@@ -578,15 +580,15 @@ export function Layout({ children }: { children: ReactNode }) {
                         style={{
                           fontFamily: "var(--app-font-sans)",
                           fontSize: "14px",
-                          color: "rgba(26,36,16,0.60)",
+                          color: "rgba(26,36,16,0.85)",
                           textDecoration: "none",
                           transition: "color 0.15s ease",
                         }}
                         onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink)";
+                          (e.currentTarget as HTMLAnchorElement).style.color = "#1A2410";
                         }}
                         onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLAnchorElement).style.color = "rgba(26,36,16,0.60)";
+                          (e.currentTarget as HTMLAnchorElement).style.color = "rgba(26,36,16,0.85)";
                         }}
                       >
                         {l.label}
@@ -612,7 +614,7 @@ export function Layout({ children }: { children: ReactNode }) {
               style={{
                 fontFamily: "var(--app-font-sans)",
                 fontSize: "13px",
-                color: "rgba(26,36,16,0.50)",
+                color: "rgba(26,36,16,0.70)",
               }}
             >
               © {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados. Broker certificado CCEE.
@@ -628,20 +630,20 @@ export function Layout({ children }: { children: ReactNode }) {
               <Link
                 href="/politica-de-privacidade"
                 style={{
-                  color: "rgba(26,36,16,0.50)",
+                  color: "rgba(26,36,16,0.80)",
                   textDecoration: "none",
                   transition: "color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink)";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#1A2410";
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.color = "rgba(26,36,16,0.50)";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "rgba(26,36,16,0.80)";
                 }}
               >
                 Política de Privacidade
               </Link>
-              <span style={{ color: "rgba(26,36,16,0.50)" }}>
+              <span style={{ color: "rgba(26,36,16,0.65)" }}>
                 Ajudando o Brasil a economizar mais.
               </span>
             </div>

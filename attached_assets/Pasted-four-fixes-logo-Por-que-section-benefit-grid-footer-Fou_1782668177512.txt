@@ -1,0 +1,19 @@
+four fixes (logo, "Por que" section, benefit grid, footer):
+
+Four targeted fixes. Report files touched, then implement all. Verify each before reporting done; if any item is skipped, say which.
+
+LOGO (nav + footer): The current header/footer logo has "LUZ" in white, which is invisible on the yellow background. Replace the logo image in BOTH the nav and the footer with /public/img/logo-trocarluz.png (this version has a dark navy "LUZ"). Render it at ~38px tall in the nav (auto width) and ~34px tall in the footer. Use /public/img/logo-bolt.png as the favicon only. Confirm the full "TROCARLUZ" wordmark is clearly legible on the yellow background.
+"POR QUE A TROCARLUZ?" SECTION — make it a clean, balanced people collage (remove ALL 3D objects here): Delete every 3D render currently floating in this section (the folder, solar farm, energy bill, solar panel, and lightning bolt) — none of them belong in this section. Replace them with exactly 6 squircle photo tiles: /public/img/person-1.webp, person-3.webp, person-4.webp, person-6.webp, person-7.webp, person-8.webp. Arrange them BALANCED around the centered heading: 3 tiles down the left side and 3 down the right side, at staggered vertical offsets, with similar visual weight on both sides. Sizes 120–180px, slight rotation (−6° to +6°), soft shadow, border-radius ~22%. Keep a clear central safe zone: no tile within 60px of the "Por que a TrocarLuz?" heading. Motion: gentle float only — animate={{ y:[0,-12,0], rotate:[r-1.5,r+1.5,r-1.5] }} (r = base rotation), transition duration 6–8s (varied), repeat Infinity, random 0–2s delay per tile; NO x-drift, NO scale (avoid bounce). Wrap each tile in a motion.div with a small scroll-parallax y for depth. Mobile (≤768px): show 4 tiles only, two above the heading and two below, ~110px, none overlapping the heading. useReducedMotion() disables float + parallax.
+BENEFIT GRID (the 5 cards with the empty 6th cell): The 3×2 grid currently has 5 cards and one empty slot, which looks unbalanced. Add a 6th card to complete a clean 3×2:
+
+Title: "Economia desde o 1º mês"
+Body: "Desconto na conta de luz já na primeira fatura. Sem espera, sem surpresa."
+Icon: a Lucide "trending-down" (or "badge-percent") in the same green icon-chip style as the other five.
+
+Match the existing card styling exactly. (If for any reason a 6th card isn't added, instead center the bottom row's two cards so there's no empty gap — but the 6th card is preferred.)
+
+
+FOOTER — switch to brand yellow: Change the footer background from cream to the brand yellow #F4EAA6 with the same dot texture used on the hero/CTA bands. Add a thin top divider (1px, rgba(26,36,16,0.12)) so it separates from the section above. Fix text contrast for the yellow background: column headings and links in dark ink #1A2410 (links can be ~85% opacity, full ink on hover); the "Parceiros verificados" pill should use a white or dark-bordered style so it doesn't blend into the yellow. Confirm all footer text meets readable contrast on yellow (no light-grey-on-yellow).
+
+VERIFY: (1) wordmark legible on yellow in nav + footer, larger; (2) "Por que" section has 6 people tiles balanced 3-left/3-right, ZERO 3D objects, heading clear; (3) benefit grid is a full balanced 3×2; (4) footer is brand yellow with dark legible text and a top divider. State anything not done.
+ACCEPTANCE (reject if any fail): no white/invisible logo text anywhere; "Por que" is a balanced people-only collage with no 3D objects and gentle non-bouncy float; benefit grid has no empty cell; footer is brand yellow with proper contrast; no text overlap; no horizontal scroll at 320px; reduced-motion safe.

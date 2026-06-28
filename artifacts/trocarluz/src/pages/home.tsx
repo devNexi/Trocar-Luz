@@ -11,6 +11,7 @@ import {
   Headset,
   SealCheck,
   DeviceMobile,
+  TrendDown,
 } from "@phosphor-icons/react";
 import { Layout } from "@/components/layout";
 import { SEOHead } from "@/components/seo-head";
@@ -166,6 +167,7 @@ interface CollageTileProps {
   className?: string;
   energetic?: boolean;
   isPhoto?: boolean;
+  calm?: boolean;
 }
 
 function CollageTile({
@@ -179,6 +181,7 @@ function CollageTile({
   className,
   energetic = false,
   isPhoto = false,
+  calm = false,
 }: CollageTileProps) {
   const prefersReduced = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -190,6 +193,8 @@ function CollageTile({
 
   const floatAnim = prefersReduced
     ? {}
+    : calm
+    ? { y: [0, -10, 0] }
     : energetic
     ? {
         y: [0, -22, 0, -12, 0],
@@ -345,6 +350,11 @@ const WHY_REASONS = [
     Icon: Headset,
     title: "Gestão completa",
     desc: "Cuidamos de todo o processo até você começar a economizar. Suporte especializado.",
+  },
+  {
+    Icon: TrendDown,
+    title: "Economia desde o 1º mês",
+    desc: "Desconto na conta de luz já na primeira fatura. Sem espera, sem surpresa.",
   },
 ];
 
@@ -1569,65 +1579,81 @@ export default function Home() {
               marginBottom: "clamp(48px, 7vw, 72px)",
             }}
           >
-            {/* ── 4 corner tiles — visible on all sizes ── */}
+            {/* ── Left column — 3 person tiles ── */}
             <CollageTile
-              src="/img/person-11.webp"
-              size="clamp(96px,16vw,200px)"
-              baseRot={-4}
-              delay={0.2}
-              duration={7.5}
-              parallaxRange={[35, -45]}
+              src="/img/person-1.webp"
+              size="clamp(100px,15vw,165px)"
+              baseRot={-3}
+              delay={0}
+              duration={7}
+              parallaxRange={[18, -18]}
               isPhoto
+              calm
               style={{ top: 0, left: 0 }}
             />
             <CollageTile
-              src="/img/hero-empresa.webp"
-              size="clamp(96px,14vw,165px)"
-              baseRot={5}
+              src="/img/person-4.webp"
+              size="clamp(88px,12vw,138px)"
+              baseRot={2}
+              delay={0.6}
+              duration={7.5}
+              parallaxRange={[12, -12]}
+              isPhoto
+              calm
+              style={{
+                top: "50%",
+                left: "clamp(60px,12vw,200px)",
+                marginTop: "clamp(-44px,-6vw,-69px)",
+              }}
+            />
+            <CollageTile
+              src="/img/person-7.webp"
+              size="clamp(100px,14vw,158px)"
+              baseRot={-2}
               delay={1.2}
               duration={8}
-              parallaxRange={[20, -50]}
+              parallaxRange={[18, -18]}
+              isPhoto
+              calm
+              style={{ bottom: 0, left: 0 }}
+            />
+            {/* ── Right column — 3 person tiles ── */}
+            <CollageTile
+              src="/img/person-3.webp"
+              size="clamp(100px,15vw,165px)"
+              baseRot={3}
+              delay={0.3}
+              duration={7.5}
+              parallaxRange={[18, -18]}
+              isPhoto
+              calm
               style={{ top: 0, right: 0 }}
             />
             <CollageTile
-              src="/img/hero-casa.webp"
-              size="clamp(96px,13vw,158px)"
-              baseRot={4}
-              delay={1.7}
-              duration={7}
-              parallaxRange={[25, -45]}
-              style={{ bottom: 0, left: 0 }}
-            />
-            <CollageTile
-              src="/img/obj-mercado.webp"
-              size="clamp(96px,13vw,155px)"
-              baseRot={-3}
+              src="/img/person-6.webp"
+              size="clamp(88px,12vw,138px)"
+              baseRot={-2}
               delay={0.9}
+              duration={7}
+              parallaxRange={[12, -12]}
+              isPhoto
+              calm
+              style={{
+                top: "50%",
+                right: "clamp(60px,12vw,200px)",
+                marginTop: "clamp(-44px,-6vw,-69px)",
+              }}
+            />
+            <CollageTile
+              src="/img/person-8.webp"
+              size="clamp(100px,14vw,155px)"
+              baseRot={2}
+              delay={1.5}
               duration={8.5}
-              parallaxRange={[45, -35]}
+              parallaxRange={[18, -18]}
+              isPhoto
+              calm
               style={{ bottom: 0, right: 0 }}
-            />
-            {/* ── Accent objects — hide on mobile ── */}
-            <CollageTile
-              src="/img/obj-raio.webp"
-              size="clamp(70px,7.5vw,90px)"
-              baseRot={8}
-              delay={0}
-              duration={7}
-              parallaxRange={[30, -30]}
-              energetic
-              className="collage-hide-mobile"
-              style={{ top: "clamp(150px,24vw,190px)", left: "clamp(80px,14vw,200px)" }}
-            />
-            <CollageTile
-              src="/img/obj-fazenda.webp"
-              size="clamp(80px,9vw,110px)"
-              baseRot={-5}
-              delay={1.4}
-              duration={7}
-              parallaxRange={[20, -30]}
-              className="collage-hide-mobile"
-              style={{ bottom: "clamp(150px,24vw,190px)", right: "clamp(80px,14vw,200px)" }}
             />
 
             {/* Heading — centered, always above tiles */}
