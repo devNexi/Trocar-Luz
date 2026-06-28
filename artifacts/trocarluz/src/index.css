@@ -437,8 +437,30 @@
   .como-grid { grid-template-columns: 1fr 1fr; }
 }
 
-/* ── Por que cutouts — hide on small screens ─────────────────────── */
-.pq-cutout { display: none; }
+/* ── Por que 3D objects — hide on small screens ──────────────────── */
+.pq-obj { display: none; }
 @media (min-width: 900px) {
-  .pq-cutout { display: block; }
+  .pq-obj { display: block; }
+}
+
+/* ── 3D object float animation ───────────────────────────────────── */
+@keyframes obj-float-a {
+  from { transform: translateY(0px) rotate(-1deg); }
+  to   { transform: translateY(-8px) rotate(2deg); }
+}
+@keyframes obj-float-b {
+  from { transform: translateY(0px) rotate(1deg); }
+  to   { transform: translateY(-8px) rotate(-2deg); }
+}
+.obj-float-a {
+  animation: obj-float-a 5.4s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.obj-float-b {
+  animation: obj-float-b 5.8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .obj-float-a,
+  .obj-float-b { animation: none !important; will-change: auto !important; }
 }

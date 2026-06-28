@@ -1,0 +1,44 @@
+I'm attaching six transparent 3D illustration assets. Place them into the existing homepage's image slots, then add the full motion + polish layer described below. Do NOT change copy, colours, structure, or section order — only wire images, animation, and polish. Install lenis and framer-motion if not already present. Report the files you'll touch in one line, then apply everything.
+PREREQUISITE: all six images are transparent PNG/WebP. Save to /public/img/ with these exact names: obj-raio, obj-fazenda, hero-casa, hero-empresa, obj-solar, obj-mercado. Render every image with object-fit: contain, explicit width/height or aspect-ratio (zero CLS), lazy-loaded below the fold.
+IMAGE PLACEMENT:
+
+obj-fazenda.webp → fills the large EMPTY render box on the left of "Como funciona", ~520–560px. (This is the biggest current empty space.)
+hero-casa.webp → the "Residências" card, anchored lower-right, ~300–360px, overlapping the card edge slightly.
+hero-empresa.webp → the "Empresas" card, anchored lower-right, ~300–360px.
+obj-solar.webp → "até 35% off / Geração Distribuída" card, top-right, ~140px.
+obj-mercado.webp → "até 30% off / Mercado Livre" card, top-right, ~140px.
+obj-raio.webp → one small floating accent in the hero (upper-right area, ~120px), AND reused as one of the scattered objects in "Por que a TrocarLuz?".
+"POR QUE A TROCARLUZ?" floating decoration (replaces the empty cutout placeholders — NO people): scatter 4–6 of the 3D objects (obj-raio, obj-fazenda, obj-solar, hero-casa, obj-mercado) as floating elements around the big centered heading, at varied sizes 80–150px, varied positions and slight rotations (±8°), behind/around the heading and the ghost word "Economia". Keep the existing 5 benefit cards below unchanged.
+
+MOTION (transform/opacity only; must hit ~60fps on a mid-tier phone; ALL motion disabled under prefers-reduced-motion):
+
+Lenis smooth scroll site-wide, lerp ~0.09 — premium momentum feel.
+Sticky white pill nav: pinned top-centre through the ENTIRE scroll (the reference keeps it pinned the whole way); condense slightly after 60px (less padding, tighter shadow) with ZERO layout shift; pill stays white over every section.
+FLOAT LOOP on every 3D image (this is what makes static renders feel animated like the reference): continuous translateY ±8px + rotate ±2°, 5–6s ease-in-out alternate, with a RANDOMIZED per-element delay/offset so nothing bobs in sync. Apply to all placed renders including the scattered "Por que" objects.
+HERO LOAD SEQUENCE (~700ms, once): reveal in order — heading line 1, ghost line 2, subhead, CTAs, trust line, then the two cards rise + fade in (90ms stagger). Never block first paint; hero text renders immediately.
+SCROLL PARALLAX: on top of the float, each 3D image translates Y opposite to scroll by a small range (≤24px) while its section is in view. The "Por que" scattered objects parallax at slightly different rates for depth.
+SECTION REVEALS: each section's heading + children fade + rise 20px, 450ms ease-out, 70ms stagger for grouped items (cards, steps, benefits), fire ONCE at ~15% in view. Never animate the hero on scroll.
+GIANT-WORD PARALLAX: the oversized words ("Compare", "Pronto", and the ghost "Economia") get a subtle scrubbed parallax — translate a few px and/or scale 1.0→1.03 across their scroll range. Subtle, alive, not moving far.
+CARD HOVER: comparison cards, hero cards, and benefit cards lift 4px + deepen shadow on hover; the 3D object inside nudges ~4–6px (parallax-on-hover).
+BUTTON HOVER: primary buttons lift 2px + darken to --green-hover; active scale .98; any trailing arrow (→) nudges right 4px.
+STATS: count up from 0 to each final value (12000+, 18%, 27, 100%) over ~1.2s on first in-view; reduced-motion shows final values instantly.
+ACCORDION: smooth max-height transition + chevron rotate 180° on open.
+
+POLISH:
+
+Increase section vertical padding to clamp(6rem,12vw,10rem) for Payard-level breathing room.
+Card shadows: layered soft — 0 10px 34px rgba(26,36,16,.10), 0 2px 6px rgba(26,36,16,.06).
+Giant headings: line-height .96, letter-spacing -0.02em.
+Ensure the hero cards still overlap up into the yellow hero, now WITH their images sitting inside.
+
+ACCESSIBILITY (report): white-on-green CTA text ≥4.5:1; dark text on the yellow hero ≥4.5:1; dark text on the cream footer ≥4.5:1; nav links ≥4.5:1. One h1. Keyboard operable: nav dropdown, mobile sheet (focus trap + restore + Esc), accordion, all form fields, visible focus everywhere. prefers-reduced-motion disables Lenis smoothing, all float loops, parallax, reveals, count-up, and giant-word motion — site stays fully usable.
+PERFORMANCE: transform/opacity only; use will-change sparingly on animated renders; no layout shift; nav condense reserves height; preconnect fonts. No horizontal scroll at 320px.
+ACCEPTANCE CRITERIA:
+
+All six renders placed in the correct slots; the "Como funciona" empty box is filled with obj-fazenda; no empty image boxes remain.
+"Por que a TrocarLuz?" has 4–6 floating 3D objects (no people) scattered around the heading + ghost "Economia"; benefit cards unchanged below.
+Every 3D render floats gently (randomized, out of sync) and parallaxes on scroll; ALL motion fully disabled under reduced-motion.
+Sticky pill nav pinned the whole scroll with zero layout shift; hero load sequence plays once; section reveals fire once; stats count up; accordion animates.
+No copy/colour/structure/order changes; smooth on a mid-tier phone; no horizontal scroll at 320px; reported contrasts pass.
+
+Knock the backgrounds out, attach the six, run that. The float + parallax + sticky pill + load sequence is the layer that turns your correct-but-static page into something that moves like the reference — that's the missing 15% you saw in the video. After it's built, scroll it on your phone and tell me if the motion feels premium or fussy, and I'll tune the timings.

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Lightning,
   ShieldCheck,
@@ -22,8 +23,106 @@ const DOT_TEXTURE: React.CSSProperties = {
   backgroundSize: "22px 22px",
 };
 
+/* ── Layered card shadow ─────────────────────────────────────────── */
+const CARD_SHADOW = "0 10px 34px rgba(26,36,16,.10), 0 2px 6px rgba(26,36,16,.06)";
+const CARD_SHADOW_HOVER = "0 24px 56px rgba(26,36,16,.16), 0 4px 10px rgba(26,36,16,.08)";
+
+/* ── FloatImg ────────────────────────────────────────────────────── */
+interface FloatImgProps {
+  src: string;
+  alt?: string;
+  width?: number | string;
+  height?: number | string;
+  floatClass?: "obj-float-a" | "obj-float-b";
+  animDelay?: string;
+  parallaxStrength?: number;
+  style?: React.CSSProperties;
+  imgStyle?: React.CSSProperties;
+  className?: string;
+  loading?: "eager" | "lazy";
+}
+
+function FloatImg({
+  src,
+  alt = "",
+  width,
+  height,
+  floatClass = "obj-float-a",
+  animDelay = "0s",
+  parallaxStrength = 16,
+  style,
+  imgStyle,
+  className,
+  loading = "lazy",
+}: FloatImgProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef(0);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced || parallaxStrength === 0) return;
+
+    const update = () => {
+      const el = wrapRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      const val = (center / window.innerHeight) * parallaxStrength * -1;
+      if (Math.abs(val - parallaxRef.current) > 0.1) {
+        parallaxRef.current = val;
+        el.style.setProperty("--py", `${val.toFixed(1)}px`);
+      }
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, [parallaxStrength]);
+
+  return (
+    <div
+      ref={wrapRef}
+      className={className}
+      style={{
+        transform: "translateY(var(--py, 0px))",
+        transition: "transform 0.08s linear",
+        width,
+        height,
+        ...style,
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        width={typeof width === "number" ? width : undefined}
+        height={typeof height === "number" ? height : undefined}
+        className={floatClass}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          animationDelay: animDelay,
+          display: "block",
+          ...imgStyle,
+        }}
+      />
+    </div>
+  );
+}
+
 /* ── Count-up hook ───────────────────────────────────────────────── */
-function useCountUp(target: number, duration = 1400) {
+function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const started = useRef(false);
@@ -154,7 +253,7 @@ function FaqSection() {
     <section
       id="duvidas"
       aria-labelledby="faq-heading"
-      style={{ backgroundColor: "#fff", padding: "var(--section-y) var(--gutter)" }}
+      style={{ backgroundColor: "#fff", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
     >
       <div style={{ maxWidth: "760px", margin: "0 auto" }}>
         <Reveal>
@@ -166,6 +265,7 @@ function FaqSection() {
               fontSize: "clamp(2rem, 4vw, 3rem)",
               color: "var(--ink)",
               letterSpacing: "-0.02em",
+              lineHeight: 0.96,
               marginBottom: "clamp(32px, 5vw, 48px)",
             }}
           >
@@ -241,7 +341,7 @@ function FaqSection() {
                     style={{
                       maxHeight: isOpen ? "400px" : "0",
                       overflow: "hidden",
-                      transition: "max-height 0.3s ease",
+                      transition: "max-height 0.32s ease",
                     }}
                   >
                     <p
@@ -287,6 +387,33 @@ function FaqSection() {
 
 /* ══════════════════════════════════════════════════════════════════ */
 export default function Home() {
+  /* ── Hero card hover state (to nudge internal image) ─── */
+  const [casaHover, setCasaHover] = useState(false);
+  const [empresaHover, setEmpresaHover] = useState(false);
+
+  /* ── Giant-word parallax refs ──────────────────────────── */
+  const compareSectionRef = useRef<HTMLElement>(null);
+  const ctaSectionRef = useRef<HTMLElement>(null);
+  const porqueSectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress: compareProg } = useScroll({
+    target: compareSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const compareWordY = useTransform(compareProg, [0, 1], [28, -28]);
+
+  const { scrollYProgress: ctaProg } = useScroll({
+    target: ctaSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const ctaWordY = useTransform(ctaProg, [0, 1], [24, -24]);
+
+  const { scrollYProgress: porqueProg } = useScroll({
+    target: porqueSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const economiaY = useTransform(porqueProg, [0, 1], [20, -20]);
+
   return (
     <Layout>
       <SEOHead
@@ -309,27 +436,68 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
-        <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          <h1
-            id="hero-heading"
-            style={{
-              fontFamily: "var(--app-font-display)",
-              fontWeight: 700,
-              fontSize: "clamp(3.25rem, 8vw, 6rem)",
-              lineHeight: 0.98,
-              letterSpacing: "-0.02em",
-              marginBottom: "28px",
-            }}
-          >
-            <span style={{ display: "block", color: "var(--ink)" }}>
+        {/* obj-raio — floating accent upper-right */}
+        <FloatImg
+          src="/img/obj-raio.webp"
+          alt=""
+          width={120}
+          height={120}
+          floatClass="obj-float-b"
+          animDelay="0.4s"
+          parallaxStrength={20}
+          loading="eager"
+          className="pq-obj"
+          style={{
+            position: "absolute",
+            top: "clamp(80px, 12vw, 120px)",
+            right: "clamp(40px, 8vw, 120px)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+
+        <div style={{ maxWidth: "var(--container)", margin: "0 auto", position: "relative", zIndex: 2 }}>
+          <h1 id="hero-heading" style={{ margin: 0 }}>
+            <motion.span
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0 }}
+              style={{
+                display: "block",
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(3.25rem, 8vw, 6rem)",
+                lineHeight: 0.96,
+                letterSpacing: "-0.02em",
+                color: "var(--ink)",
+                marginBottom: "4px",
+              }}
+            >
               Compare e economize na sua conta
-            </span>
-            <span style={{ display: "block", color: "var(--env-soft)" }}>
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+              style={{
+                display: "block",
+                fontFamily: "var(--app-font-display)",
+                fontWeight: 700,
+                fontSize: "clamp(3.25rem, 8vw, 6rem)",
+                lineHeight: 0.96,
+                letterSpacing: "-0.02em",
+                color: "var(--env-soft)",
+                marginBottom: "28px",
+              }}
+            >
               de energia.
-            </span>
+            </motion.span>
           </h1>
 
-          <p
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut", delay: 0.22 }}
             style={{
               fontFamily: "var(--app-font-sans)",
               fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
@@ -341,9 +509,14 @@ export default function Home() {
           >
             Geração distribuída já disponível para reduzir sua conta agora. E a partir de
             dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
-          </p>
+          </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-3 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut", delay: 0.34 }}
+            className="flex flex-col sm:flex-row gap-3 mb-8"
+          >
             <Link
               href="/comparar-desconto"
               style={{
@@ -358,19 +531,23 @@ export default function Home() {
                 padding: "15px 32px",
                 borderRadius: "999px",
                 textDecoration: "none",
-                transition: "background 0.15s, transform 0.1s",
+                transition: "background 0.15s, transform 0.12s, box-shadow 0.12s",
                 boxShadow: "0 2px 8px rgba(26,36,16,0.10)",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "#F5F5F0";
-                el.style.transform = "translateY(-1px)";
+                el.style.transform = "translateY(-2px)";
+                el.style.boxShadow = "0 6px 20px rgba(26,36,16,0.14)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "#fff";
                 el.style.transform = "";
+                el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.10)";
               }}
+              onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
+              onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
             >
               Ver desconto disponível
             </Link>
@@ -389,24 +566,31 @@ export default function Home() {
                 padding: "15px 32px",
                 borderRadius: "999px",
                 textDecoration: "none",
-                transition: "background 0.15s, transform 0.1s",
+                transition: "background 0.15s, transform 0.12s",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "rgba(26,36,16,0.07)";
-                el.style.transform = "translateY(-1px)";
+                el.style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "transparent";
                 el.style.transform = "";
               }}
+              onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
+              onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
             >
               Enviar conta de luz
             </Link>
-          </div>
+          </motion.div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.44 }}
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
             <ShieldCheck size={18} weight="fill" style={{ color: "var(--green)", flexShrink: 0 }} />
             <span
               style={{
@@ -417,7 +601,7 @@ export default function Home() {
             >
               Broker certificado CCEE · Mais de 12 mil comparações feitas
             </span>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -429,12 +613,15 @@ export default function Home() {
           zIndex: 10,
           marginTop: "calc(clamp(120px, 18vw, 200px) * -1)",
           padding: "0 var(--gutter)",
-          paddingBottom: "var(--section-y)",
+          paddingBottom: "clamp(6rem,12vw,10rem)",
           background: "transparent",
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          <p
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.54 }}
             style={{
               fontFamily: "var(--app-font-sans)",
               fontWeight: 600,
@@ -446,10 +633,14 @@ export default function Home() {
             }}
           >
             Comece agora
-          </p>
+          </motion.p>
           <div className="grid md:grid-cols-2 gap-5">
             {/* Card — Residências */}
-            <Reveal delay={0.04}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.56 }}
+            >
               <Link href="/para-sua-casa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <article
                   style={{
@@ -459,40 +650,52 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     gap: "16px",
-                    boxShadow: "0 20px 56px rgba(26,36,16,0.12)",
+                    boxShadow: CARD_SHADOW,
                     cursor: "pointer",
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     height: "100%",
                     position: "relative",
                     overflow: "hidden",
+                    minHeight: "300px",
                   }}
                   onMouseEnter={(e) => {
+                    setCasaHover(true);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = "0 28px 72px rgba(26,36,16,0.17)";
+                    el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
+                    setCasaHover(false);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "";
-                    el.style.boxShadow = "0 20px 56px rgba(26,36,16,0.12)";
+                    el.style.boxShadow = CARD_SHADOW;
                   }}
                 >
-                  {/* Placeholder image slot — bottom right */}
+                  {/* hero-casa — bottom-right, ~330px, floats + nudges on hover */}
                   <div
                     aria-hidden="true"
                     style={{
                       position: "absolute",
-                      bottom: 0,
-                      right: 0,
-                      width: "160px",
-                      height: "160px",
-                      backgroundImage: "url(/img/hero-casa.webp)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center top",
-                      borderRadius: "var(--r-card) 0 0 0",
-                      opacity: 0.65,
+                      bottom: "-10px",
+                      right: "-10px",
+                      width: "clamp(200px, 28vw, 330px)",
+                      height: "clamp(200px, 28vw, 330px)",
+                      transition: "transform 0.3s ease",
+                      transform: casaHover ? "translateY(-6px)" : "translateY(0)",
+                      pointerEvents: "none",
                     }}
-                  />
+                  >
+                    <FloatImg
+                      src="/img/hero-casa.webp"
+                      alt=""
+                      floatClass="obj-float-a"
+                      animDelay="0.2s"
+                      parallaxStrength={10}
+                      loading="eager"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", position: "relative" }}>
                     <House size={18} weight="bold" style={{ color: "var(--green)" }} />
                     <span
@@ -529,7 +732,7 @@ export default function Home() {
                       margin: 0,
                       flex: 1,
                       position: "relative",
-                      maxWidth: "calc(100% - 120px)",
+                      maxWidth: "calc(100% - 100px)",
                     }}
                   >
                     Geração Distribuída já disponível para reduzir sua conta sem obras ou
@@ -547,16 +750,23 @@ export default function Home() {
                       fontWeight: 600,
                       fontSize: "14px",
                       position: "relative",
+                      transition: "background 0.15s",
                     }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green-hover)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green)"; }}
                   >
                     Quero economizar →
                   </span>
                 </article>
               </Link>
-            </Reveal>
+            </motion.div>
 
             {/* Card — Empresas */}
-            <Reveal delay={0.10}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.65 }}
+            >
               <Link href="/para-sua-empresa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <article
                   style={{
@@ -566,22 +776,52 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     gap: "16px",
-                    boxShadow: "0 20px 56px rgba(26,36,16,0.12)",
+                    boxShadow: CARD_SHADOW,
                     cursor: "pointer",
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     height: "100%",
+                    position: "relative",
+                    overflow: "hidden",
+                    minHeight: "300px",
                   }}
                   onMouseEnter={(e) => {
+                    setEmpresaHover(true);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "translateY(-4px)";
-                    el.style.boxShadow = "0 28px 72px rgba(26,36,16,0.17)";
+                    el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
+                    setEmpresaHover(false);
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "";
-                    el.style.boxShadow = "0 20px 56px rgba(26,36,16,0.12)";
+                    el.style.boxShadow = CARD_SHADOW;
                   }}
                 >
+                  {/* hero-empresa — bottom-right */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: "absolute",
+                      bottom: "-10px",
+                      right: "-10px",
+                      width: "clamp(200px, 28vw, 330px)",
+                      height: "clamp(200px, 28vw, 330px)",
+                      transition: "transform 0.3s ease",
+                      transform: empresaHover ? "translateY(-6px)" : "translateY(0)",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <FloatImg
+                      src="/img/hero-empresa.webp"
+                      alt=""
+                      floatClass="obj-float-b"
+                      animDelay="0.8s"
+                      parallaxStrength={10}
+                      loading="eager"
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  </div>
+
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <Buildings size={18} weight="bold" style={{ color: "#2C5F8A" }} />
                     <span
@@ -616,6 +856,7 @@ export default function Home() {
                       lineHeight: 1.65,
                       margin: 0,
                       flex: 1,
+                      maxWidth: "calc(100% - 100px)",
                     }}
                   >
                     GD + Mercado Livre de Energia para reduzir custos operacionais. Análise
@@ -632,13 +873,16 @@ export default function Home() {
                       fontFamily: "var(--app-font-sans)",
                       fontWeight: 600,
                       fontSize: "14px",
+                      transition: "background 0.15s",
                     }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "#2e3d20"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--ink)"; }}
                   >
                     Analisar minha empresa →
                   </span>
                 </article>
               </Link>
-            </Reveal>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -693,7 +937,10 @@ export default function Home() {
               textUnderlineOffset: "3px",
               whiteSpace: "nowrap",
               flexShrink: 0,
+              transition: "opacity 0.15s",
             }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "0.7"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "1"; }}
           >
             Saiba como →
           </Link>
@@ -701,13 +948,14 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────── */}
-      {/* 3. COMPARE — WHITE, giant two-tone word                     */}
+      {/* 3. COMPARE — WHITE, giant two-tone word + parallax          */}
       {/* ─────────────────────────────────────────────────────────── */}
       <section
+        ref={compareSectionRef}
         aria-labelledby="compare-heading"
         style={{
           backgroundColor: "#fff",
-          padding: "clamp(6rem, 12vw, 9rem) var(--gutter)",
+          padding: "clamp(6rem, 12vw, 10rem) var(--gutter)",
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
@@ -725,7 +973,7 @@ export default function Home() {
             >
               O que você quer comparar?
             </p>
-            <div
+            <motion.div
               id="compare-heading"
               aria-label="Compare"
               style={{
@@ -736,11 +984,12 @@ export default function Home() {
                 letterSpacing: "-0.03em",
                 marginBottom: "clamp(48px, 6vw, 72px)",
                 userSelect: "none",
+                y: compareWordY,
               }}
             >
               <span style={{ color: "var(--ink)" }}>Compa</span>
               <span style={{ color: "var(--green)" }}>re</span>
-            </div>
+            </motion.div>
           </Reveal>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -760,7 +1009,7 @@ export default function Home() {
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "translateY(-3px)";
-                    el.style.boxShadow = "0 12px 32px rgba(26,36,16,0.10)";
+                    el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
@@ -778,35 +1027,50 @@ export default function Home() {
                       gap: "12px",
                     }}
                   >
-                    <div
-                      style={{
-                        fontFamily: "var(--app-font-display)",
-                        fontWeight: 700,
-                        fontSize: "clamp(36px, 5vw, 52px)",
-                        color: "var(--green)",
-                        lineHeight: 1,
-                        letterSpacing: "-0.02em",
-                      }}
-                    >
-                      até 35% off
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--app-font-display)",
+                          fontWeight: 700,
+                          fontSize: "clamp(36px, 5vw, 52px)",
+                          color: "var(--green)",
+                          lineHeight: 1,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        até 35% off
+                      </div>
                     </div>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        fontFamily: "var(--app-font-sans)",
-                        fontWeight: 600,
-                        fontSize: "11px",
-                        color: "#fff",
-                        backgroundColor: "var(--green)",
-                        borderRadius: "999px",
-                        padding: "4px 12px",
-                        whiteSpace: "nowrap",
-                        letterSpacing: "0.03em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Disponível agora
-                    </span>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+                      <span
+                        style={{
+                          flexShrink: 0,
+                          fontFamily: "var(--app-font-sans)",
+                          fontWeight: 600,
+                          fontSize: "11px",
+                          color: "#fff",
+                          backgroundColor: "var(--green)",
+                          borderRadius: "999px",
+                          padding: "4px 12px",
+                          whiteSpace: "nowrap",
+                          letterSpacing: "0.03em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        Disponível agora
+                      </span>
+                      {/* obj-solar — top-right ~140px */}
+                      <FloatImg
+                        src="/img/obj-solar.webp"
+                        alt=""
+                        width={100}
+                        height={100}
+                        floatClass="obj-float-a"
+                        animDelay="0.3s"
+                        parallaxStrength={12}
+                        style={{ flexShrink: 0 }}
+                      />
+                    </div>
                   </div>
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -849,7 +1113,10 @@ export default function Home() {
                         fontWeight: 500,
                         fontSize: "15px",
                         marginTop: "4px",
+                        transition: "background 0.15s",
                       }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "var(--green-hover)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "var(--green)"; }}
                     >
                       Comparar GD →
                     </div>
@@ -874,7 +1141,7 @@ export default function Home() {
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
                     el.style.transform = "translateY(-3px)";
-                    el.style.boxShadow = "0 12px 32px rgba(26,36,16,0.10)";
+                    el.style.boxShadow = CARD_SHADOW_HOVER;
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
@@ -892,35 +1159,50 @@ export default function Home() {
                       gap: "12px",
                     }}
                   >
-                    <div
-                      style={{
-                        fontFamily: "var(--app-font-display)",
-                        fontWeight: 700,
-                        fontSize: "clamp(36px, 5vw, 52px)",
-                        color: "var(--green-text)",
-                        lineHeight: 1,
-                        letterSpacing: "-0.02em",
-                      }}
-                    >
-                      até 30% off
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--app-font-display)",
+                          fontWeight: 700,
+                          fontSize: "clamp(36px, 5vw, 52px)",
+                          color: "var(--green-text)",
+                          lineHeight: 1,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        até 30% off
+                      </div>
                     </div>
-                    <span
-                      style={{
-                        flexShrink: 0,
-                        fontFamily: "var(--app-font-sans)",
-                        fontWeight: 600,
-                        fontSize: "11px",
-                        color: "var(--green-text)",
-                        backgroundColor: "rgba(31,164,89,0.12)",
-                        borderRadius: "999px",
-                        padding: "4px 12px",
-                        whiteSpace: "nowrap",
-                        letterSpacing: "0.03em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      A partir de 2027
-                    </span>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
+                      <span
+                        style={{
+                          flexShrink: 0,
+                          fontFamily: "var(--app-font-sans)",
+                          fontWeight: 600,
+                          fontSize: "11px",
+                          color: "var(--green-text)",
+                          backgroundColor: "rgba(31,164,89,0.12)",
+                          borderRadius: "999px",
+                          padding: "4px 12px",
+                          whiteSpace: "nowrap",
+                          letterSpacing: "0.03em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        A partir de 2027
+                      </span>
+                      {/* obj-mercado — top-right ~140px */}
+                      <FloatImg
+                        src="/img/obj-mercado.webp"
+                        alt=""
+                        width={100}
+                        height={100}
+                        floatClass="obj-float-b"
+                        animDelay="1.1s"
+                        parallaxStrength={12}
+                        style={{ flexShrink: 0 }}
+                      />
+                    </div>
                   </div>
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -963,7 +1245,10 @@ export default function Home() {
                         fontWeight: 500,
                         fontSize: "15px",
                         marginTop: "4px",
+                        transition: "background 0.15s",
                       }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "#2e3d20"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "var(--ink)"; }}
                     >
                       Ver mercado livre →
                     </div>
@@ -976,11 +1261,11 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────── */}
-      {/* 4. COMO FUNCIONA — two-col: heading+render | numbered steps */}
+      {/* 4. COMO FUNCIONA — two-col: heading+obj-fazenda | steps     */}
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-labelledby="como-heading"
-        style={{ backgroundColor: "var(--cream)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "var(--cream)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="como-grid">
@@ -993,7 +1278,7 @@ export default function Home() {
                     fontFamily: "var(--app-font-display)",
                     fontWeight: 700,
                     fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                    lineHeight: 1,
+                    lineHeight: 0.96,
                     color: "var(--ink)",
                     letterSpacing: "-0.02em",
                     marginBottom: "32px",
@@ -1002,7 +1287,7 @@ export default function Home() {
                   Como funciona
                 </h2>
               </Reveal>
-              {/* 3D render image slot */}
+              {/* obj-fazenda — fills the large render box */}
               <Reveal delay={0.08}>
                 <div
                   style={{
@@ -1010,13 +1295,25 @@ export default function Home() {
                     overflow: "hidden",
                     aspectRatio: "4/3",
                     backgroundColor: "var(--tint)",
-                    backgroundImage: "url(/img/obj-raio.webp)",
-                    backgroundSize: "contain",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   aria-hidden="true"
-                />
+                >
+                  <FloatImg
+                    src="/img/obj-fazenda.webp"
+                    alt=""
+                    floatClass="obj-float-a"
+                    animDelay="0.6s"
+                    parallaxStrength={18}
+                    style={{
+                      width: "90%",
+                      height: "90%",
+                      padding: "16px",
+                    }}
+                  />
+                </div>
               </Reveal>
             </div>
 
@@ -1100,7 +1397,7 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-label="Números TrocarLuz"
-        style={{ backgroundColor: "var(--tint)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "var(--tint)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -1113,28 +1410,30 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────── */}
-      {/* 6. POR QUÊ — full-bleed --env, ghost word, reason cards    */}
+      {/* 6. POR QUÊ — full-bleed --env, ghost word, 3D objects       */}
       {/* ─────────────────────────────────────────────────────────── */}
       <section
+        ref={porqueSectionRef}
         aria-labelledby="porque-heading"
         className="relative overflow-hidden"
         style={{
           backgroundColor: "var(--env)",
-          padding: "var(--section-y) var(--gutter)",
+          padding: "clamp(6rem,12vw,10rem) var(--gutter)",
           ...DOT_TEXTURE,
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          {/* Heading + ghost word block */}
+          {/* Heading + ghost word + floating objects */}
           <div style={{ position: "relative", marginBottom: "clamp(48px, 7vw, 72px)" }}>
-            {/* Ghost "Economia" behind heading */}
-            <div
+            {/* Ghost "Economia" — parallaxed */}
+            <motion.div
               aria-hidden="true"
               style={{
                 position: "absolute",
                 bottom: "-20px",
                 left: "50%",
-                transform: "translateX(-50%)",
+                x: "-50%",
+                y: economiaY,
                 fontFamily: "var(--app-font-display)",
                 fontWeight: 700,
                 fontSize: "clamp(5rem, 18vw, 14rem)",
@@ -1147,37 +1446,77 @@ export default function Home() {
               }}
             >
               Economia
-            </div>
+            </motion.div>
 
-            {/* Scattered photo cutouts (hidden below 900px) */}
+            {/* Scattered 3D objects — no people */}
             {[
-              { src: "/img/cutout-1.webp", style: { top: "-20px", left: "2%", transform: "rotate(-5deg)" } as React.CSSProperties },
-              { src: "/img/cutout-2.webp", style: { top: "-10px", right: "4%", transform: "rotate(4deg)" } as React.CSSProperties },
-              { src: "/img/cutout-3.webp", style: { top: "50%", left: "-1%", transform: "rotate(-3deg) translateY(-50%)" } as React.CSSProperties },
-              { src: "/img/cutout-4.webp", style: { top: "55%", right: "-1%", transform: "rotate(6deg) translateY(-50%)" } as React.CSSProperties },
-              { src: "/img/cutout-5.webp", style: { bottom: "-10px", left: "28%", transform: "rotate(-4deg)" } as React.CSSProperties },
-            ].map((c, i) => (
-              <div
+              {
+                src: "/img/obj-raio.webp",
+                size: 110,
+                floatClass: "obj-float-a" as const,
+                delay: "0s",
+                strength: 14,
+                pos: { top: "-20px", left: "3%" },
+                rot: "-6deg",
+              },
+              {
+                src: "/img/obj-fazenda.webp",
+                size: 130,
+                floatClass: "obj-float-b" as const,
+                delay: "0.7s",
+                strength: 18,
+                pos: { top: "-10px", right: "5%" },
+                rot: "5deg",
+              },
+              {
+                src: "/img/obj-solar.webp",
+                size: 90,
+                floatClass: "obj-float-a" as const,
+                delay: "1.3s",
+                strength: 10,
+                pos: { top: "45%", left: "-0.5%" },
+                rot: "-3deg",
+              },
+              {
+                src: "/img/obj-mercado.webp",
+                size: 100,
+                floatClass: "obj-float-b" as const,
+                delay: "0.4s",
+                strength: 16,
+                pos: { top: "50%", right: "-0.5%" },
+                rot: "7deg",
+              },
+              {
+                src: "/img/hero-casa.webp",
+                size: 120,
+                floatClass: "obj-float-a" as const,
+                delay: "1.8s",
+                strength: 12,
+                pos: { bottom: "-8px", left: "27%" },
+                rot: "-4deg",
+              },
+            ].map((obj, i) => (
+              <FloatImg
                 key={i}
-                className="pq-cutout"
-                aria-hidden="true"
+                src={obj.src}
+                alt=""
+                width={obj.size}
+                height={obj.size}
+                floatClass={obj.floatClass}
+                animDelay={obj.delay}
+                parallaxStrength={obj.strength}
+                className="pq-obj"
                 style={{
                   position: "absolute",
-                  width: "clamp(120px, 12vw, 180px)",
-                  height: "clamp(140px, 14vw, 210px)",
-                  borderRadius: "18px",
-                  backgroundColor: "rgba(26,36,16,0.06)",
-                  backgroundImage: `url(${c.src})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  boxShadow: "0 12px 32px rgba(26,36,16,0.14)",
                   zIndex: 1,
-                  ...c.style,
+                  transform: `rotate(${obj.rot})`,
+                  pointerEvents: "none",
+                  ...obj.pos,
                 }}
               />
             ))}
 
-            {/* Heading centred, above ghost */}
+            {/* Heading — centred, above ghost */}
             <Reveal>
               <h2
                 id="porque-heading"
@@ -1200,7 +1539,7 @@ export default function Home() {
             </Reveal>
           </div>
 
-          {/* Reason cards — 2-col grid */}
+          {/* Reason cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {WHY_REASONS.map(({ Icon, title, desc }, i) => (
               <Reveal key={title} delay={i * 0.07}>
@@ -1212,7 +1551,18 @@ export default function Home() {
                     display: "flex",
                     flexDirection: "column",
                     gap: "12px",
-                    boxShadow: "0 4px 16px rgba(26,36,16,0.08)",
+                    boxShadow: CARD_SHADOW,
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "translateY(-3px)";
+                    el.style.boxShadow = CARD_SHADOW_HOVER;
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLElement;
+                    el.style.transform = "";
+                    el.style.boxShadow = CARD_SHADOW;
                   }}
                 >
                   <div
@@ -1270,7 +1620,10 @@ export default function Home() {
                   color: "var(--green-text)",
                   textDecoration: "underline",
                   textUnderlineOffset: "3px",
+                  transition: "opacity 0.15s",
                 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "0.7"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "1"; }}
               >
                 Fale com nosso time →
               </Link>
@@ -1284,7 +1637,7 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-labelledby="lead-form-heading"
-        style={{ backgroundColor: "var(--cream)", padding: "var(--section-y) var(--gutter)" }}
+        style={{ backgroundColor: "var(--cream)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -1298,7 +1651,7 @@ export default function Home() {
                     fontWeight: 700,
                     fontSize: "clamp(2rem, 4vw, 3rem)",
                     color: "var(--ink)",
-                    lineHeight: 1.1,
+                    lineHeight: 0.96,
                     letterSpacing: "-0.02em",
                     marginBottom: "20px",
                   }}
@@ -1379,7 +1732,7 @@ export default function Home() {
                   backgroundColor: "#fff",
                   borderRadius: "var(--r-card)",
                   padding: "clamp(24px, 4vw, 40px)",
-                  boxShadow: "0 8px 32px rgba(26,36,16,0.10)",
+                  boxShadow: CARD_SHADOW,
                 }}
               >
                 <LeadForm type="residential" sourcePage="home" />
@@ -1390,42 +1743,40 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────── */}
-      {/* 8. CTA BAND — full-bleed --env, giant "Pronto"             */}
+      {/* 8. CTA BAND — full-bleed --env, giant "Pronto" + parallax  */}
       {/* ─────────────────────────────────────────────────────────── */}
       <section
+        ref={ctaSectionRef}
         aria-labelledby="cta-heading"
         className="relative overflow-hidden"
         style={{
           backgroundColor: "var(--env)",
-          padding: "var(--section-y) var(--gutter)",
+          padding: "clamp(6rem,12vw,10rem) var(--gutter)",
           textAlign: "center",
           ...DOT_TEXTURE,
         }}
       >
         <div style={{ position: "relative", zIndex: 1, maxWidth: "720px", margin: "0 auto" }}>
           <Reveal>
-            <h2
-              id="cta-heading"
-              style={{
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                marginBottom: "20px",
-              }}
-            >
-              <span
+            <h2 id="cta-heading" style={{ letterSpacing: "-0.02em", marginBottom: "20px" }}>
+              <motion.span
                 style={{
                   display: "block",
+                  fontFamily: "var(--app-font-display)",
+                  fontWeight: 700,
                   fontSize: "clamp(5rem, 14vw, 11rem)",
                   color: "var(--ink)",
                   lineHeight: 0.88,
+                  y: ctaWordY,
                 }}
               >
                 Pronto
-              </span>
+              </motion.span>
               <span
                 style={{
                   display: "block",
+                  fontFamily: "var(--app-font-display)",
+                  fontWeight: 700,
                   fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
                   color: "var(--env-soft)",
                   lineHeight: 1.15,
@@ -1464,18 +1815,22 @@ export default function Home() {
                 fontSize: "16px",
                 textDecoration: "none",
                 boxShadow: "0 4px 16px rgba(26,36,16,0.12)",
-                transition: "transform 0.15s ease, box-shadow 0.15s ease",
+                transition: "transform 0.15s ease, box-shadow 0.15s ease, background 0.15s",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "translateY(-2px)";
                 el.style.boxShadow = "0 8px 24px rgba(26,36,16,0.18)";
+                el.style.background = "#f5f5f0";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "";
                 el.style.boxShadow = "0 4px 16px rgba(26,36,16,0.12)";
+                el.style.background = "#fff";
               }}
+              onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
+              onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
             >
               Comparar agora
             </Link>

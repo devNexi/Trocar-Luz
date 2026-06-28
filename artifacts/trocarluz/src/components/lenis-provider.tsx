@@ -8,7 +8,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     ).matches;
     if (prefersReduced) return;
 
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
 
     let rafId: number;
     function raf(time: number) {
