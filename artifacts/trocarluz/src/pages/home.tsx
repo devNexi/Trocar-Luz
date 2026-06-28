@@ -719,49 +719,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Lightning bolt accent — upper-right, hidden on mobile */}
-        <motion.img
-          src="/img/obj-raio.webp"
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
-          className="hidden md:block"
-          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
-          transition={prefersReduced ? {} : { duration: 6, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
-          style={{
-            position: "absolute",
-            top: "clamp(90px,12vw,160px)",
-            right: "clamp(80px,16vw,260px)",
-            width: "110px",
-            aspectRatio: "1",
-            objectFit: "contain",
-            pointerEvents: "none",
-            zIndex: 1,
-          }}
-        />
-
-        {/* Sun + arrow accent — lower-right, hidden on mobile */}
-        <motion.img
-          src="/img/obj-sol.webp"
-          alt=""
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
-          className="hidden md:block"
-          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
-          transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity }}
-          style={{
-            position: "absolute",
-            bottom: "clamp(48px, 8vw, 112px)",
-            right: "clamp(24px, 6vw, 80px)",
-            width: "clamp(120px, 17vw, 210px)",
-            aspectRatio: "1",
-            objectFit: "contain",
-            pointerEvents: "none",
-            zIndex: 1,
-          }}
-        />
       </section>
 
       {/* Overlap cards — rise into hero/white boundary */}
@@ -2075,9 +2032,55 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────── */}
-      {/* 9. FAQ                                                      */}
+      {/* 9. FAQ — with flanking 3D accents                          */}
       {/* ─────────────────────────────────────────────────────────── */}
-      <FaqSection />
+      <div style={{ position: "relative" }}>
+        {/* Lightning bolt — left of FAQ */}
+        <motion.img
+          src="/img/obj-raio.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="hidden lg:block"
+          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+          transition={prefersReduced ? {} : { duration: 6, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
+          style={{
+            position: "absolute",
+            left: "clamp(12px, 3vw, 48px)",
+            top: "clamp(60px, 12%, 140px)",
+            width: "clamp(90px, 9vw, 130px)",
+            aspectRatio: "1",
+            objectFit: "contain",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        {/* Sun + arrow — right of FAQ */}
+        <motion.img
+          src="/img/obj-sol.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          className="hidden lg:block"
+          animate={prefersReduced ? {} : { y: [0, -12, 0] }}
+          transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity }}
+          style={{
+            position: "absolute",
+            right: "clamp(12px, 3vw, 48px)",
+            top: "clamp(40px, 8%, 100px)",
+            width: "clamp(120px, 12vw, 180px)",
+            aspectRatio: "1",
+            objectFit: "contain",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        <FaqSection />
+      </div>
     </Layout>
   );
 }
