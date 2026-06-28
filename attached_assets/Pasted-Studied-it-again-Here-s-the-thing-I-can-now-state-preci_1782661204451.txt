@@ -1,0 +1,74 @@
+Studied it again. Here's the thing I can now state precisely about Payard's cards, which is the root of your placement problem:
+Payard's cards are heading + big visual and almost no body text — so the render has a whole empty zone to live in. Yours have heading + 3 lines of copy + a button, and Replit dumped the render on top of that copy. That's why "Residências" and "Empresas" look broken — the bill and folder are sitting over the paragraph. The fix isn't "move the image a bit," it's: give every render its own column/zone with nothing behind it, using CSS grid — never absolute-position an image over text.
+And you're right about the animation — I specced float + parallax twice and Replit built static both times. That's not "Replit can't"; it's Replit silently skipping it. This prompt forces it and makes the agent prove it did it.
+REPLIT PROMPT:
+
+Two critical problems with the current homepage: (1) the 3D images are positioned ON TOP OF text, breaking the card layouts, and (2) the animations I specified in previous prompts were NOT implemented — every image is static. Fix BOTH now. Do not change copy, colours, section order, or the assets. Report the files you'll touch in one line, then implement everything below. Do NOT mark this done until both the placement fixes AND every animation are actually working — if you cannot implement a specific animation, say so explicitly instead of skipping it silently.
+=== PART 1 — FIX IMAGE PLACEMENT (no image may overlap text) ===
+
+Rule: every 3D render lives in its OWN grid cell or dedicated zone with NO text behind it. Use CSS grid/flex columns. NEVER absolutely-position a render over a text block. Each render: object-fit contain, sized to fit its cell with padding.
+
+"Residências" and "Empresas" hero cards (currently the render covers the body paragraph — broken):
+
+Restructure each card as a 2-column grid: LEFT column (~58%) = eyebrow ("PARA SUA CASA"/"PARA SUA EMPRESA") + heading + body paragraph + green button, stacked. RIGHT column (~42%) = the render (hero-casa.webp / hero-empresa.webp), vertically centered, contained within the column with 16px padding. The image must NOT extend back over the left text column.
+On mobile (<768px): stack to one column — text block on top, render BELOW it in its own row. No overlap.
+
+
+"até 35% off" / "até 30% off" comparison cards (the small object crowds the badge):
+
+Card top row = a flex row: LEFT = "até X% off" heading; RIGHT = the status badge ("DISPONÍVEL AGORA" / "A PARTIR DE 2027").
+Place the 3D object (obj-solar on the GD card; obj-mercado on the Mercado Livre card IF that file exists, otherwise keep obj-solar) in the card's mid-right area at max 110px, with enough top padding that it sits BELOW the badge and enough left margin that the description text (constrained to ~65% width) never runs under it.
+
+
+"Como funciona" — obj-fazenda in its green box on the left is fine; leave it, just ensure it's centered in its box with padding.
+"Por que a TrocarLuz?" floating objects (currently cluttered, overlapping the heading):
+
+Reduce to 4 floating objects. Position them ONLY in the outer margins/corners of the section (top-left, top-right, bottom-left, bottom-right) — none may overlap the central "Por que a TrocarLuz?" heading or come within 40px of it. The ghost word "Economia" stays behind, but the small objects must not sit on top of the readable heading.
+
+
+
+=== PART 2 — IMPLEMENT THE ANIMATIONS (these were skipped before — implement for real) ===
+
+Ensure framer-motion is installed and actually imported/used in the components below. Use Lenis for smooth scroll. ALL motion must be wrapped to disable under prefers-reduced-motion.
+A. FLOAT LOOP on every 3D render (this is the "animated images" that is currently missing). Add a CSS keyframe and apply it to every render img:
+
+@keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+.render-float { animation: floatY 5.5s ease-in-out infinite; will-change: transform; }
+
+Apply .render-float to ALL 3D images (hero-casa, hero-empresa, obj-solar/mercado, obj-fazenda, obj-raio, and the 4 floating objects in "Por que"). Give each a DIFFERENT animation-delay (e.g. 0s, -1.2s, -2.4s, -3.1s, randomized) so they do NOT bob in sync.
+B. SCROLL PARALLAX on each render, composed with the float. Wrap each render in a motion element driven by scroll:
+
+const ref = useRef(null);
+
+const { scrollYProgress } = useScroll({ target: ref, offset: ["start end","end start"] });
+
+const y = useTransform(scrollYProgress, [0,1], [28,-28]);
+
+return <motion.div ref={ref} style={{ y }}><img className="render-float" .../></motion.div>
+
+(Float on the <img>, parallax translateY on the wrapping motion.div, so they don't fight.) The "Por que" objects use slightly different ranges for depth.
+C. SECTION REVEALS — wrap each section's content block:
+
+<motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:0.15}} transition={{duration:0.45,ease:"easeOut"}}>
+
+For grouped items (the two hero cards, the two comparison cards, the 3 numbered steps, the benefit cards) use a parent with staggerChildren:0.07 so they cascade. Never animate the hero text on scroll (it shows immediately).
+D. STICKY NAV — the white pill must stay pinned at the top through the ENTIRE scroll (position: sticky; top: 12px; high z-index, or a fixed wrapper). It currently is not behaving like the reference. Condense slightly after 60px scroll with zero layout shift.
+E. STATS COUNT-UP — animate 12000+, 18%, 27, 100% from 0 to value over ~1.2s when the stats band enters view (once). reduced-motion shows final values instantly.
+F. HOVER — cards lift 4px + deepen shadow on hover; the render inside nudges ~5px. Buttons lift 2px + darken; trailing → nudges right 4px.
+G. ACCORDION — smooth max-height + chevron rotate 180°.
+H. prefers-reduced-motion: disable Lenis smoothing, the float loops, parallax, reveals, count-up, and hover transforms. Site stays fully usable.
+=== VERIFICATION (required before you report done) ===
+
+Confirm framer-motion is in package.json and imported in the hero, cards, and sections components.
+List each animation (A–G) and the exact file + component where you implemented it.
+Confirm NO 3D image overlaps any text in any card at desktop OR mobile widths.
+State the expected visible behavior: "renders gently float out of sync; they parallax on scroll; sections fade up once; nav stays pinned; stats count up." If any item is not implemented, say which and why — do not claim completion otherwise.
+
+=== ACCEPTANCE (reject the result if any fail) ===
+
+No render overlaps text anywhere; Residências/Empresas cards are 2-column (text | image) on desktop, stacked on mobile; comparison-card objects clear the badge and text.
+Every 3D render visibly floats (out of sync) AND parallaxes on scroll — not static.
+Section reveals fire once; sticky pill stays pinned the whole scroll; stats count up; accordion + hovers animate.
+All motion disabled under prefers-reduced-motion; smooth on a mid phone; no CLS; no horizontal scroll at 320px.
+No copy/colour/structure changes.

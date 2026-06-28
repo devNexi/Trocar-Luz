@@ -437,6 +437,18 @@
   .como-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* ── Hero CTA cards — stack on mobile ────────────────────────────── */
+@media (max-width: 767px) {
+  .hero-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-card-grid .hero-card-render {
+    padding-top: 0 !important;
+    justify-content: center;
+    min-height: 180px;
+  }
+}
+
 /* ── Por que 3D objects — hide on small screens ──────────────────── */
 .pq-obj { display: none; }
 @media (min-width: 900px) {

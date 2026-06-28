@@ -635,28 +635,28 @@ export default function Home() {
             Comece agora
           </motion.p>
           <div className="grid md:grid-cols-2 gap-5">
-            {/* Card — Residências */}
+            {/* Card — Residências: 2-col grid — text left, render right */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.56 }}
+              style={{ height: "100%" }}
             >
               <Link href="/para-sua-casa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <article
+                  className="hero-card-grid"
                   style={{
                     backgroundColor: "#E8F4E2",
                     borderRadius: "var(--r-card)",
                     padding: "clamp(28px, 4vw, 44px)",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
+                    display: "grid",
+                    gridTemplateColumns: "58fr 42fr",
+                    gap: "0",
                     boxShadow: CARD_SHADOW,
                     cursor: "pointer",
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     height: "100%",
-                    position: "relative",
-                    overflow: "hidden",
-                    minHeight: "300px",
+                    minHeight: "260px",
                   }}
                   onMouseEnter={(e) => {
                     setCasaHover(true);
@@ -671,18 +671,78 @@ export default function Home() {
                     el.style.boxShadow = CARD_SHADOW;
                   }}
                 >
-                  {/* hero-casa — bottom-right, ~330px, floats + nudges on hover */}
+                  {/* LEFT: text column */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "14px", justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <House size={18} weight="bold" style={{ color: "var(--green)" }} />
+                      <span
+                        style={{
+                          fontFamily: "var(--app-font-sans)",
+                          fontWeight: 600,
+                          fontSize: "11px",
+                          letterSpacing: "0.10em",
+                          textTransform: "uppercase",
+                          color: "var(--green-text)",
+                        }}
+                      >
+                        Para sua casa
+                      </span>
+                    </div>
+                    <h2
+                      style={{
+                        fontFamily: "var(--app-font-display)",
+                        fontWeight: 700,
+                        fontSize: "clamp(22px, 3vw, 30px)",
+                        color: "var(--ink)",
+                        margin: 0,
+                        lineHeight: 1.05,
+                      }}
+                    >
+                      Residências
+                    </h2>
+                    <p
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontSize: "15px",
+                        color: "rgba(26,36,16,0.70)",
+                        lineHeight: 1.65,
+                        margin: 0,
+                      }}
+                    >
+                      Geração Distribuída já disponível para reduzir sua conta sem obras ou
+                      instalações. Conectamos você a energia solar de fazendas parceiras.
+                    </p>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignSelf: "flex-start",
+                        padding: "11px 22px",
+                        borderRadius: "999px",
+                        backgroundColor: "var(--green)",
+                        color: "#fff",
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        transition: "background 0.15s",
+                        marginTop: "4px",
+                      }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green-hover)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green)"; }}
+                    >
+                      Quero economizar →
+                    </span>
+                  </div>
+
+                  {/* RIGHT: render column — its own zone, no text behind it */}
                   <div
                     aria-hidden="true"
                     style={{
-                      position: "absolute",
-                      bottom: "-10px",
-                      right: "-10px",
-                      width: "clamp(200px, 28vw, 330px)",
-                      height: "clamp(200px, 28vw, 330px)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "16px",
                       transition: "transform 0.3s ease",
-                      transform: casaHover ? "translateY(-6px)" : "translateY(0)",
-                      pointerEvents: "none",
+                      transform: casaHover ? "translateY(-5px)" : "translateY(0)",
                     }}
                   >
                     <FloatImg
@@ -692,97 +752,35 @@ export default function Home() {
                       animDelay="0.2s"
                       parallaxStrength={10}
                       loading="eager"
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
                     />
                   </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", position: "relative" }}>
-                    <House size={18} weight="bold" style={{ color: "var(--green)" }} />
-                    <span
-                      style={{
-                        fontFamily: "var(--app-font-sans)",
-                        fontWeight: 600,
-                        fontSize: "11px",
-                        letterSpacing: "0.10em",
-                        textTransform: "uppercase",
-                        color: "var(--green-text)",
-                      }}
-                    >
-                      Para sua casa
-                    </span>
-                  </div>
-                  <h2
-                    style={{
-                      fontFamily: "var(--app-font-display)",
-                      fontWeight: 700,
-                      fontSize: "clamp(22px, 3vw, 30px)",
-                      color: "var(--ink)",
-                      margin: 0,
-                      position: "relative",
-                    }}
-                  >
-                    Residências
-                  </h2>
-                  <p
-                    style={{
-                      fontFamily: "var(--app-font-sans)",
-                      fontSize: "15px",
-                      color: "rgba(26,36,16,0.70)",
-                      lineHeight: 1.65,
-                      margin: 0,
-                      flex: 1,
-                      position: "relative",
-                      maxWidth: "calc(100% - 100px)",
-                    }}
-                  >
-                    Geração Distribuída já disponível para reduzir sua conta sem obras ou
-                    instalações. Conectamos você a energia solar de fazendas parceiras.
-                  </p>
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignSelf: "flex-start",
-                      padding: "11px 22px",
-                      borderRadius: "999px",
-                      backgroundColor: "var(--green)",
-                      color: "#fff",
-                      fontFamily: "var(--app-font-sans)",
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      position: "relative",
-                      transition: "background 0.15s",
-                    }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green-hover)"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--green)"; }}
-                  >
-                    Quero economizar →
-                  </span>
                 </article>
               </Link>
             </motion.div>
 
-            {/* Card — Empresas */}
+            {/* Card — Empresas: 2-col grid — text left, render right */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.65 }}
+              style={{ height: "100%" }}
             >
               <Link href="/para-sua-empresa" style={{ textDecoration: "none", display: "block", height: "100%" }}>
                 <article
+                  className="hero-card-grid"
                   style={{
                     backgroundColor: "#EAF0F7",
                     borderRadius: "var(--r-card)",
                     padding: "clamp(28px, 4vw, 44px)",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
+                    display: "grid",
+                    gridTemplateColumns: "58fr 42fr",
+                    gap: "0",
                     boxShadow: CARD_SHADOW,
                     cursor: "pointer",
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     height: "100%",
-                    position: "relative",
-                    overflow: "hidden",
-                    minHeight: "300px",
+                    minHeight: "260px",
                   }}
                   onMouseEnter={(e) => {
                     setEmpresaHover(true);
@@ -797,18 +795,78 @@ export default function Home() {
                     el.style.boxShadow = CARD_SHADOW;
                   }}
                 >
-                  {/* hero-empresa — bottom-right */}
+                  {/* LEFT: text column */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "14px", justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <Buildings size={18} weight="bold" style={{ color: "#2C5F8A" }} />
+                      <span
+                        style={{
+                          fontFamily: "var(--app-font-sans)",
+                          fontWeight: 600,
+                          fontSize: "11px",
+                          letterSpacing: "0.10em",
+                          textTransform: "uppercase",
+                          color: "#2C5F8A",
+                        }}
+                      >
+                        Para sua empresa
+                      </span>
+                    </div>
+                    <h2
+                      style={{
+                        fontFamily: "var(--app-font-display)",
+                        fontWeight: 700,
+                        fontSize: "clamp(22px, 3vw, 30px)",
+                        color: "var(--ink)",
+                        margin: 0,
+                        lineHeight: 1.05,
+                      }}
+                    >
+                      Empresas
+                    </h2>
+                    <p
+                      style={{
+                        fontFamily: "var(--app-font-sans)",
+                        fontSize: "15px",
+                        color: "rgba(26,36,16,0.70)",
+                        lineHeight: 1.65,
+                        margin: 0,
+                      }}
+                    >
+                      GD + Mercado Livre de Energia para reduzir custos operacionais. Análise
+                      gratuita do seu perfil de consumo e gestão completa da migração.
+                    </p>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignSelf: "flex-start",
+                        padding: "11px 22px",
+                        borderRadius: "999px",
+                        backgroundColor: "var(--ink)",
+                        color: "#fff",
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                        transition: "background 0.15s",
+                        marginTop: "4px",
+                      }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "#2e3d20"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--ink)"; }}
+                    >
+                      Analisar minha empresa →
+                    </span>
+                  </div>
+
+                  {/* RIGHT: render column — its own zone, no text behind it */}
                   <div
                     aria-hidden="true"
                     style={{
-                      position: "absolute",
-                      bottom: "-10px",
-                      right: "-10px",
-                      width: "clamp(200px, 28vw, 330px)",
-                      height: "clamp(200px, 28vw, 330px)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "16px",
                       transition: "transform 0.3s ease",
-                      transform: empresaHover ? "translateY(-6px)" : "translateY(0)",
-                      pointerEvents: "none",
+                      transform: empresaHover ? "translateY(-5px)" : "translateY(0)",
                     }}
                   >
                     <FloatImg
@@ -818,68 +876,9 @@ export default function Home() {
                       animDelay="0.8s"
                       parallaxStrength={10}
                       loading="eager"
-                      style={{ width: "100%", height: "100%" }}
+                      style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
                     />
                   </div>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <Buildings size={18} weight="bold" style={{ color: "#2C5F8A" }} />
-                    <span
-                      style={{
-                        fontFamily: "var(--app-font-sans)",
-                        fontWeight: 600,
-                        fontSize: "11px",
-                        letterSpacing: "0.10em",
-                        textTransform: "uppercase",
-                        color: "#2C5F8A",
-                      }}
-                    >
-                      Para sua empresa
-                    </span>
-                  </div>
-                  <h2
-                    style={{
-                      fontFamily: "var(--app-font-display)",
-                      fontWeight: 700,
-                      fontSize: "clamp(22px, 3vw, 30px)",
-                      color: "var(--ink)",
-                      margin: 0,
-                    }}
-                  >
-                    Empresas
-                  </h2>
-                  <p
-                    style={{
-                      fontFamily: "var(--app-font-sans)",
-                      fontSize: "15px",
-                      color: "rgba(26,36,16,0.70)",
-                      lineHeight: 1.65,
-                      margin: 0,
-                      flex: 1,
-                      maxWidth: "calc(100% - 100px)",
-                    }}
-                  >
-                    GD + Mercado Livre de Energia para reduzir custos operacionais. Análise
-                    gratuita do seu perfil de consumo e gestão completa da migração.
-                  </p>
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignSelf: "flex-start",
-                      padding: "11px 22px",
-                      borderRadius: "999px",
-                      backgroundColor: "var(--ink)",
-                      color: "#fff",
-                      fontFamily: "var(--app-font-sans)",
-                      fontWeight: 600,
-                      fontSize: "14px",
-                      transition: "background 0.15s",
-                    }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "#2e3d20"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "var(--ink)"; }}
-                  >
-                    Analisar minha empresa →
-                  </span>
                 </article>
               </Link>
             </motion.div>
@@ -1017,6 +1016,7 @@ export default function Home() {
                     el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.06)";
                   }}
                 >
+                  {/* Header: discount heading | badge — no object here */}
                   <div
                     style={{
                       background: "rgba(31,164,89,0.07)",
@@ -1027,52 +1027,55 @@ export default function Home() {
                       gap: "12px",
                     }}
                   >
-                    <div style={{ flex: 1 }}>
-                      <div
-                        style={{
-                          fontFamily: "var(--app-font-display)",
-                          fontWeight: 700,
-                          fontSize: "clamp(36px, 5vw, 52px)",
-                          color: "var(--green)",
-                          lineHeight: 1,
-                          letterSpacing: "-0.02em",
-                        }}
-                      >
-                        até 35% off
-                      </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--app-font-display)",
+                        fontWeight: 700,
+                        fontSize: "clamp(36px, 5vw, 52px)",
+                        color: "var(--green)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      até 35% off
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
-                      <span
-                        style={{
-                          flexShrink: 0,
-                          fontFamily: "var(--app-font-sans)",
-                          fontWeight: 600,
-                          fontSize: "11px",
-                          color: "#fff",
-                          backgroundColor: "var(--green)",
-                          borderRadius: "999px",
-                          padding: "4px 12px",
-                          whiteSpace: "nowrap",
-                          letterSpacing: "0.03em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        Disponível agora
-                      </span>
-                      {/* obj-solar — top-right ~140px */}
-                      <FloatImg
-                        src="/img/obj-solar.webp"
-                        alt=""
-                        width={100}
-                        height={100}
-                        floatClass="obj-float-a"
-                        animDelay="0.3s"
-                        parallaxStrength={12}
-                        style={{ flexShrink: 0 }}
-                      />
-                    </div>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "11px",
+                        color: "#fff",
+                        backgroundColor: "var(--green)",
+                        borderRadius: "999px",
+                        padding: "4px 12px",
+                        whiteSpace: "nowrap",
+                        letterSpacing: "0.03em",
+                        textTransform: "uppercase",
+                        marginTop: "6px",
+                      }}
+                    >
+                      Disponível agora
+                    </span>
                   </div>
-                  <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Body: text constrained to ~65%; obj-solar in its own right zone */}
+                  <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
+                    {/* obj-solar — right zone, below badge, not over text */}
+                    <FloatImg
+                      src="/img/obj-solar.webp"
+                      alt=""
+                      width={110}
+                      height={110}
+                      floatClass="obj-float-a"
+                      animDelay="0.3s"
+                      parallaxStrength={12}
+                      style={{
+                        position: "absolute",
+                        top: "12px",
+                        right: "20px",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Sun size={20} weight="bold" style={{ color: "var(--green)", flexShrink: 0 }} />
                       <h3
@@ -1095,6 +1098,7 @@ export default function Home() {
                         lineHeight: "1.6",
                         margin: 0,
                         flex: 1,
+                        maxWidth: "65%",
                       }}
                     >
                       Economize na conta de luz hoje com energia solar compartilhada, sem obras
@@ -1149,6 +1153,7 @@ export default function Home() {
                     el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.06)";
                   }}
                 >
+                  {/* Header: discount heading | badge — no object here */}
                   <div
                     style={{
                       background: "rgba(143,209,79,0.10)",
@@ -1159,52 +1164,55 @@ export default function Home() {
                       gap: "12px",
                     }}
                   >
-                    <div style={{ flex: 1 }}>
-                      <div
-                        style={{
-                          fontFamily: "var(--app-font-display)",
-                          fontWeight: 700,
-                          fontSize: "clamp(36px, 5vw, 52px)",
-                          color: "var(--green-text)",
-                          lineHeight: 1,
-                          letterSpacing: "-0.02em",
-                        }}
-                      >
-                        até 30% off
-                      </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--app-font-display)",
+                        fontWeight: 700,
+                        fontSize: "clamp(36px, 5vw, 52px)",
+                        color: "var(--green-text)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      até 30% off
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
-                      <span
-                        style={{
-                          flexShrink: 0,
-                          fontFamily: "var(--app-font-sans)",
-                          fontWeight: 600,
-                          fontSize: "11px",
-                          color: "var(--green-text)",
-                          backgroundColor: "rgba(31,164,89,0.12)",
-                          borderRadius: "999px",
-                          padding: "4px 12px",
-                          whiteSpace: "nowrap",
-                          letterSpacing: "0.03em",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        A partir de 2027
-                      </span>
-                      {/* obj-mercado — top-right ~140px */}
-                      <FloatImg
-                        src="/img/obj-mercado.webp"
-                        alt=""
-                        width={100}
-                        height={100}
-                        floatClass="obj-float-b"
-                        animDelay="1.1s"
-                        parallaxStrength={12}
-                        style={{ flexShrink: 0 }}
-                      />
-                    </div>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontFamily: "var(--app-font-sans)",
+                        fontWeight: 600,
+                        fontSize: "11px",
+                        color: "var(--green-text)",
+                        backgroundColor: "rgba(31,164,89,0.12)",
+                        borderRadius: "999px",
+                        padding: "4px 12px",
+                        whiteSpace: "nowrap",
+                        letterSpacing: "0.03em",
+                        textTransform: "uppercase",
+                        marginTop: "6px",
+                      }}
+                    >
+                      A partir de 2027
+                    </span>
                   </div>
-                  <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* Body: text constrained to ~65%; obj-mercado in its own right zone */}
+                  <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
+                    {/* obj-mercado — right zone, below badge, not over text */}
+                    <FloatImg
+                      src="/img/obj-mercado.webp"
+                      alt=""
+                      width={110}
+                      height={110}
+                      floatClass="obj-float-b"
+                      animDelay="1.1s"
+                      parallaxStrength={12}
+                      style={{
+                        position: "absolute",
+                        top: "12px",
+                        right: "20px",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <Lightning size={20} weight="bold" style={{ color: "var(--green-text)", flexShrink: 0 }} />
                       <h3
@@ -1227,6 +1235,7 @@ export default function Home() {
                         lineHeight: "1.6",
                         margin: 0,
                         flex: 1,
+                        maxWidth: "65%",
                       }}
                     >
                       Escolha seu fornecedor de energia com contrato direto e reduza
@@ -1448,52 +1457,43 @@ export default function Home() {
               Economia
             </motion.div>
 
-            {/* Scattered 3D objects — no people */}
+            {/* 4 corner objects — strictly in outer corners, 40px+ clear of heading */}
             {[
               {
                 src: "/img/obj-raio.webp",
-                size: 110,
+                size: 100,
                 floatClass: "obj-float-a" as const,
                 delay: "0s",
                 strength: 14,
-                pos: { top: "-20px", left: "3%" },
-                rot: "-6deg",
+                pos: { top: "24px", left: "24px" },
+                rot: "-8deg",
               },
               {
                 src: "/img/obj-fazenda.webp",
-                size: 130,
+                size: 110,
                 floatClass: "obj-float-b" as const,
                 delay: "0.7s",
                 strength: 18,
-                pos: { top: "-10px", right: "5%" },
-                rot: "5deg",
+                pos: { top: "24px", right: "24px" },
+                rot: "6deg",
               },
               {
                 src: "/img/obj-solar.webp",
-                size: 90,
+                size: 88,
                 floatClass: "obj-float-a" as const,
                 delay: "1.3s",
                 strength: 10,
-                pos: { top: "45%", left: "-0.5%" },
-                rot: "-3deg",
+                pos: { bottom: "24px", left: "24px" },
+                rot: "-4deg",
               },
               {
                 src: "/img/obj-mercado.webp",
-                size: 100,
+                size: 96,
                 floatClass: "obj-float-b" as const,
                 delay: "0.4s",
                 strength: 16,
-                pos: { top: "50%", right: "-0.5%" },
-                rot: "7deg",
-              },
-              {
-                src: "/img/hero-casa.webp",
-                size: 120,
-                floatClass: "obj-float-a" as const,
-                delay: "1.8s",
-                strength: 12,
-                pos: { bottom: "-8px", left: "27%" },
-                rot: "-4deg",
+                pos: { bottom: "24px", right: "24px" },
+                rot: "8deg",
               },
             ].map((obj, i) => (
               <FloatImg
