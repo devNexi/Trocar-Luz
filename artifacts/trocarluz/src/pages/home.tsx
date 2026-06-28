@@ -194,7 +194,7 @@ function CollageTile({
   const floatAnim = prefersReduced
     ? {}
     : calm
-    ? { y: [0, -10, 0] }
+    ? { y: [0, -10, 0], rotate: [baseRot, baseRot, baseRot] }
     : energetic
     ? {
         y: [0, -22, 0, -12, 0],
@@ -1584,7 +1584,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-1.webp"
               size="clamp(96px,17vw,188px)"
-              baseRot={-8}
+              baseRot={-6}
               delay={0}
               duration={7}
               parallaxRange={[12, -12]}
@@ -1596,7 +1596,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-2.webp"
               size="110px"
-              baseRot={5}
+              baseRot={10}
               delay={0.4}
               duration={7.2}
               parallaxRange={[10, -10]}
@@ -1609,7 +1609,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-5.webp"
               size="200px"
-              baseRot={-3}
+              baseRot={0}
               delay={1.0}
               duration={6.8}
               parallaxRange={[12, -12]}
@@ -1622,7 +1622,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-3.webp"
               size="clamp(84px,11vw,120px)"
-              baseRot={9}
+              baseRot={7}
               delay={0.3}
               duration={7.5}
               parallaxRange={[10, -10]}
@@ -1634,7 +1634,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-4.webp"
               size="130px"
-              baseRot={-5}
+              baseRot={-8}
               delay={0.6}
               duration={8}
               parallaxRange={[12, -12]}
@@ -1647,7 +1647,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-6.webp"
               size="152px"
-              baseRot={6}
+              baseRot={4}
               delay={0.9}
               duration={7}
               parallaxRange={[12, -12]}
@@ -1660,7 +1660,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-7.webp"
               size="clamp(70px,9vw,100px)"
-              baseRot={-9}
+              baseRot={11}
               delay={1.2}
               duration={8.5}
               parallaxRange={[10, -10]}
@@ -1672,7 +1672,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-9.webp"
               size="164px"
-              baseRot={4}
+              baseRot={-7}
               delay={1.6}
               duration={7.6}
               parallaxRange={[12, -12]}
@@ -1685,7 +1685,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-10.webp"
               size="142px"
-              baseRot={-7}
+              baseRot={0}
               delay={0.8}
               duration={8.2}
               parallaxRange={[12, -12]}
@@ -1698,7 +1698,7 @@ export default function Home() {
             <CollageTile
               src="/img/person-8.webp"
               size="clamp(112px,16vw,176px)"
-              baseRot={8}
+              baseRot={-5}
               delay={1.5}
               duration={6.8}
               parallaxRange={[12, -12]}
