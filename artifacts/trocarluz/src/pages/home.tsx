@@ -718,6 +718,28 @@ export default function Home() {
             </span>
           </motion.div>
         </div>
+
+        {/* Sun + arrow accent — lower-right, hidden on mobile */}
+        <motion.img
+          src="/img/obj-sol.webp"
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          className="hidden md:block"
+          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+          transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity }}
+          style={{
+            position: "absolute",
+            bottom: "clamp(48px, 8vw, 112px)",
+            right: "clamp(24px, 6vw, 80px)",
+            width: "clamp(120px, 17vw, 210px)",
+            aspectRatio: "1",
+            objectFit: "contain",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
       </section>
 
       {/* Overlap cards — rise into hero/white boundary */}
@@ -1177,7 +1199,7 @@ export default function Home() {
                   </div>
                   {/* Body: text constrained to ~65%; render in its own right zone */}
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
-                    {/* hero-casa — right zone, y-only calm float + nudge on card hover */}
+                    {/* obj-credito — right zone, y-only calm float + nudge on card hover */}
                     <div
                       aria-hidden="true"
                       style={{
@@ -1192,7 +1214,7 @@ export default function Home() {
                       }}
                     >
                       <motion.img
-                        src="/img/hero-casa.webp"
+                        src="/img/obj-credito.webp"
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -1339,7 +1361,7 @@ export default function Home() {
                       }}
                     >
                       <motion.img
-                        src="/img/obj-raio.webp"
+                        src="/img/obj-mercado.webp"
                         alt=""
                         loading="lazy"
                         decoding="async"
