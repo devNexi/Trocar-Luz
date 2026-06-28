@@ -135,9 +135,9 @@ export function Layout({ children }: { children: ReactNode }) {
             style={{ flexShrink: 0, lineHeight: 0 }}
           >
             <img
-              src="/img/logo-trocarluz.png"
+              src="/img/logo-trocarluz-nobg.png"
               alt="TrocarLuz"
-              style={{ height: "38px", width: "auto", display: "block" }}
+              style={{ height: "36px", width: "auto", display: "block" }}
             />
           </Link>
 
@@ -513,9 +513,9 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="md:col-span-1">
               <Link href="/" style={{ display: "block", lineHeight: 0, marginBottom: "16px" }}>
                 <img
-                  src="/img/logo-trocarluz.png"
+                  src="/img/logo-trocarluz-nobg.png"
                   alt="TrocarLuz"
-                  style={{ height: "34px", width: "auto", display: "block" }}
+                  style={{ height: "32px", width: "auto", display: "block" }}
                 />
               </Link>
               <p

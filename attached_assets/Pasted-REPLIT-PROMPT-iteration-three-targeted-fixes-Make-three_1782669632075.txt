@@ -1,0 +1,41 @@
+REPLIT PROMPT (iteration — three targeted fixes):
+Make three targeted changes to the existing homepage. Do NOT change copy, colours, section order, fonts, or any other layout. Touch only the logo treatment, the "Por que a TrocarLuz?" section, and any image slot currently rendering empty/placeholder. Report the exact files you'll edit in one line, then apply. Do not report done until every acceptance criterion passes.
+
+1) LOGO — remove the white box (header AND footer)
+- Remove any white background, card, border, or padding wrapper behind the logo in both the header nav and the footer. The logo must sit directly on the page background (Manteiga yellow in header, cream in footer) with NO box behind it.
+- Use the transparent logo asset at /public/img/logo.svg (or logo.webp) that I've uploaded. If the current logo file has a baked-in white/opaque background, THAT is the cause of the box — swap the <img src> to the transparent version. Do not try to mask it with CSS.
+- Wordmark uses dark ink #1A2410 (reads on yellow); bolt stays green. Confirm wordmark contrast on Manteiga ≥ 4.5:1.
+- Logo ~36px tall in header, ~32px in footer, vertically centered, no drop shadow.
+
+2) "POR QUE A TROCARLUZ?" — denser collage (add 4 tiles)
+- I've uploaded 4 more transparent squircle tiles to /public/img/ (person-*.webp). Add them so the section shows ~10 floating photos total instead of 6. It currently has too much empty yellow.
+- This is a COLLAGE, not a grid:
+  - Sizes: mix large (170–190px), medium (130–150px), small (100–120px). No two adjacent tiles the same size.
+  - Positions: distribute asymmetrically around all edges/corners of the heading. Specifically fill the empty UPPER-CENTRE and LOWER-CENTRE gaps that currently look bare — but keep a clear central safe zone around the heading text.
+  - Rotation: each tile ±6°, varied.
+  - Depth: outer tiles slightly smaller/lighter so it reads layered.
+- Heading stays centered, Poppins bold, dark ink, on top. NO tile may overlap or touch the heading text at any breakpoint.
+- Keep the dot texture, pale-yellow background, and the existing subtle multi-axis float (±8px, 6–10s, staggered, respects prefers-reduced-motion). Apply the same float to the 4 new tiles.
+- Every tile: object-fit cover, fixed aspect-ratio (zero CLS), lazy-loaded, alt="" (decorative).
+
+3) PLACE THE IMAGES THAT AREN'T SHOWING
+- Audit /public/img/ and ensure every asset is actually rendered somewhere. In particular:
+  - obj-raio.webp → small floating accent in the hero, upper-right, ~110px, behind the headline, same subtle drift. The hero currently has no floating object.
+  - Any other .webp not currently placed (e.g. obj-mercado.webp on the "até 30% off / Mercado Livre" card, if a generic lightning is there instead) → put it in its intended slot.
+- If a referenced file is missing, render a neutral grey squircle placeholder at the correct size — never collapse the layout.
+
+RESPONSIVE
+- Mobile ≤480px: collage drops to 4–5 tiles, smaller (80–110px), still no overlap with heading; hero accent may hide. No horizontal scroll at 320px.
+
+ACCESSIBILITY
+- Logo wordmark ≥4.5:1 on its background. Decorative photos alt="". prefers-reduced-motion disables all drift.
+
+PERFORMANCE
+- All images WebP/SVG, explicit dimensions or aspect-ratio (zero CLS), lazy below the fold.
+
+ACCEPTANCE CRITERIA
+- No white box behind the logo in header OR footer; logo sits on transparent.
+- "Por que" shows ~10 photos with varied sizes/positions/rotation, no tile touching the heading, upper/lower-centre gaps reduced.
+- Hero shows the obj-raio accent; every file in /public/img/ is placed somewhere.
+- No CLS, no horizontal scroll at 320px, reduced-motion respected.
+- Report which files you edited and confirm each criterion line by line.

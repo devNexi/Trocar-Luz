@@ -719,6 +719,28 @@ export default function Home() {
           </motion.div>
         </div>
 
+        {/* Lightning bolt accent — upper-right, hidden on mobile */}
+        <motion.img
+          src="/img/obj-raio.webp"
+          alt=""
+          aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          className="hidden md:block"
+          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
+          transition={prefersReduced ? {} : { duration: 6, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
+          style={{
+            position: "absolute",
+            top: "clamp(90px,12vw,160px)",
+            right: "clamp(80px,16vw,260px)",
+            width: "110px",
+            aspectRatio: "1",
+            objectFit: "contain",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+
         {/* Sun + arrow accent — lower-right, hidden on mobile */}
         <motion.img
           src="/img/obj-sol.webp"
@@ -1676,6 +1698,58 @@ export default function Home() {
               isPhoto
               calm
               style={{ bottom: 0, right: 0 }}
+            />
+
+            {/* ── Upper-centre tiles — hidden on mobile ── */}
+            <CollageTile
+              src="/img/person-2.webp"
+              size="clamp(88px,13vw,145px)"
+              baseRot={-5}
+              delay={0.4}
+              duration={7.2}
+              parallaxRange={[14, -14]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ top: 0, left: "clamp(175px,28vw,400px)" }}
+            />
+            <CollageTile
+              src="/img/person-5.webp"
+              size="clamp(80px,10vw,112px)"
+              baseRot={4}
+              delay={1.0}
+              duration={6.8}
+              parallaxRange={[10, -10]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ top: 0, right: "clamp(165px,26vw,370px)" }}
+            />
+
+            {/* ── Lower-centre tiles — hidden on mobile ── */}
+            <CollageTile
+              src="/img/person-9.webp"
+              size="clamp(80px,10vw,115px)"
+              baseRot={-6}
+              delay={1.6}
+              duration={7.6}
+              parallaxRange={[10, -10]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ bottom: 0, left: "clamp(165px,26vw,370px)" }}
+            />
+            <CollageTile
+              src="/img/person-10.webp"
+              size="clamp(88px,13vw,140px)"
+              baseRot={5}
+              delay={0.8}
+              duration={8.2}
+              parallaxRange={[14, -14]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ bottom: 0, right: "clamp(175px,28vw,400px)" }}
             />
 
             {/* Heading — centered, always above tiles */}
