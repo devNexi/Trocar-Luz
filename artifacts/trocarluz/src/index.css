@@ -487,10 +487,6 @@
   .obj-float-b { animation: none !important; will-change: auto !important; }
 }
 
-/* ── CTA band responsive ─────────────────────────────────────────── */
-@media (max-width: 480px) {
-  .cta-bolt { display: none !important; }
-}
 
 /* ── Raio-X da Conta tool interactive states ─────────────────────── */
 .tool-input:focus {

@@ -599,6 +599,37 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
+        {/* ── Hero bolt anchor — large 3D visual, top-right, cropped by overflow:hidden ── */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            top: "-24px",
+            right: "-48px",
+            width: "clamp(180px, 38vw, 460px)",
+            height: "clamp(180px, 38vw, 460px)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        >
+          <motion.img
+            src="/img/obj-raio.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+            animate={prefersReduced ? {} : { y: [0, -4, 0] }}
+            transition={prefersReduced ? {} : { duration: 10, ease: "easeInOut", repeat: Infinity }}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              display: "block",
+              transform: "rotate(12deg)",
+              transformOrigin: "top right",
+            }}
+          />
+        </div>
+
         <div style={{ maxWidth: "var(--container)", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <h1 id="hero-heading" style={{ margin: 0 }}>
             <motion.span
@@ -2013,53 +2044,6 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
-        {/* ── CTA band 3D accents — z-index 0, behind all text ── */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            left: "clamp(0px, 4%, 56px)",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "clamp(60px, 10vw, 125px)",
-            height: "clamp(60px, 10vw, 125px)",
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <motion.img
-            src="/img/obj-sol.webp"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            animate={prefersReduced ? {} : { y: [0, -8, 0], rotate: [8, 8, 8] }}
-            transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, delay: 0 }}
-            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-          />
-        </div>
-        <div
-          aria-hidden="true"
-          className="cta-bolt"
-          style={{
-            position: "absolute",
-            right: "clamp(0px, 4%, 56px)",
-            bottom: "22%",
-            width: "clamp(50px, 8vw, 90px)",
-            height: "clamp(50px, 8vw, 90px)",
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <motion.img
-            src="/img/obj-raio.webp"
-            alt=""
-            loading="lazy"
-            decoding="async"
-            animate={prefersReduced ? {} : { y: [0, -6, 0], rotate: [-10, -10, -10] }}
-            transition={{ duration: 6.5, ease: "easeInOut", repeat: Infinity, delay: 1.2 }}
-            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-          />
-        </div>
         <div style={{ position: "relative", zIndex: 1, maxWidth: "720px", margin: "0 auto" }}>
           <Reveal>
             <h2 id="cta-heading" style={{ letterSpacing: "-0.02em", marginBottom: "20px" }}>
