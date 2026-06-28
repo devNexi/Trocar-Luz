@@ -1569,144 +1569,142 @@ export default function Home() {
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          {/* Collage container — tiles in outer ring, heading centered (Payard style) */}
+          {/* Collage container — 10 tiles, scattered positions, heading centred */}
           <div
             style={{
               position: "relative",
-              minHeight: "clamp(320px, 50vw, 480px)",
+              minHeight: "680px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: "clamp(48px, 7vw, 72px)",
             }}
           >
-            {/* ── Left column — 3 person tiles ── */}
+            {/* A — person-1, top-left, 188px */}
             <CollageTile
               src="/img/person-1.webp"
-              size="clamp(100px,15vw,165px)"
-              baseRot={-3}
+              size="clamp(96px,17vw,188px)"
+              baseRot={-8}
               delay={0}
               duration={7}
-              parallaxRange={[18, -18]}
-              isPhoto
-              calm
-              style={{ top: 0, left: 0 }}
-            />
-            <CollageTile
-              src="/img/person-4.webp"
-              size="clamp(88px,12vw,138px)"
-              baseRot={2}
-              delay={0.6}
-              duration={7.5}
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              style={{
-                top: "50%",
-                left: "clamp(60px,12vw,200px)",
-                marginTop: "clamp(-44px,-6vw,-69px)",
-              }}
+              style={{ top: "4%", left: "5%" }}
             />
+            {/* B — person-2, top-centre, 110px — desktop only */}
             <CollageTile
-              src="/img/person-7.webp"
-              size="clamp(100px,14vw,158px)"
-              baseRot={-2}
-              delay={1.2}
-              duration={8}
-              parallaxRange={[18, -18]}
+              src="/img/person-2.webp"
+              size="110px"
+              baseRot={5}
+              delay={0.4}
+              duration={7.2}
+              parallaxRange={[10, -10]}
               isPhoto
               calm
-              style={{ bottom: 0, left: 0 }}
+              className="collage-hide-mobile"
+              style={{ top: "7%", left: "33%" }}
             />
-            {/* ── Right column — 3 person tiles ── */}
+            {/* C — person-5, upper-centre-right, 200px — desktop only */}
+            <CollageTile
+              src="/img/person-5.webp"
+              size="200px"
+              baseRot={-3}
+              delay={1.0}
+              duration={6.8}
+              parallaxRange={[12, -12]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ top: "3%", left: "56%" }}
+            />
+            {/* D — person-3, top-right, 120px */}
             <CollageTile
               src="/img/person-3.webp"
-              size="clamp(100px,15vw,165px)"
-              baseRot={3}
+              size="clamp(84px,11vw,120px)"
+              baseRot={9}
               delay={0.3}
               duration={7.5}
-              parallaxRange={[18, -18]}
+              parallaxRange={[10, -10]}
               isPhoto
               calm
-              style={{ top: 0, right: 0 }}
+              style={{ top: "9%", right: "4%" }}
             />
+            {/* E — person-4, far-left flank, 130px — desktop only */}
+            <CollageTile
+              src="/img/person-4.webp"
+              size="130px"
+              baseRot={-5}
+              delay={0.6}
+              duration={8}
+              parallaxRange={[12, -12]}
+              isPhoto
+              calm
+              className="collage-hide-mobile"
+              style={{ top: "49%", left: "2%" }}
+            />
+            {/* F — person-6, far-right flank, 152px — desktop only */}
             <CollageTile
               src="/img/person-6.webp"
-              size="clamp(88px,12vw,138px)"
-              baseRot={-2}
+              size="152px"
+              baseRot={6}
               delay={0.9}
               duration={7}
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              style={{
-                top: "50%",
-                right: "clamp(60px,12vw,200px)",
-                marginTop: "clamp(-44px,-6vw,-69px)",
-              }}
-            />
-            <CollageTile
-              src="/img/person-8.webp"
-              size="clamp(100px,14vw,155px)"
-              baseRot={2}
-              delay={1.5}
-              duration={8.5}
-              parallaxRange={[18, -18]}
-              isPhoto
-              calm
-              style={{ bottom: 0, right: 0 }}
-            />
-
-            {/* ── Upper-centre tiles — hidden on mobile ── */}
-            <CollageTile
-              src="/img/person-2.webp"
-              size="clamp(88px,13vw,145px)"
-              baseRot={-5}
-              delay={0.4}
-              duration={7.2}
-              parallaxRange={[14, -14]}
-              isPhoto
-              calm
               className="collage-hide-mobile"
-              style={{ top: 0, left: "clamp(175px,28vw,400px)" }}
+              style={{ top: "47%", right: "2%" }}
             />
+            {/* G — person-7, lower-left, 100px */}
             <CollageTile
-              src="/img/person-5.webp"
-              size="clamp(80px,10vw,112px)"
-              baseRot={4}
-              delay={1.0}
-              duration={6.8}
+              src="/img/person-7.webp"
+              size="clamp(70px,9vw,100px)"
+              baseRot={-9}
+              delay={1.2}
+              duration={8.5}
               parallaxRange={[10, -10]}
               isPhoto
               calm
-              className="collage-hide-mobile"
-              style={{ top: 0, right: "clamp(165px,26vw,370px)" }}
+              style={{ top: "71%", left: "6%" }}
             />
-
-            {/* ── Lower-centre tiles — hidden on mobile ── */}
+            {/* H — person-9, lower-centre-left, 164px — desktop only */}
             <CollageTile
               src="/img/person-9.webp"
-              size="clamp(80px,10vw,115px)"
-              baseRot={-6}
+              size="164px"
+              baseRot={4}
               delay={1.6}
               duration={7.6}
-              parallaxRange={[10, -10]}
+              parallaxRange={[12, -12]}
               isPhoto
               calm
               className="collage-hide-mobile"
-              style={{ bottom: 0, left: "clamp(165px,26vw,370px)" }}
+              style={{ top: "74%", left: "30%" }}
             />
+            {/* I — person-10, lower-centre-right, 142px — desktop only */}
             <CollageTile
               src="/img/person-10.webp"
-              size="clamp(88px,13vw,140px)"
-              baseRot={5}
+              size="142px"
+              baseRot={-7}
               delay={0.8}
               duration={8.2}
-              parallaxRange={[14, -14]}
+              parallaxRange={[12, -12]}
               isPhoto
               calm
               className="collage-hide-mobile"
-              style={{ bottom: 0, right: "clamp(175px,28vw,400px)" }}
+              style={{ top: "73%", left: "55%" }}
+            />
+            {/* J — person-8, lower-right, 176px */}
+            <CollageTile
+              src="/img/person-8.webp"
+              size="clamp(112px,16vw,176px)"
+              baseRot={8}
+              delay={1.5}
+              duration={6.8}
+              parallaxRange={[12, -12]}
+              isPhoto
+              calm
+              style={{ top: "68%", right: "5%" }}
             />
 
             {/* Heading — centered, always above tiles */}
@@ -2034,53 +2032,7 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       {/* 9. FAQ — with flanking 3D accents                          */}
       {/* ─────────────────────────────────────────────────────────── */}
-      <div style={{ position: "relative" }}>
-        {/* Lightning bolt — left of FAQ */}
-        <motion.img
-          src="/img/obj-raio.webp"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="hidden lg:block"
-          animate={prefersReduced ? {} : { y: [0, -10, 0] }}
-          transition={prefersReduced ? {} : { duration: 6, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
-          style={{
-            position: "absolute",
-            left: "clamp(12px, 3vw, 48px)",
-            top: "clamp(60px, 12%, 140px)",
-            width: "clamp(90px, 9vw, 130px)",
-            aspectRatio: "1",
-            objectFit: "contain",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Sun + arrow — right of FAQ */}
-        <motion.img
-          src="/img/obj-sol.webp"
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="hidden lg:block"
-          animate={prefersReduced ? {} : { y: [0, -12, 0] }}
-          transition={prefersReduced ? {} : { duration: 5.5, ease: "easeInOut", repeat: Infinity }}
-          style={{
-            position: "absolute",
-            right: "clamp(12px, 3vw, 48px)",
-            top: "clamp(40px, 8%, 100px)",
-            width: "clamp(120px, 12vw, 180px)",
-            aspectRatio: "1",
-            objectFit: "contain",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        <FaqSection />
-      </div>
+      <FaqSection />
     </Layout>
   );
 }

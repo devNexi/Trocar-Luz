@@ -1,0 +1,47 @@
+REPLIT PROMPT (size + spacing pass on "Por que a TrocarLuz?" — placement only):
+Update ONLY the tile sizes and positions in the "Por que a TrocarLuz?" section. Keep exactly 10 photo tiles — do not add or remove any. Do NOT change copy, colours, fonts, the heading, the background/dot texture, the float animation, or any other section. Report files touched in one line, then apply. Do not report done until every acceptance criterion passes.
+
+CHANGE 1 — EVERY TILE A DIFFERENT SIZE (this is the main fix)
+The tiles are currently all about the same width, which looks like a grid. Give each tile its OWN width from the list below. Do NOT apply a single shared width or a CSS rule that sizes them uniformly — if you're mapping over an array, each entry must carry its own size value. The size difference must be obvious at a glance.
+Widths (px), one per tile — all 10 distinct, range 100–200:
+- Tile A (woman on steps, top-left):          188
+- Tile B (man in suit + laptop, top-centre):   110
+- Tile C (man in dark shirt, upper centre-right): 200   ← largest
+- Tile D (grey-haired man at desk, top-right): 120
+- Tile E (older couple, far left):             130
+- Tile F (woman with braids, far right):       152
+- Tile G (woman, dark background, lower-left): 100    ← smallest
+- Tile H (woman in chair w/ tablet, lower centre-left): 164
+- Tile I (woman by window, lower centre-right): 142
+- Tile J (couple, lower-right):                176
+Tiles stay square (1:1), squircle corners as now.
+
+CHANGE 2 — GIVE THE HEADING ROOM
+Define a central CLEAR ZONE around the heading text: horizontal 25%–75% of the section width, vertical 44%–72% of the section height. NO tile (or any part of one) may enter this box. Specifically, the two tiles currently nearest the heading must move OUT to the margins:
+- Tile E (older couple) → far-left margin.
+- Tile F (woman with braids) → far-right margin.
+No tile edge may come within 48px of the heading text horizontally or 32px vertically, at any width.
+
+POSITIONS (section: position relative, min-height 680px; tiles position absolute; values are % of the section). Keep the existing scattered feel — these keep tiles near where they are now, just adjusted for the new sizes and the clear zone:
+- A  top 4%   left 5%
+- B  top 7%   left 33%
+- C  top 3%   left 56%
+- D  top 9%   right 4%
+- E  top 49%  left 2%      (far-left flank)
+- F  top 47%  right 2%     (far-right flank)
+- G  top 71%  left 6%
+- H  top 74%  left 30%
+- I  top 73%  left 55%
+- J  top 68%  right 5%
+Keep the subtle varied rotation (roughly -10° to +10°, different per tile) and the existing multi-axis float (±8px, 6–10s, staggered). prefers-reduced-motion renders the scatter static.
+
+MOBILE (≤480px): show 5 tiles, still all DIFFERENT sizes (e.g. 96/112/126/140/154), placed above and below the heading only (none far-left/right), none entering the clear zone. No horizontal scroll at 320px.
+
+EACH TILE: object-fit cover, fixed aspect-ratio (zero CLS), lazy-loaded, alt="" (decorative).
+
+ACCEPTANCE CRITERIA:
+- All 10 tiles have DISTINCT widths; the largest (~200px) is clearly bigger than the smallest (~100px); the variation is visible at a glance.
+- The central clear zone is empty — no tile touches or sits within 48px (horizontal) / 32px (vertical) of the heading text at any breakpoint.
+- Tile count is exactly 10; positions remain an irregular scatter (not a grid, not one-per-corner).
+- No horizontal scroll at 320px; no CLS; reduced-motion renders static.
+- Report the file(s) edited and confirm each criterion line by line.
