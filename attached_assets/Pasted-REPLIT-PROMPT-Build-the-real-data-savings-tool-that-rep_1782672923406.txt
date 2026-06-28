@@ -1,0 +1,69 @@
+REPLIT PROMPT:
+
+Build the real-data savings tool that replaces the fake discount bands. User-facing product name: "Raio-X da Conta" (treat as a single label/constant — I may rename it; keep it in ONE place). It runs in the current Vite + React + Tailwind app and powers /comparar-desconto. Build all components as clean, standard React + Tailwind so they port to a future Next.js migration unchanged. No SSR work in this task.
+
+CONTEXT:
+TrocarLuz, Brazilian energy broker, pt-BR. This tool lets a visitor check, in under a minute, how much they can save on their electricity bill — using REAL partner offers, not invented numbers. Audience is cost-conscious and skeptical, so it must feel fast, honest, trustworthy, and lead with the saving in REAIS (not %). Never use the jargon "geração distribuída" as the headline — talk about reducing the conta de luz.
+
+=== 1. REAL OFFER DATA — seed a gd_offers table (single source of truth) ===
+I will provide the file Planilha_GD_MASTER (sheet "Base_Operacional_GD", ~58 rows). Parse it and seed a gd_offers table. Do NOT hardcode discounts anywhere — every number comes from this table, so updating an offer = updating a row.
+
+Column mapping (sheet → gd_offers):
+- Distribuidora de Energia → distribuidora
+- Estado → estado · UF → uf · Região → regiao
+- Grupo Tarifário → grupo_tarifario ("Grupo A" | "Grupo B")
+- Comercializadora → comercializadora (LUDFOR ENERGIA, PRIME ENERGY, ATMO, DELANTIS, GEDISA, GENIAL ENERGIA)
+- Produto → produto
+- Status da Oferta → status ("Disponível" | "Sujeito a Consulta" | "Sem Disponibilidade")
+- Desconto Variável (%) → desconto_variavel_raw (e.g. "15% a 22%", may be "-")
+- Desconto Fixo (%) → desconto_fixo_raw (e.g. "25%", may be "-")
+- Ticket Mínimo → ticket_minimo_raw (e.g. "300 kWh", "500-1000 kWh", "-")
+- Fidelidade → fidelidade · Tipo Cliente → tipo_cliente · Observações → observacoes
+
+Computed columns on seed:
+- discount_min, discount_max (numbers): "X% a Y%" → min X / max Y; single "Z%" → min=max=Z; if BOTH variable range and fixed exist → min = lower of the mins, max = the variable max; "-" on both → null (treat offer as Sujeito a Consulta).
+- ticket_minimo_kwh (number, nullable): "300 kWh" → 300; "500-1000 kWh" → 500 (lower bound = entry minimum); "-" → null.
+After seeding, validate and REPORT: ~58 rows, 6 distinct comercializadoras, 3 distinct status values.
+
+=== 2. ESTIMATE LOGIC — rewrite POST /api/savings-estimate to query gd_offers ===
+DELETE the hardcoded GD_BANDS map. Inputs: estado OR distribuidora; grupo_tarifario (default "Grupo B" residential); tipo_cliente ("residencial"|"comercial"); monthly_bill_brl OR monthly_consumption_kwh; hasEV.
+If only bill given, estimate consumption: kwh ≈ bill_brl / 0.95 (document the assumption).
+Matching:
+a. Filter gd_offers to estado (or distribuidora) + grupo_tarifario + a tipo_cliente covering the customer (Residencial/Comercial covers residential).
+b. Keep status = "Disponível".
+c. Ticket gate: keep offers where consumption ≥ ticket_minimo_kwh (null minimum always passes).
+d. ≥1 passes → eligible: return representative discount_min/discount_max across matches; savings_min_brl = bill × discount_min%, savings_max_brl = bill × discount_max% (monthly); annual = ×12. Return matched comercializadora INTERNALLY for routing — don't necessarily show partner name yet.
+e. Matches exist but all "Sujeito a Consulta" / null discount → status "consulta" (eligible-soft, CTA = send bill).
+f. Offers exist but consumption BELOW all ticket minimums → status "below_minimum" (CTA = waitlist).
+g. No coverage / only "Sem Disponibilidade" → status "no_coverage" (CTA = waitlist).
+Always return a disclaimer string. Keep existing rate-limits.
+
+=== 3. THE TOOL UX — "Raio-X da Conta" on /comparar-desconto (kick-ass + easy) ===
+Short, fast, mobile-first multi-step flow with a slim progress indicator. One decision per step, ≥44px targets, the new design tokens (squircle cards, flat green CTAs, lime focus ring).
+Step 1 — "Onde fica?": estado (select) → distribuidora (select, filtered by estado from gd_offers; auto-select if only one). Tipo: Residência / Empresa toggle.
+Step 2 — "Quanto você paga?": monthly bill in R$ (currency-masked — the number people actually know) as primary; optional advanced "sei meu consumo (kWh)" toggle. Plus "Tem carro elétrico?" sim/não (one tap; note briefly it can increase the saving).
+Step 3 — INSTANT RESULT (calls /api/savings-estimate):
+  • eligible → lead with the SAVING IN REAIS, large: "Você pode economizar R$ {min}–{max} por mês", annual beneath "≈ R$ {annual} por ano", the % range smaller. Reassurance: "Sem instalar nada. Você continua com a sua distribuidora." Primary CTA: "Enviar conta e receber proposta →" (routes to /enviar-conta carrying the estimate). Secondary: "Como funciona".
+  • consulta → "Há uma opção para a sua região, sujeita a confirmação. Envie sua conta e confirmamos a melhor proposta." → send-bill CTA.
+  • below_minimum → honest: "Pelo seu consumo atual, as ofertas da sua região ainda não se aplicam. Quer que a gente avise quando surgir uma opção?" → waitlist (name + WhatsApp).
+  • no_coverage → "Ainda não temos uma oferta ativa na sua região. Entre na lista e avisamos." → waitlist.
+The result % must come ONLY from gd_offers. No dead-end states — every path has a next action.
+
+=== 4. SALES-MINDED RESULT DESIGN ===
+- Reais first; % is secondary. R$/month and R$/year are the hero numbers.
+- Trust strip under the result: "Sem custo • Sem compromisso • Você mantém sua distribuidora."
+- Optional social proof: "Clientes economizam em média 18%."
+- Honest disclaimer, small but present: "Estimativa indicativa baseada em ofertas reais de parceiros, sujeita à análise da sua conta, consumo mínimo e disponibilidade. Valores não garantidos."
+
+=== 5. FIX THE COMPARISON CARDS (homepage section D) ===
+Cards currently show "até 35%" (GD) / "até 30%" (Mercado Livre). Replace the GD figure with the REAL maximum discount_max present in gd_offers (compute from the data — don't hardcode), phrased "até X%", so card and tool match. Never display a % the tool can't return.
+
+=== 6. CONSISTENCY / SAFE ===
+- Standard React + Tailwind, ports to Next.js untouched. Reuse existing /enviar-conta; the tool hands off the estimate (estado, distribuidora, bill, hasEV, matched status) via state/URL params. All pt-BR.
+
+=== ACCEPTANCE CRITERIA ===
+- gd_offers seeded from the sheet; row count + 6 partners + 3 statuses reported; GD_BANDS gone (grep to prove it).
+- /api/savings-estimate returns correct paths for THREE real test cases — paste request + response for each: (a) Disponível offer, consumption above ticket → eligible with real range; (b) a "Sujeito a Consulta"-only state → consulta; (c) low residential consumption below ticket minimum → below_minimum → waitlist.
+- Tool shows reais-first results, never a % outside gd_offers, no dead ends.
+- Homepage GD card shows the real max %, matching the tool.
+- Mobile: stepper works, ≥44px targets, no horizontal scroll at 320px.
