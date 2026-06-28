@@ -67,6 +67,11 @@ const GREEN = "#1FA459";
 const BORDER = "#E6E4DC";
 const MUTED = "#515A68";
 
+const DOT_TEXTURE: React.CSSProperties = {
+  backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
+  backgroundSize: "22px 22px",
+};
+
 const CARD: React.CSSProperties = {
   backgroundColor: "#fff",
   borderRadius: "22px",
@@ -354,13 +359,13 @@ export default function CompararDesconto() {
       />
 
       {/* ── Hero ── */}
-      <section style={{ backgroundColor: NAVY, color: "#fff", padding: "56px 0 48px" }}>
+      <section style={{ backgroundColor: "var(--env)", padding: "56px 0 48px", ...DOT_TEXTURE }}>
         <div style={{ maxWidth: "600px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <div
             style={{
               display: "inline-block",
-              backgroundColor: "rgba(31,164,89,0.18)",
-              color: GREEN,
+              backgroundColor: "rgba(21,107,59,0.12)",
+              color: "#156B3B",
               fontFamily: "'Inter', sans-serif",
               fontSize: "12px",
               fontWeight: 700,
@@ -381,7 +386,7 @@ export default function CompararDesconto() {
               lineHeight: 1.1,
               marginBottom: "14px",
               letterSpacing: "-0.02em",
-              color: "#fff",
+              color: "#1A2410",
             }}
           >
             {TOOL_NAME}
@@ -390,7 +395,7 @@ export default function CompararDesconto() {
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "17px",
-              color: "rgba(255,255,255,0.65)",
+              color: "rgba(26,36,16,0.70)",
               lineHeight: 1.65,
               maxWidth: "480px",
               margin: "0 auto",

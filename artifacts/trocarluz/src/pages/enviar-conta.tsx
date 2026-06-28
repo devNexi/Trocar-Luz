@@ -258,20 +258,27 @@ export default function EnviarConta() {
         description="Envie sua conta de luz para analisarmos e confirmarmos as opções de desconto disponíveis para você."
       />
 
-      <section className="bg-[#0A1628] text-white py-14 text-center">
+      <section
+        className="py-14 text-center"
+        style={{
+          backgroundColor: "var(--env)",
+          backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
+          backgroundSize: "22px 22px",
+        }}
+      >
         <div className="max-w-xl mx-auto px-4">
           {discountMin > 0 && (
             <div
               className="inline-block mb-4 font-display font-bold"
-              style={{ backgroundColor: "rgba(106,191,75,0.15)", border: "1px solid #6ABF4B", borderRadius: "8px", padding: "8px 20px", color: "#6ABF4B", fontSize: "15px" }}
+              style={{ backgroundColor: "rgba(21,107,59,0.12)", border: "1px solid rgba(21,107,59,0.30)", borderRadius: "8px", padding: "8px 20px", color: "#156B3B", fontSize: "15px" }}
             >
               Estimativa: {discountMin}%–{discountMax}% de desconto / R${savingsMin}–R${savingsMax}/mês
             </div>
           )}
-          <h1 className="font-display font-extrabold mb-3" style={{ fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.1 }}>
+          <h1 className="font-display font-extrabold mb-3" style={{ fontSize: "clamp(28px, 5vw, 44px)", lineHeight: 1.1, color: "#1A2410" }}>
             Envie sua conta de luz
           </h1>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", color: "rgba(255,255,255,0.75)", lineHeight: 1.7 }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "17px", color: "rgba(26,36,16,0.70)", lineHeight: 1.7 }}>
             Analisamos e confirmamos a melhor opção disponível para você.
           </p>
         </div>

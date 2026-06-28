@@ -45,20 +45,27 @@ export default function CarroEletrico() {
       />
 
       {/* Hero */}
-      <section className="bg-[#0A1628] text-white py-20">
+      <section
+        className="py-20"
+        style={{
+          backgroundColor: "var(--env)",
+          backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
+          backgroundSize: "22px 22px",
+        }}
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <div
                 className="inline-block font-display font-bold text-sm mb-6"
-                style={{ backgroundColor: "rgba(106,191,75,0.15)", border: "1px solid #6ABF4B", color: "#6ABF4B", borderRadius: "8px", padding: "6px 16px" }}
+                style={{ backgroundColor: "rgba(21,107,59,0.12)", border: "1px solid rgba(21,107,59,0.30)", color: "#156B3B", borderRadius: "8px", padding: "6px 16px" }}
               >
                 Para donos de carro elétrico
               </div>
-              <h1 className="font-display font-extrabold mb-5" style={{ fontSize: "clamp(32px, 5vw, 52px)", lineHeight: 1.1 }}>
+              <h1 className="font-display font-extrabold mb-5" style={{ fontSize: "clamp(32px, 5vw, 52px)", lineHeight: 1.1, color: "#1A2410" }}>
                 Sua conta subiu depois do carro elétrico?
               </h1>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.80)", lineHeight: 1.7, marginBottom: "32px" }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(26,36,16,0.70)", lineHeight: 1.7, marginBottom: "32px" }}>
                 A geração distribuída pode compensar o aumento — sem instalar nada, sem obras. Você continua conectado à mesma distribuidora, com desconto solar direto na conta.
               </p>
               <Link
@@ -86,10 +93,10 @@ export default function CarroEletrico() {
               ].map((s) => (
                 <div
                   key={s.label}
-                  style={{ backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.10)", borderRadius: "12px", padding: "20px 28px" }}
+                  style={{ backgroundColor: "rgba(26,36,16,0.06)", border: "1px solid rgba(26,36,16,0.12)", borderRadius: "12px", padding: "20px 28px" }}
                 >
-                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)", marginBottom: "4px" }}>{s.label}</div>
-                  <div className="font-display font-bold" style={{ fontSize: "24px", color: "#6ABF4B" }}>{s.value}</div>
+                  <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "rgba(26,36,16,0.55)", marginBottom: "4px" }}>{s.label}</div>
+                  <div className="font-display font-bold" style={{ fontSize: "24px", color: "#156B3B" }}>{s.value}</div>
                 </div>
               ))}
             </div>
