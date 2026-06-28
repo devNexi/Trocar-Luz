@@ -619,12 +619,54 @@ export default function Home() {
               lineHeight: 1.6,
               color: "rgba(26,36,16,0.75)",
               maxWidth: "560px",
-              marginBottom: "40px",
+              marginBottom: "20px",
             }}
           >
             Geração distribuída já disponível para reduzir sua conta agora. E a partir de
             dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
           </motion.p>
+
+          {/* ── Social-proof avatar cluster ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.28 }}
+            style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}
+          >
+            <div style={{ display: "flex" }}>
+              {["/img/person-1.webp", "/img/person-5.webp", "/img/person-8.webp"].map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  loading="eager"
+                  decoding="async"
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: "2px solid var(--env)",
+                    marginLeft: i === 0 ? 0 : "-12px",
+                    position: "relative",
+                    zIndex: 3 - i,
+                    flexShrink: 0,
+                  }}
+                />
+              ))}
+            </div>
+            <span
+              style={{
+                fontFamily: "var(--app-font-sans)",
+                fontSize: "15px",
+                fontWeight: 500,
+                color: "var(--ink)",
+                lineHeight: 1.3,
+              }}
+            >
+              Mais de 12 mil comparações feitas
+            </span>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 14 }}
@@ -714,7 +756,7 @@ export default function Home() {
                 color: "rgba(26,36,16,0.70)",
               }}
             >
-              Broker certificado CCEE · Mais de 12 mil comparações feitas
+              Broker certificado CCEE
             </span>
           </motion.div>
         </div>
@@ -1654,7 +1696,7 @@ export default function Home() {
               isPhoto
               calm
               className="collage-hide-mobile"
-              style={{ top: "47%", right: "2%" }}
+              style={{ top: "38%", right: "2%" }}
             />
             {/* G — person-7, lower-left, 100px */}
             <CollageTile
@@ -1947,6 +1989,53 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
+        {/* ── CTA band 3D accents — z-index 0, behind all text ── */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "clamp(0px, 4%, 56px)",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "clamp(60px, 10vw, 125px)",
+            height: "clamp(60px, 10vw, 125px)",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        >
+          <motion.img
+            src="/img/obj-sol.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            animate={prefersReduced ? {} : { y: [0, -8, 0], rotate: [8, 8, 8] }}
+            transition={{ duration: 8, ease: "easeInOut", repeat: Infinity, delay: 0 }}
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          className="cta-bolt"
+          style={{
+            position: "absolute",
+            right: "clamp(0px, 4%, 56px)",
+            bottom: "22%",
+            width: "clamp(50px, 8vw, 90px)",
+            height: "clamp(50px, 8vw, 90px)",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        >
+          <motion.img
+            src="/img/obj-raio.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            animate={prefersReduced ? {} : { y: [0, -6, 0], rotate: [-10, -10, -10] }}
+            transition={{ duration: 6.5, ease: "easeInOut", repeat: Infinity, delay: 1.2 }}
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+          />
+        </div>
         <div style={{ position: "relative", zIndex: 1, maxWidth: "720px", margin: "0 auto" }}>
           <Reveal>
             <h2 id="cta-heading" style={{ letterSpacing: "-0.02em", marginBottom: "20px" }}>
