@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import {
   Lightning,
   ShieldCheck,
@@ -55,12 +55,31 @@ function FloatImg({
   className,
   loading = "lazy",
 }: FloatImgProps) {
+  const prefersReduced = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const parallaxRef = useRef(0);
   const rafRef = useRef<number>(0);
+  const delaySeconds = parseFloat(animDelay) || 0;
 
+  /* ── float loop via framer-motion (not CSS — works reliably) ─ */
+  const floatVariant = floatClass === "obj-float-b" ? "b" : "a";
+  const floatAnimate = prefersReduced
+    ? {}
+    : {
+        y: [0, -10, 0],
+        rotate: floatVariant === "a" ? [-1, 2, -1] : [1, -2, 1],
+      };
+  const floatTransition = prefersReduced
+    ? {}
+    : {
+        duration: floatVariant === "a" ? 5.4 : 5.8,
+        ease: "easeInOut" as const,
+        repeat: Infinity,
+        delay: delaySeconds,
+      };
+
+  /* ── scroll parallax ─────────────────────────────────────────── */
   useEffect(() => {
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced || parallaxStrength === 0) return;
 
     const update = () => {
@@ -86,7 +105,7 @@ function FloatImg({
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [parallaxStrength]);
+  }, [parallaxStrength, prefersReduced]);
 
   return (
     <div
@@ -100,20 +119,21 @@ function FloatImg({
         ...style,
       }}
     >
-      <img
+      <motion.img
         src={src}
         alt={alt}
         loading={loading}
         decoding="async"
         width={typeof width === "number" ? width : undefined}
         height={typeof height === "number" ? height : undefined}
-        className={floatClass}
+        animate={floatAnimate}
+        transition={floatTransition}
         style={{
           width: "100%",
           height: "100%",
           objectFit: "contain",
-          animationDelay: animDelay,
           display: "block",
+          willChange: prefersReduced ? "auto" : "transform",
           ...imgStyle,
         }}
       />
