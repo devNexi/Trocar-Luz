@@ -1,6 +1,5 @@
 /* ── Fonts ─────────────────────────────────────────────────────────── */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -73,9 +72,18 @@
 
 /* ── TrocarLuz Design System ─────────────────────────────────────── */
 :root {
-  /* ── Surfaces */
+  /* ── Payard palette ── the canonical tokens */
+  --env:       #F4EAA6;
+  --env-soft:  rgba(26,36,16,0.28);
+  --signal:    #F3E25C;
+  --ink:       #1A2410;
+  --cream:     #F5F4EF;
+  --tint:      #EAF5DC;
+  --border:    #E6E4DC;
+
+  /* ── Surfaces (legacy + new aliases) */
   --bg:            #FFFFFF;
-  --bg-alt:        #F5F4EF;
+  --bg-alt:        #F5F4EF;  /* = --cream */
   --bg-invert:     #0E1525;
   --surface:       #FFFFFF;
   --surface-invert:#16203A;
@@ -100,7 +108,7 @@
 
   /* ── Radius */
   --r-pill:  999px;
-  --r-card:  22px;
+  --r-card:  24px;
   --r-input: 14px;
 
   /* ── Shadows */
@@ -108,29 +116,28 @@
   --shadow-md:  0 10px 34px rgba(14,21,37,.10);
   --shadow-nav: 0 8px 30px rgba(14,21,37,.12);
 
-  /* ── Payard-style hero + light-section tokens */
+  /* ── Legacy Payard tokens (keep for any existing usages) */
   --hero-green:    #0E4A2C;
   --hero-green-2:  #12603A;
   --bg-green-tint: #E8F7EF;
-  --hero-env:      #F4EAA6;
+  --hero-env:      #F4EAA6;   /* = --env */
   --hero-env-soft: rgba(26,36,16,0.30);
-  --ink-on-env:    #1A2410;
-  --signal:        #F3E25C;
+  --ink-on-env:    #1A2410;   /* = --ink */
 
   /* ── Spacing */
   --container: 1240px;
   --gutter:    clamp(20px, 4vw, 32px);
-  --section-y: clamp(4.5rem, 10vw, 8.5rem);
+  --section-y: clamp(5rem, 11vw, 9rem);
 
-  /* ── Legacy brand tokens (kept for shared components) */
+  /* ── Legacy brand tokens */
   --tt-green: #1FA459;
   --tt-green-dark: #1A8F4D;
   --tt-green-darker: #157A3C;
   --tt-yellow: #F2C33C;
   --tt-navy: #0E1525;
 
-  /* ── Fonts */
-  --app-font-display: 'Clash Display', 'Inter', system-ui, sans-serif;
+  /* ── Fonts — Poppins replaces Clash Display */
+  --app-font-display: 'Poppins', 'Inter', system-ui, sans-serif;
   --app-font-sans:    'Inter', system-ui, sans-serif;
   --app-font-serif:   Georgia, serif;
   --app-font-mono:    Menlo, monospace;
@@ -164,7 +171,6 @@
   --card-foreground: 225 34% 11%;
   --card-border: 40 14% 88%;
 
-  --border: 40 14% 88%;
   --input: 40 14% 88%;
   --ring: 148 80% 38%;
 
@@ -191,9 +197,7 @@
 
   --shadow-2xs: 0px 1px 2px 0px rgba(14,21,37,.04);
   --shadow-xs:  0px 1px 3px 0px rgba(14,21,37,.06);
-  --shadow-sm:  0px 1px 3px 0px rgba(14,21,37,.08), 0px 1px 2px -1px rgba(14,21,37,.06);
   --shadow:     0px 2px 4px 0px rgba(14,21,37,.08), 0px 1px 2px -1px rgba(14,21,37,.06);
-  --shadow-md:  0px 4px 6px -1px rgba(14,21,37,.08), 0px 2px 4px -2px rgba(14,21,37,.06);
   --shadow-lg:  0px 4px 16px 0px rgba(14,21,37,.12), 0px 2px 4px -1px rgba(14,21,37,.06);
   --shadow-xl:  0px 8px 20px -2px rgba(14,21,37,.12), 0px 4px 8px -4px rgba(14,21,37,.08);
   --shadow-2xl: 0px 16px 40px -4px rgba(14,21,37,.16);
@@ -265,7 +269,7 @@
 @layer base {
   * { @apply border-border; }
 
-  html { scroll-behavior: auto; } /* Lenis overrides this client-side */
+  html { scroll-behavior: auto; }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
@@ -281,7 +285,6 @@
 @layer utilities {
   .font-display { font-family: var(--app-font-display); }
 
-  /* Primary CTA — green pill, white text */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -304,7 +307,6 @@
   .btn-primary:focus-visible { outline: 2px solid var(--lime); }
   .btn-primary:disabled { background: #EEEDE8; color: #9EA3B0; cursor: not-allowed; transform: none; }
 
-  /* Ghost CTA — transparent, white border */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
@@ -338,17 +340,16 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #F5F4EF;
+    background: var(--cream);
     border: 1px solid var(--border-light);
     border-radius: var(--r-pill);
     padding: 4px 12px;
     font-family: var(--app-font-sans);
     font-size: 12px;
     font-weight: 500;
-    color: var(--text);
+    color: var(--ink);
   }
 
-  /* Squircle card with left accent stripe */
   .tile-card {
     border: 1px solid var(--border-light);
     border-radius: var(--r-card);
@@ -358,7 +359,6 @@
   }
   .tile-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
-  /* Scrollbar */
   input[type="search"]::-webkit-search-cancel-button { @apply hidden; }
 
   [contenteditable][data-placeholder]:empty::before {
@@ -367,7 +367,6 @@
     pointer-events: none;
   }
 
-  /* Elevation helpers kept for shadcn compatibility */
   .no-default-hover-elevate {}
   .no-default-active-elevate {}
 
@@ -404,34 +403,42 @@
   .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after { inset: -1px; }
 
-  /* Reduced-motion: disable scroll animations */
   @media (prefers-reduced-motion: reduce) {
     .motion-safe\:animate-reveal { animation: none !important; }
   }
 }
 
-/* ── Hero illustration responsive ──────────────────────────────── */
-.hero-illustration { display: none !important; }
-@media (min-width: 768px) {
-  .hero-illustration { display: block !important; }
-}
-
-/* ── Nav responsive (can't rely on Tailwind responsive classes for fixed elements) */
-.nav-desktop  { display: none !important; }
-.nav-cta      { display: none !important; }
-.nav-hamburger { display: flex !important; }
+/* ── Nav responsive ──────────────────────────────────────────────── */
+.nav-pill-desktop { display: none !important; }
+.nav-hamburger    { display: flex !important; }
 
 @media (min-width: 1024px) {
-  .nav-desktop  { display: flex !important; }
-  .nav-cta      { display: inline-flex !important; }
-  .nav-hamburger { display: none !important; }
+  .nav-pill-desktop { display: flex !important; }
+  .nav-hamburger    { display: none !important; }
 }
 
-/* Scroll progress — desktop only */
+/* ── Scroll progress — desktop only ─────────────────────────────── */
 .scroll-progress-bar { display: none; }
 @media (min-width: 1024px) {
   .scroll-progress-bar { display: block; }
   @media (prefers-reduced-motion: reduce) {
     .scroll-progress-bar { display: none; }
   }
+}
+
+/* ── Como funciona — two-col responsive ─────────────────────────── */
+.como-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .como-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Por que cutouts — hide on small screens ─────────────────────── */
+.pq-cutout { display: none; }
+@media (min-width: 900px) {
+  .pq-cutout { display: block; }
 }

@@ -1,0 +1,67 @@
+REBUILD the home page from scratch into the exact structure below. Do NOT try to edit the current homepage section-by-section — create a new home layout to this spec and replace the old one (back the old one up). Reuse all existing pt-BR copy strings, routes, logo, and the brand green; rebuild only the structure/layout/styling. Report the files you'll create/replace in one line, then build everything.
+GLOBAL TOKENS:
+
+--env: #F4EAA6 (Manteiga — the recurring full-bleed colour section background: hero, "why" section, CTA band)
+--env-soft: rgba(26,36,16,0.28) (translucent dark for ghost-text heading lines)
+--signal: #F3E25C (Sol — ONLY the urgency strip + the 01/02/03 numbers)
+--ink: #1A2410 (all dark text/headings; also the dark "Payard-black" pill buttons)
+--cream: #F5F4EF (alternating light section bg + footer)
+--tint: #EAF5DC (faint green tint for the stats band)
+--green: #1FA459 (primary CTA fill, white text), --green-hover #1A8F4D, --green-text #157A3C (green text on light)
+--lime: #8FD14F (logo bolt only)
+--surface: #FFFFFF; --border: #E6E4DC
+--r-pill: 999px; --r-card: 24px; --r-input: 14px
+NO navy / no #0E1525 anywhere. There must be zero dark-blue on the page.
+
+FONT (critical — replaces Clash Display):
+
+Headings: Poppins (Google Fonts, 600 + 700). Body/UI: Inter (400/500/600). Set --font-display: "Poppins". Preconnect, font-display: swap. This rounded geometric font is required for the look.
+
+GLOBAL — NAV (copy Payard's pill exactly):
+
+Logo "TROCARLUZ" (lime bolt + ink wordmark) sits to the LEFT, separate from the pill.
+A WHITE floating pill in the centre containing, in order: "Para sua casa", "Para sua empresa", "Geração Distribuída", "Recursos ▾" (dropdown holding Carro Elétrico, Guias, Dúvidas), then the GREEN "Ver desconto" CHIP as the last item INSIDE the pill (green fill, white text, pill). Consolidating the 7 links to these is required for the clean pill.
+OUTSIDE the pill, right side: one outline-ink pill "Enviar conta de luz" (mirrors Payard's "Sign in").
+Condense on scroll (zero layout shift). Pill stays white over every section.
+
+GLOBAL — buttons: primary = flat --green fill + white text; on --env sections = WHITE fill + --green-text; secondary/"Payard-black" = --ink fill + white text (use this for one CTA, e.g. business card). NO gradients anywhere.
+GLOBAL — motion: install lenis (smooth scroll, lerp ~0.1) + framer-motion. Section reveals: fade + 20px rise, 450ms ease, stagger 70ms, fire once at ~15% in view, never on hero. The "Por que" floating cutouts drift gently (small loop). reduced-motion disables ALL of it.
+GLOBAL — coloured sections carry a faint dot texture: radial-gradient(circle, rgba(26,36,16,0.05) 1px, transparent 1px) ~22px spacing.
+SECTION 1 — HERO (Payard solid-colour + ghost heading + overlapping cards):
+
+Full-bleed --env background + dot texture. Dark text only.
+Heading full container width, Poppins 700, clamp(3.25rem,8vw,6rem), lh .98: line 1 "Compare e economize na sua conta" in --ink; line 2 "de energia." in --env-soft (ghost).
+Subhead (existing): --ink ~75%, max-width 560px. Then CTAs: primary WHITE-fill/green-text "Ver desconto disponível"; secondary --ink-outline "Enviar conta de luz". Then trust line "Broker certificado CCEE · Mais de 12 mil comparações feitas" with green shield.
+OVERLAPPING CARD PANEL (Payard's hero signature): a label "Comece agora", then two large cards (radius 24px) that OVERLAP UP into the bottom of the hero via negative margin (top half over --env, bottom over the next white section). Left card "Residências" (PARA SUA CASA eyebrow, existing desc, green "Quero economizar →", soft green-tint #E8F4E2 bg, image bottom-right = /public/img/hero-casa.webp). Right card "Empresas" (PARA SUA EMPRESA eyebrow, existing desc, --ink-fill "Analisar minha empresa →" button like Payard's black "Create Your Account", soft blue-tint #E4ECF7 bg, image = /public/img/hero-empresa.webp). Images sized with aspect-ratio, grey placeholder if missing.
+
+SECTION 2 — URGENCY STRIP (--signal, thin): existing copy "A partir de dezembro de 2027… Somos esse broker." + underlined ink "Saiba como →". Dark text ≥4.5:1. Keep it slim — it's the one Sol moment.
+SECTION 3 — "COMPARE" (Payard giant-word slot): WHITE section, generous padding clamp(6rem,12vw,9rem). A GIANT two-tone word "Compare" full width (Poppins 700, clamp(4rem,13vw,11rem)) — "Compa" in --ink, "re" in --green (Payard's one-letter-different trick). Small eyebrow above: "O que você quer comparar?". Below, the two existing comparison cards ("até 35% off Geração Distribuída" / "até 30% off Mercado Livre de Energia") side by side, radius 24px, soft shadow, "até X% off" large in --green, badges in green/neutral (never Sol), 3D object top-right (obj-solar.webp / obj-bateria.webp), green CTAs ("Quero economizar →" / "Analisar minha empresa →").
+SECTION 4 — "COMO FUNCIONA" (Payard "Fast.Safe." layout): WHITE/--cream section. LEFT: big heading "Como funciona" (Poppins 700) + a 3D render obj-raio.webp below it (placeholder if missing). RIGHT: the three steps as a vertical list separated by hairlines — each row = the number (01/02/03 in --signal, Poppins 700) + title (Informe / Compare / Troque, --ink) + existing description. This mirrors Payard's icon-list-with-hairlines exactly.
+SECTION 5 — STATS (--tint band): the four existing stats (12000+, 18%, 27, 100%) huge in --ink (Poppins 700), labels muted. Optional count-up on first view (reduced-motion off).
+SECTION 6 — "POR QUE A TROCARLUZ?" (Payard "Why Payard?" — THE signature, build it rich): full-bleed --env + dot texture, tall. GIANT centred "Por que a TrocarLuz?" (--ink, Poppins 700). Scatter 4–5 squircle PHOTO CUTOUTS (radius 18px, rotated ±6°, soft shadow) of Brazilian people/homes around the heading — /public/img/cutout-1…5.webp — plus 1–2 floating 3D objects (obj-raio.webp, obj-casa.webp). Behind/below, an oversized GHOST word "Economia" (--env-soft, clamp(5rem,16vw,14rem)) like Payard's bottom "Secure Payments". Cutouts drift gently. Placeholders (grey squircles) if files missing — this section MUST exist even empty so the layout is right.
+SECTION 7 — LEAD FORM ("Sua conta de luz está alta demais?"): --cream section. Two columns: LEFT existing heading + paragraph + the 3 lightning-bullet benefits + the green pill "Clientes economizam em média 18% na conta". RIGHT a prominent WHITE card (radius 24px, soft shadow) with the existing form (Nome completo, WhatsApp masked (11) 99999-9999, Estado select, Consumo médio select) labels above each, inputs radius 14px ≥44px, visible green focus ring, full-width green "Descobrir economia" + "Seus dados estão seguros. Sem complicação." microcopy.
+SECTION 8 — CTA BAND ("Pronto para pagar menos?"): full-bleed --env + dot texture. GIANT "Pronto" (--ink) + "para pagar menos?" as ghost (--env-soft) — same two-tone-ghost technique as the hero, centred. Subhead "Compare suas opções agora. Sem custo, sem compromisso." + WHITE-fill/green-text pill "Comparar agora".
+SECTION 9 — FAQ ("Dúvidas frequentes"): WHITE. Big heading. Accessible accordion (button + aria-expanded, one open by default, chevron rotates, smooth height) with existing Q/As + green "Ver todas as perguntas frequentes →".
+SECTION 10 — FOOTER (NO navy): --cream background, --ink text. Existing columns (Serviços / Recursos / Empresa), logo, "Parceiro de Ótima Energia", "Parceiros verificados" pill (light green-tint bg now), copyright. 1px --border top.
+OVERSIZED-WORD RULE: the giant two-tone/ghost word treatment appears on exactly three sections by design — hero ghost line, "Compare", "Por que" ghost "Economia", and the CTA "Pronto". That's the Payard rhythm; do not add more elsewhere.
+MOBILE (copy Payard's mobile — they nailed it):
+
+Header: logo left + a CIRCULAR hamburger button (round, --ink or --green) right. Opens a FULL-SCREEN sheet: large stacked links + green "Ver desconto"; focus-trapped, Esc/overlay closes.
+Hero: heading stacks ~4 lines, full-bleed --env + dots; CTAs stack full-width; the two cards stack vertically and STILL overlap up into the hero, each with its image.
+"Compare": giant word scales down but stays bold; cards stack.
+"Como funciona": heading, render, then the 3 numbered rows stacked.
+Stats: 2×2 grid.
+"Por que": big centred heading with cutouts arranged around/above it (like Payard mobile "Why Payard?").
+Form: stacks, full-width white card. FAQ full-width accordion. Tap targets ≥44px. No horizontal scroll at 320px.
+
+ACCESSIBILITY (report ratios): white-on-green ≥4.5:1; --ink on --env ≥4.5:1; --ink on --cream ≥4.5:1; nav links ≥4.5:1; --signal numbers are decorative-large. One h1 (hero). Keyboard operable: nav dropdown, mobile sheet (trap+restore), accordion, all form fields, visible focus. prefers-reduced-motion disables Lenis + reveals + drift + count-up.
+PERFORMANCE: all images WebP, explicit width/height or aspect-ratio (no CLS), lazy below fold, grey placeholders where files absent. Preconnect fonts. Nav condense reserves height.
+ACCEPTANCE:
+
+Homepage rebuilt to the 10 sections above in order; Poppins headings; ZERO navy anywhere; footer is cream.
+Hero is full-bleed --env with a 2-line ghost heading and two cards overlapping up into it.
+Nav = logo left + white centre pill with links + green "Ver desconto" chip inside + outline "Enviar conta de luz" outside right; consolidated to ≤5 items.
+"Compare" giant two-tone word; "Por que a TrocarLuz?" section exists with floating cutout/object slots (placeholders ok) + ghost "Economia"; CTA band has giant "Pronto" + ghost.
+Every image-bearing slot renders a placeholder when the file is missing, with correct layout.
+Mobile matches the Payard mobile described (circular hamburger, full-screen sheet, stacked full-bleed sections, overlapping cards with images).
+All reported contrasts pass; no gradient buttons; no horizontal scroll at 320px.
