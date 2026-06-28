@@ -45,6 +45,9 @@ const DISTRIBUTORS_BY_UF: Record<string, string[]> = {
   TO: ["Energisa TO"],
 };
 
+// PERMANENT RULE: comercializadoras / partner names intentionally absent from this interface.
+// Partner identity is core broker IP and must never be exposed to the customer-facing UI
+// until a deal is committed. The API strips partner fields before sending this response.
 interface EstimateResult {
   eligible: boolean;
   discountMin: number;
@@ -55,30 +58,73 @@ interface EstimateResult {
   disclaimer: string;
   partnerAvailable: boolean;
   coverageStatus: "eligible" | "consulta" | "below_minimum" | "no_coverage";
-  comercializadoras: string[];
   minBillNeeded?: number;
 }
 
-const inp: React.CSSProperties = {
-  width: "100%",
-  border: "1px solid #D1D0CB",
-  borderRadius: "8px",
-  padding: "12px 16px",
-  fontFamily: "'Inter', sans-serif",
-  fontSize: "16px",
-  color: "#1A1F36",
-  outline: "none",
+const NAVY = "#0E1525";
+const CREAM = "#F5F4EF";
+const GREEN = "#1FA459";
+const BORDER = "#E6E4DC";
+const MUTED = "#515A68";
+
+const CARD: React.CSSProperties = {
   backgroundColor: "#fff",
-  boxSizing: "border-box",
+  borderRadius: "22px",
+  padding: "clamp(24px,5vw,40px)",
+  boxShadow: "0 10px 34px rgba(14,21,37,.10)",
 };
 
-const lbl: React.CSSProperties = {
-  display: "block",
+const BTN_CTA: React.CSSProperties = {
+  width: "100%",
+  backgroundColor: GREEN,
+  color: "#fff",
+  fontFamily: "'Inter', sans-serif",
+  fontWeight: 700,
+  fontSize: "16px",
+  height: "52px",
+  borderRadius: "999px",
+  border: "none",
+  cursor: "pointer",
+  letterSpacing: "0.01em",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const BTN_GHOST: React.CSSProperties = {
+  width: "100%",
+  backgroundColor: "transparent",
+  color: MUTED,
   fontFamily: "'Inter', sans-serif",
   fontSize: "14px",
+  fontWeight: 500,
+  height: "44px",
+  borderRadius: "999px",
+  border: `1px solid ${BORDER}`,
+  cursor: "pointer",
+};
+
+const LBL: React.CSSProperties = {
+  display: "block",
+  fontFamily: "'Inter', sans-serif",
+  fontSize: "13px",
   fontWeight: 600,
-  color: "#1A1F36",
+  color: NAVY,
   marginBottom: "6px",
+};
+
+const SELECT_BASE: React.CSSProperties = {
+  width: "100%",
+  minHeight: "52px",
+  border: `1.5px solid ${BORDER}`,
+  borderRadius: "14px",
+  padding: "0 16px",
+  fontFamily: "'Inter', sans-serif",
+  fontSize: "16px",
+  backgroundColor: "#fff",
+  boxSizing: "border-box",
+  appearance: "none",
+  outline: "none",
 };
 
 function ToggleButton({
@@ -96,15 +142,18 @@ function ToggleButton({
       onClick={onClick}
       style={{
         flex: 1,
-        padding: "10px 12px",
-        borderRadius: "8px",
-        border: `2px solid ${active ? "#00B86B" : "#D1D0CB"}`,
-        backgroundColor: active ? "#E8F5EE" : "#fff",
+        minHeight: "52px",
+        padding: "12px 16px",
+        borderRadius: "14px",
+        border: `2px solid ${active ? GREEN : BORDER}`,
+        backgroundColor: active ? "rgba(31,164,89,0.09)" : "#fff",
         fontFamily: "'Inter', sans-serif",
         fontSize: "14px",
         fontWeight: 600,
-        color: active ? "#00B86B" : "#6B7080",
+        color: active ? "#157A3C" : MUTED,
         cursor: "pointer",
+        transition: "border-color 0.15s, background-color 0.15s, color 0.15s",
+        lineHeight: 1.2,
       }}
     >
       {children}
@@ -116,26 +165,27 @@ function StepIndicator({ step }: { step: 1 | 2 | "result" }) {
   const steps = ["Localização", "Sua conta", "Resultado"];
   const idx = step === 1 ? 0 : step === 2 ? 1 : 2;
   return (
-    <div className="flex items-center justify-center gap-2 mb-8">
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", marginBottom: "28px" }}>
       {steps.map((label, i) => (
-        <div key={label} className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
+        <div key={label} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <div
               style={{
-                width: "24px",
-                height: "24px",
+                width: "26px",
+                height: "26px",
                 borderRadius: "50%",
-                backgroundColor: i <= idx ? "#00B86B" : "#E2E1DC",
+                backgroundColor: i <= idx ? GREEN : BORDER,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
+                transition: "background-color 0.2s",
               }}
             >
               {i < idx ? (
-                <span style={{ color: "#fff", fontSize: "12px", fontWeight: "bold" }}>✓</span>
+                <span style={{ color: "#fff", fontSize: "12px", fontWeight: 700, lineHeight: 1 }}>✓</span>
               ) : (
-                <span style={{ color: i === idx ? "#fff" : "#9EA3B0", fontSize: "11px", fontWeight: 700 }}>
+                <span style={{ color: i === idx ? "#fff" : MUTED, fontSize: "11px", fontWeight: 700 }}>
                   {i + 1}
                 </span>
               )}
@@ -145,7 +195,7 @@ function StepIndicator({ step }: { step: 1 | 2 | "result" }) {
                 fontFamily: "'Inter', sans-serif",
                 fontSize: "12px",
                 fontWeight: i === idx ? 700 : 400,
-                color: i <= idx ? "#1A1F36" : "#9EA3B0",
+                color: i <= idx ? NAVY : "#9AA6B8",
                 whiteSpace: "nowrap",
               }}
             >
@@ -153,7 +203,14 @@ function StepIndicator({ step }: { step: 1 | 2 | "result" }) {
             </span>
           </div>
           {i < steps.length - 1 && (
-            <div style={{ width: "24px", height: "1px", backgroundColor: i < idx ? "#00B86B" : "#E2E1DC" }} />
+            <div
+              style={{
+                width: "28px",
+                height: "1.5px",
+                backgroundColor: i < idx ? GREEN : BORDER,
+                transition: "background-color 0.2s",
+              }}
+            />
           )}
         </div>
       ))}
@@ -162,28 +219,26 @@ function StepIndicator({ step }: { step: 1 | 2 | "result" }) {
 }
 
 function ResultBadge({ status }: { status: EstimateResult["coverageStatus"] }) {
-  const config: Record<
-    EstimateResult["coverageStatus"],
-    { label: string; bg: string; color: string }
-  > = {
-    eligible: { label: "✓ Desconto disponível", bg: "#E8F5EE", color: "#00B86B" },
-    consulta: { label: "⚡ Sujeito a análise", bg: "#FEF9E7", color: "#D4A00A" },
-    below_minimum: { label: "⚠ Consumo abaixo do mínimo", bg: "#EFF6FF", color: "#2563EB" },
-    no_coverage: { label: "○ Sem cobertura ainda", bg: "#F7F7F5", color: "#6B7080" },
+  const config: Record<EstimateResult["coverageStatus"], { label: string; bg: string; color: string }> = {
+    eligible: { label: "✓ Desconto disponível", bg: GREEN, color: "#fff" },
+    consulta: { label: "⚡ Sujeito a análise", bg: "#FEF3C7", color: "#92400E" },
+    below_minimum: { label: "⚠ Consumo abaixo do mínimo", bg: "#EFF6FF", color: "#1D4ED8" },
+    no_coverage: { label: "○ Sem cobertura ainda", bg: BORDER, color: MUTED },
   };
   const c = config[status];
   return (
     <div
       style={{
-        display: "inline-block",
+        display: "inline-flex",
+        alignItems: "center",
         backgroundColor: c.bg,
         color: c.color,
         fontFamily: "'Inter', sans-serif",
         fontSize: "13px",
         fontWeight: 700,
-        padding: "6px 14px",
+        padding: "7px 16px",
         borderRadius: "999px",
-        marginBottom: "16px",
+        marginBottom: "20px",
       }}
     >
       {c.label}
@@ -281,6 +336,7 @@ export default function CompararDesconto() {
         savingsMin: String(result.savingsMinBrl),
         savingsMax: String(result.savingsMaxBrl),
       }),
+      ...(hasEv && { hasEv: "1" }),
       ...(source && { source }),
       ...(campaign && { campaign }),
       ...(partnerCode && { parceiro: partnerCode }),
@@ -288,30 +344,31 @@ export default function CompararDesconto() {
     navigate(`/enviar-conta?${params.toString()}`);
   }
 
-  const bill = parseFloat(monthlyBill.replace(",", "."));
+  const billNum = parseFloat(monthlyBill.replace(",", "."));
 
   return (
     <Layout>
       <SEOHead
         title={`${TOOL_NAME} — TrocarLuz`}
-        description="Descubra em 1 minuto quanto você pode economizar na conta de luz com energia solar compartilhada. Estimativa gratuita com dados reais de parceiros."
+        description="Descubra em 1 minuto quanto você pode economizar na conta de luz com energia solar compartilhada. Estimativa gratuita com dados reais."
       />
 
-      <section style={{ backgroundColor: "#0A1628", color: "#fff", padding: "56px 0 40px" }}>
+      {/* ── Hero ── */}
+      <section style={{ backgroundColor: NAVY, color: "#fff", padding: "56px 0 48px" }}>
         <div style={{ maxWidth: "600px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <div
             style={{
               display: "inline-block",
-              backgroundColor: "rgba(0,184,107,0.15)",
-              color: "#00B86B",
+              backgroundColor: "rgba(31,164,89,0.18)",
+              color: GREEN,
               fontFamily: "'Inter', sans-serif",
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              padding: "5px 14px",
+              padding: "5px 16px",
               borderRadius: "999px",
-              marginBottom: "16px",
+              marginBottom: "18px",
             }}
           >
             Ferramenta gratuita
@@ -320,10 +377,11 @@ export default function CompararDesconto() {
             className="font-display"
             style={{
               fontWeight: 800,
-              fontSize: "clamp(30px, 5vw, 48px)",
+              fontSize: "clamp(28px, 5vw, 46px)",
               lineHeight: 1.1,
-              marginBottom: "12px",
+              marginBottom: "14px",
               letterSpacing: "-0.02em",
+              color: "#fff",
             }}
           >
             {TOOL_NAME}
@@ -332,40 +390,36 @@ export default function CompararDesconto() {
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: "17px",
-              color: "rgba(255,255,255,0.7)",
-              lineHeight: 1.6,
+              color: "rgba(255,255,255,0.65)",
+              lineHeight: 1.65,
+              maxWidth: "480px",
+              margin: "0 auto",
             }}
           >
-            Descubra em 1 minuto se há desconto disponível para a sua distribuidora — com dados reais dos nossos parceiros.
+            Descubra em 1 minuto se há desconto disponível para a sua distribuidora — com dados reais verificados.
           </p>
         </div>
       </section>
 
-      <section style={{ backgroundColor: "#F7F7F5", padding: "40px 0 64px" }}>
-        <div style={{ maxWidth: "560px", margin: "0 auto", padding: "0 20px" }}>
+      {/* ── Tool ── */}
+      <section style={{ backgroundColor: CREAM, padding: "44px 0 80px" }}>
+        <div style={{ maxWidth: "560px", margin: "0 auto", padding: "0 16px" }}>
           <StepIndicator step={step} />
 
           {/* ── Step 1: Localização ── */}
           {step === 1 && (
-            <div
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "16px",
-                padding: "36px",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-              }}
-            >
+            <div style={CARD}>
               <h2
                 className="font-display"
-                style={{ fontWeight: 700, fontSize: "22px", color: "#1A1F36", marginBottom: "24px" }}
+                style={{ fontWeight: 700, fontSize: "22px", color: NAVY, marginBottom: "24px" }}
               >
                 Onde fica sua unidade?
               </h2>
 
               <div className="space-y-5">
                 <div>
-                  <label style={lbl}>Você é *</label>
-                  <div className="flex gap-3">
+                  <label style={LBL}>Você é *</label>
+                  <div style={{ display: "flex", gap: "12px" }}>
                     <ToggleButton
                       active={customerType === "residential"}
                       onClick={() => setCustomerType("residential")}
@@ -382,29 +436,35 @@ export default function CompararDesconto() {
                 </div>
 
                 <div>
-                  <label style={lbl}>Estado *</label>
-                  <select value={uf} onChange={(e) => handleUfChange(e.target.value)} style={inp}>
+                  <label style={LBL}>Estado *</label>
+                  <select
+                    value={uf}
+                    onChange={(e) => handleUfChange(e.target.value)}
+                    className="tool-input"
+                    style={{ ...SELECT_BASE, color: uf ? NAVY : MUTED }}
+                  >
                     <option value="">Selecione seu estado</option>
                     {STATES.map((s) => (
-                      <option key={s.uf} value={s.uf}>
-                        {s.name}
-                      </option>
+                      <option key={s.uf} value={s.uf}>{s.name}</option>
                     ))}
                   </select>
                 </div>
 
                 {uf && distributors.length > 0 && (
                   <div>
-                    <label style={lbl}>Distribuidora</label>
-                    <select value={distributor} onChange={(e) => setDistributor(e.target.value)} style={inp}>
+                    <label style={LBL}>Distribuidora</label>
+                    <select
+                      value={distributor}
+                      onChange={(e) => setDistributor(e.target.value)}
+                      className="tool-input"
+                      style={{ ...SELECT_BASE, color: distributor ? NAVY : MUTED }}
+                    >
                       <option value="">Não sei / outra</option>
                       {distributors.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
+                        <option key={d} value={d}>{d}</option>
                       ))}
                     </select>
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9EA3B0", marginTop: "4px" }}>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9AA6B8", marginTop: "5px" }}>
                       Distribuidoras com ofertas disponíveis na sua região
                     </p>
                   </div>
@@ -417,18 +477,8 @@ export default function CompararDesconto() {
                 <button
                   type="button"
                   onClick={handleStep1Next}
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#00B86B",
-                    color: "#fff",
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 700,
-                    fontSize: "16px",
-                    padding: "16px",
-                    borderRadius: "8px",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
+                  className="tool-btn-cta"
+                  style={BTN_CTA}
                 >
                   Próximo →
                 </button>
@@ -438,25 +488,17 @@ export default function CompararDesconto() {
 
           {/* ── Step 2: Conta ── */}
           {step === 2 && (
-            <form
-              onSubmit={handleStep2Submit}
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "16px",
-                padding: "36px",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-              }}
-            >
+            <form onSubmit={handleStep2Submit} style={CARD}>
               <h2
                 className="font-display"
-                style={{ fontWeight: 700, fontSize: "22px", color: "#1A1F36", marginBottom: "24px" }}
+                style={{ fontWeight: 700, fontSize: "22px", color: NAVY, marginBottom: "24px" }}
               >
                 Sobre sua conta de luz
               </h2>
 
               <div className="space-y-5">
                 <div>
-                  <label style={lbl}>Valor médio mensal *</label>
+                  <label style={LBL}>Valor médio mensal *</label>
                   <div style={{ position: "relative" }}>
                     <span
                       style={{
@@ -465,8 +507,10 @@ export default function CompararDesconto() {
                         top: "50%",
                         transform: "translateY(-50%)",
                         fontFamily: "'Inter', sans-serif",
-                        color: "#6B7080",
+                        color: MUTED,
                         fontSize: "16px",
+                        pointerEvents: "none",
+                        zIndex: 1,
                       }}
                     >
                       R$
@@ -479,39 +523,50 @@ export default function CompararDesconto() {
                       min="0"
                       step="10"
                       required
-                      style={{ ...inp, paddingLeft: "44px" }}
+                      className="tool-input"
+                      style={{
+                        width: "100%",
+                        minHeight: "52px",
+                        border: `1.5px solid ${BORDER}`,
+                        borderRadius: "14px",
+                        padding: "0 16px 0 44px",
+                        fontFamily: "'Inter', sans-serif",
+                        fontSize: "16px",
+                        color: NAVY,
+                        backgroundColor: "#fff",
+                        boxSizing: "border-box",
+                        outline: "none",
+                      }}
                     />
                   </div>
-                  {bill > 0 && bill < 150 && (
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9EA3B0", marginTop: "4px" }}>
-                      Contas menores podem não atingir o consumo mínimo das distribuidoras. Verificaremos assim mesmo.
+                  {billNum > 0 && billNum < 150 && (
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9AA6B8", marginTop: "5px" }}>
+                      Contas menores podem não atingir o consumo mínimo. Verificaremos assim mesmo.
                     </p>
                   )}
                 </div>
 
                 <div
-                  className="flex items-center gap-3"
-                  style={{ cursor: "pointer" }}
+                  style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}
                   onClick={() => setHasEv(!hasEv)}
                 >
                   <div
                     style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "4px",
-                      border: `2px solid ${hasEv ? "#00B86B" : "#D1D0CB"}`,
-                      backgroundColor: hasEv ? "#00B86B" : "#fff",
+                      width: "22px",
+                      height: "22px",
+                      borderRadius: "6px",
+                      border: `2px solid ${hasEv ? GREEN : BORDER}`,
+                      backgroundColor: hasEv ? GREEN : "#fff",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
+                      transition: "all 0.15s",
                     }}
                   >
-                    {hasEv && (
-                      <span style={{ color: "#fff", fontSize: "12px", fontWeight: "bold" }}>✓</span>
-                    )}
+                    {hasEv && <span style={{ color: "#fff", fontSize: "12px", fontWeight: 700, lineHeight: 1 }}>✓</span>}
                   </div>
-                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#1A1F36" }}>
+                  <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: NAVY, lineHeight: 1.4 }}>
                     Tenho carro elétrico (minha conta subiu após a compra)
                   </span>
                 </div>
@@ -523,42 +578,21 @@ export default function CompararDesconto() {
                 <button
                   type="submit"
                   disabled={loading}
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#00B86B",
-                    color: "#fff",
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: 700,
-                    fontSize: "16px",
-                    padding: "16px",
-                    borderRadius: "8px",
-                    border: "none",
-                    cursor: loading ? "not-allowed" : "pointer",
-                    opacity: loading ? 0.7 : 1,
-                  }}
+                  className="tool-btn-cta"
+                  style={{ ...BTN_CTA, opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer" }}
                 >
-                  {loading ? "Consultando parceiros..." : "Ver meu resultado →"}
+                  {loading ? "Consultando dados..." : "Ver meu resultado →"}
                 </button>
 
                 <button
                   type="button"
                   onClick={() => { setStep(1); setError(null); }}
-                  style={{
-                    width: "100%",
-                    backgroundColor: "transparent",
-                    color: "#6B7080",
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "14px",
-                    padding: "10px",
-                    borderRadius: "8px",
-                    border: "1px solid #E2E1DC",
-                    cursor: "pointer",
-                  }}
+                  style={BTN_GHOST}
                 >
                   ← Voltar
                 </button>
 
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9EA3B0", textAlign: "center" }}>
+                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9AA6B8", textAlign: "center" }}>
                   Estimativa gratuita. Sem compromisso. Sem custo para você.
                 </p>
               </div>
@@ -567,117 +601,80 @@ export default function CompararDesconto() {
 
           {/* ── Result ── */}
           {step === "result" && result && (
-            <div
-              style={{
-                backgroundColor: "#fff",
-                borderRadius: "16px",
-                padding: "36px",
-                boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-              }}
-            >
+            <div style={CARD}>
               <ResultBadge status={result.coverageStatus} />
 
               {result.coverageStatus === "eligible" && (
                 <>
-                  <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                  {/* R$ is the visual hero — savings first, % secondary */}
+                  <div style={{ textAlign: "center", marginBottom: "28px", padding: "8px 0" }}>
+                    <div
+                      style={{
+                        fontSize: "clamp(32px,9vw,52px)",
+                        fontWeight: 800,
+                        color: NAVY,
+                        fontFamily: "'Inter', sans-serif",
+                        lineHeight: 1.05,
+                        marginBottom: "6px",
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      R${result.savingsMinBrl.toLocaleString("pt-BR")}
+                      <span style={{ color: MUTED, fontWeight: 500 }}>–</span>
+                      R${result.savingsMaxBrl.toLocaleString("pt-BR")}
+                      <span style={{ fontSize: "0.38em", fontWeight: 600, color: MUTED, verticalAlign: "middle" }}>/mês</span>
+                    </div>
                     <div
                       className="font-display"
-                      style={{ fontSize: "clamp(40px,8vw,60px)", fontWeight: 800, color: "#00B86B", lineHeight: 1, marginBottom: "4px" }}
+                      style={{
+                        fontSize: "clamp(24px,6vw,36px)",
+                        fontWeight: 800,
+                        color: GREEN,
+                        lineHeight: 1.1,
+                        marginBottom: "4px",
+                      }}
                     >
                       {result.discountMin}%–{result.discountMax}%
                     </div>
-                    <div
-                      style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", fontWeight: 600, color: "#1A1F36", marginBottom: "4px" }}
-                    >
+                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED }}>
                       de desconto estimado
                     </div>
-                    <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6B7080" }}>
-                      Economia de{" "}
-                      <strong style={{ color: "#1A1F36" }}>
-                        R${result.savingsMinBrl}–R${result.savingsMaxBrl}/mês
-                      </strong>
-                    </div>
-                  </div>
-
-                  {result.comercializadoras.length > 0 && (
-                    <div
-                      style={{
-                        backgroundColor: "#F7F7F5",
-                        borderRadius: "10px",
-                        padding: "14px 16px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", fontWeight: 600, color: "#6B7080", marginBottom: "6px" }}>
-                        PARCEIROS COM OFERTA
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {result.comercializadoras.map((c) => (
-                          <span
-                            key={c}
-                            style={{
-                              fontFamily: "'Inter', sans-serif",
-                              fontSize: "12px",
-                              fontWeight: 600,
-                              color: "#1A1F36",
-                              backgroundColor: "#fff",
-                              border: "1px solid #E2E1DC",
-                              borderRadius: "6px",
-                              padding: "4px 10px",
-                            }}
-                          >
-                            {c}
-                          </span>
-                        ))}
+                    {hasEv && (
+                      <div
+                        style={{
+                          marginTop: "14px",
+                          backgroundColor: "rgba(31,164,89,0.09)",
+                          borderRadius: "10px",
+                          padding: "10px 14px",
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: "13px",
+                          color: "#157A3C",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Sua conta subiu após o carro elétrico? Veja quanto dá para reduzir.
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   <div
                     style={{
-                      backgroundColor: "#F7F7F5",
-                      borderRadius: "10px",
-                      padding: "12px 14px",
+                      backgroundColor: CREAM,
+                      borderRadius: "12px",
+                      padding: "14px 16px",
                       marginBottom: "24px",
                     }}
                   >
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "#9EA3B0", lineHeight: 1.6, margin: 0 }}>
-                      ⚠️ {result.disclaimer}
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "#9AA6B8", lineHeight: 1.6, margin: 0 }}>
+                      ⚠ {result.disclaimer}
                     </p>
                   </div>
 
                   <div className="space-y-3">
-                    <button
-                      onClick={goToSendBill}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#00B86B",
-                        color: "#fff",
-                        fontFamily: "'Inter', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "16px",
-                        padding: "16px",
-                        borderRadius: "8px",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Confirmar com minha conta de luz →
                     </button>
-                    <button
-                      onClick={() => { setStep(1); setResult(null); }}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        color: "#6B7080",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "14px",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid #E2E1DC",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={() => { setStep(1); setResult(null); }} style={BTN_GHOST}>
                       Refazer consulta
                     </button>
                   </div>
@@ -688,82 +685,49 @@ export default function CompararDesconto() {
                 <>
                   <h2
                     className="font-display"
-                    style={{ fontWeight: 700, fontSize: "22px", color: "#1A1F36", marginBottom: "8px" }}
+                    style={{ fontWeight: 700, fontSize: "22px", color: NAVY, marginBottom: "10px" }}
                   >
                     Há ofertas para sua região
                   </h2>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6B7080", lineHeight: 1.7, marginBottom: "20px" }}>
-                    Encontramos{" "}
-                    {result.comercializadoras.length > 0
-                      ? result.comercializadoras.join(", ")
-                      : "parceiros"}{" "}
-                    com oferta para sua distribuidora — mas precisam analisar sua conta individualmente para confirmar o desconto.
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED, lineHeight: 1.7, marginBottom: "20px" }}>
+                    Encontramos uma oferta disponível para a sua região — mas precisamos analisar sua conta individualmente para confirmar o desconto exato.
                   </p>
 
                   {result.discountMax > 0 && (
                     <div
                       style={{
                         backgroundColor: "#FEF9E7",
-                        borderRadius: "10px",
+                        borderRadius: "12px",
                         padding: "14px 16px",
                         marginBottom: "20px",
                       }}
                     >
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#92730B" }}>
                         Desconto indicativo:{" "}
-                        <strong>
-                          {result.discountMin}%–{result.discountMax}%
-                        </strong>{" "}
-                        — sujeito à análise.
+                        <strong>{result.discountMin}%–{result.discountMax}%</strong>{" "}
+                        — sujeito à análise da conta.
                       </p>
                     </div>
                   )}
 
                   <div
                     style={{
-                      backgroundColor: "#F7F7F5",
-                      borderRadius: "10px",
-                      padding: "12px 14px",
+                      backgroundColor: CREAM,
+                      borderRadius: "12px",
+                      padding: "14px 16px",
                       marginBottom: "24px",
                     }}
                   >
-                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "#9EA3B0", lineHeight: 1.6, margin: 0 }}>
-                      ⚠️ {result.disclaimer}
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "#9AA6B8", lineHeight: 1.6, margin: 0 }}>
+                      ⚠ {result.disclaimer}
                     </p>
                   </div>
 
                   <div className="space-y-3">
-                    <button
-                      onClick={goToSendBill}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#1A1F36",
-                        color: "#fff",
-                        fontFamily: "'Inter', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "16px",
-                        padding: "16px",
-                        borderRadius: "8px",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Solicitar análise personalizada →
                     </button>
-                    <button
-                      onClick={() => { setStep(1); setResult(null); }}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        color: "#6B7080",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "14px",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid #E2E1DC",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={() => { setStep(1); setResult(null); }} style={BTN_GHOST}>
                       Refazer consulta
                     </button>
                   </div>
@@ -774,11 +738,11 @@ export default function CompararDesconto() {
                 <>
                   <h2
                     className="font-display"
-                    style={{ fontWeight: 700, fontSize: "22px", color: "#1A1F36", marginBottom: "8px" }}
+                    style={{ fontWeight: 700, fontSize: "22px", color: NAVY, marginBottom: "10px" }}
                   >
                     Conta abaixo do mínimo da distribuidora
                   </h2>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6B7080", lineHeight: 1.7, marginBottom: "20px" }}>
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED, lineHeight: 1.7, marginBottom: "20px" }}>
                     Há parceiros na sua região, mas o consumo estimado está abaixo do mínimo exigido para entrada em GD.
                     {result.minBillNeeded
                       ? ` O ticket mínimo é de aproximadamente R$${result.minBillNeeded}/mês.`
@@ -788,7 +752,7 @@ export default function CompararDesconto() {
                   <div
                     style={{
                       backgroundColor: "#EFF6FF",
-                      borderRadius: "10px",
+                      borderRadius: "12px",
                       padding: "14px 16px",
                       marginBottom: "24px",
                     }}
@@ -799,37 +763,10 @@ export default function CompararDesconto() {
                   </div>
 
                   <div className="space-y-3">
-                    <button
-                      onClick={goToSendBill}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#1A1F36",
-                        color: "#fff",
-                        fontFamily: "'Inter', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "16px",
-                        padding: "16px",
-                        borderRadius: "8px",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Entrar na lista de espera →
                     </button>
-                    <button
-                      onClick={() => { setStep(1); setResult(null); }}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        color: "#6B7080",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "14px",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid #E2E1DC",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={() => { setStep(1); setResult(null); }} style={BTN_GHOST}>
                       Refazer consulta
                     </button>
                   </div>
@@ -840,46 +777,19 @@ export default function CompararDesconto() {
                 <>
                   <h2
                     className="font-display"
-                    style={{ fontWeight: 700, fontSize: "22px", color: "#1A1F36", marginBottom: "8px" }}
+                    style={{ fontWeight: 700, fontSize: "22px", color: NAVY, marginBottom: "10px" }}
                   >
                     Sua região ainda não tem cobertura
                   </h2>
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6B7080", lineHeight: 1.7, marginBottom: "20px" }}>
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED, lineHeight: 1.7, marginBottom: "20px" }}>
                     No momento nenhum dos nossos parceiros tem oferta de GD ativa para a distribuidora selecionada. O mercado evolui rápido — cadastre-se e avisamos assim que houver disponibilidade.
                   </p>
 
                   <div className="space-y-3">
-                    <button
-                      onClick={goToSendBill}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "#1A1F36",
-                        color: "#fff",
-                        fontFamily: "'Inter', sans-serif",
-                        fontWeight: 700,
-                        fontSize: "16px",
-                        padding: "16px",
-                        borderRadius: "8px",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Avisar quando tiver oferta →
                     </button>
-                    <button
-                      onClick={() => { setStep(1); setResult(null); }}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        color: "#6B7080",
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize: "14px",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        border: "1px solid #E2E1DC",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <button onClick={() => { setStep(1); setResult(null); }} style={BTN_GHOST}>
                       Tentar outro estado
                     </button>
                   </div>
@@ -888,21 +798,29 @@ export default function CompararDesconto() {
             </div>
           )}
 
-          <div className="flex justify-center gap-6 mt-8 flex-wrap">
-            {["Broker certificado CCEE", "Sem custo para você", "Dados reais de parceiros"].map((t) => (
-              <div key={t} className="flex items-center gap-2">
-                <span style={{ color: "#00B86B" }}>✓</span>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#6B7080" }}>{t}</span>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "24px",
+              marginTop: "32px",
+              flexWrap: "wrap",
+            }}
+          >
+            {["Broker certificado CCEE", "Sem custo para você", "Dados reais verificados"].map((t) => (
+              <div key={t} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ color: GREEN }}>✓</span>
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: MUTED }}>{t}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section style={{ padding: "48px 0", backgroundColor: "#fff", borderTop: "1px solid #E2E1DC" }}>
+      <section style={{ padding: "48px 0", backgroundColor: "#fff", borderTop: `1px solid ${BORDER}` }}>
         <div style={{ maxWidth: "600px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
-          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: "#6B7080", lineHeight: 1.7 }}>
-            <strong style={{ color: "#1A1F36" }}>Importante:</strong> na geração distribuída você{" "}
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED, lineHeight: 1.7 }}>
+            <strong style={{ color: NAVY }}>Importante:</strong> na geração distribuída você{" "}
             <strong>não troca de distribuidora</strong>. Continua conectado à mesma rede, com a mesma fatura — agora com um desconto por usar energia solar de fazendas parceiras. Sem obras, sem instalação.
           </p>
         </div>

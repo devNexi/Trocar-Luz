@@ -1,0 +1,39 @@
+REPLIT SUPER PROMPT (three changes: hero avatar cluster + home two 3D objects + fix one overlapping tile):
+Make the three changes below. Do NOT change copy, colours, fonts, section order, or anything not listed. Do NOT add any large hero photo. Report files touched in one line, then apply. Do not report done until every acceptance criterion passes.
+
+────────────────────────
+CHANGE 1 — HERO: add a social-proof avatar cluster (no hero photo)
+- In the hero's left content column, directly ABOVE the two CTA buttons (between the paragraph and the buttons), left-aligned:
+  - 3 small CIRCULAR avatars from existing /public/img/person-*.webp (3 clearly different faces), each 36×36px, overlapping horizontally by ~12px (later ones sit behind), each with a 2px ring in the hero background colour.
+  - Immediately right of the avatars: text "Mais de 12 mil comparações feitas", dark ink #1A2410, ~15–16px, medium weight, vertically centred with the avatars.
+- Move the "12 mil comparações" wording OUT of the existing trust line so it is not duplicated. The trust line below the CTAs then shows ONLY the shield badge "Broker certificado CCEE".
+- Avatars: circles (not squircles), object-fit cover, fixed 36×36 (zero CLS), eager-load (above fold), alt="". No float; optional one-time fade-in on load.
+
+────────────────────────
+CHANGE 2 — "PRONTO PARA PAGAR MENOS?" CTA band: add the two unused 3D objects as floating accents
+(Both files already exist in /public/img/ but are rendered nowhere right now.)
+- SUN+ARROW object (the 3D sun with a green downward arrow — use its actual filename in /public/img/) → PRIMARY accent. Place in the band's open LEFT area, ~125px wide, vertically near centre, rotation ~ +8°.
+- obj-raio.webp (lightning bolt) → SECONDARY accent. Place smaller, ~90px, in the band's open RIGHT area, lower than the sun (asymmetric — not a mirror of the sun), rotation ~ -10°.
+- Both objects: z-index BELOW all band text and the "Comparar agora" button; pointer-events: none; must NOT overlap the giant "Pronto" word, the subhead, or the button at any width. object-fit contain; fixed width/height or aspect-ratio (zero CLS).
+- Apply the same subtle multi-axis float used elsewhere (±8px drift, 6–10s, staggered, different phase each). prefers-reduced-motion renders both static.
+(If the bolt is later removed, the sun alone must still sit correctly — don't hard-couple them.)
+
+────────────────────────
+CHANGE 3 — "POR QUE A TROCARLUZ?": fix the one overlapping tile
+- Only ONE tile overlaps: the woman-with-braids tile on the far-right flank overlaps the couple tile directly below it. Move the braids tile UP so it no longer touches the couple tile. Set its top to ~38% (it is currently ~47%); keep its right offset, size (~152px), and tilt (~+4°) unchanged.
+- Enforce a clear vertical gap of ≥24px between the bottom edge of the braids tile and the top edge of the couple tile.
+- Do NOT move, resize, or re-tilt any of the other 9 tiles. After moving, confirm the braids tile does not collide with the grey-haired-man tile above it and does not enter the heading clear zone.
+
+────────────────────────
+RESPONSIVE
+- ≤480px: hero cluster keeps 3 avatars (~32px), text may wrap; CTA-band objects — show the sun small (~80px) only if it doesn't collide with the band text/button, hide the bolt; "Por que" tiles must still not overlap each other or the heading. No horizontal scroll at 320px anywhere.
+
+ACCESSIBILITY
+- Avatars + decorative objects/tiles all alt="". prefers-reduced-motion disables all drift (objects and tiles render static). CTA-band text contrast unaffected.
+
+ACCEPTANCE CRITERIA
+- Hero: 3-avatar circular cluster + "Mais de 12 mil comparações feitas" above the CTAs; the "12 mil" text appears exactly ONCE (not also in the badge); "Broker certificado CCEE" badge still present; NO large hero photo added.
+- CTA band: shows the SUN+ARROW (primary, left) and a smaller bolt (secondary, right), both behind the text, neither overlapping the "Pronto" word, subhead, or button at any breakpoint.
+- "Por que": the braids tile no longer overlaps the couple tile (≥24px gap); all other tiles unchanged; no tile in the heading clear zone.
+- No horizontal scroll at 320px; no CLS; reduced-motion static.
+- Report the file(s) edited and confirm each criterion line by line.

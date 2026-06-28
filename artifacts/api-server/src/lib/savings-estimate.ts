@@ -19,6 +19,9 @@ export interface EstimateResult {
   nextStep: "upload_bill" | "join_waitlist";
   disclaimer: string;
   coverageStatus: "eligible" | "consulta" | "below_minimum" | "no_coverage";
+  // PERMANENT RULE: comercializadoras is for SERVER-SIDE ROUTING ONLY.
+  // Partner identity is core broker IP — never expose to the client.
+  // The HTTP route strips this field before res.json(). Do not remove this comment.
   comercializadoras: string[];
   minBillNeeded?: number;
 }

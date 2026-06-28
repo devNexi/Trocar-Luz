@@ -486,3 +486,20 @@
   .obj-float-a,
   .obj-float-b { animation: none !important; will-change: auto !important; }
 }
+
+/* ── Raio-X da Conta tool interactive states ─────────────────────── */
+.tool-input:focus {
+  outline: 2px solid #8FD14F;
+  outline-offset: 0;
+  border-color: #8FD14F !important;
+}
+.tool-btn-cta {
+  transition: background-color 0.15s ease, transform 0.12s ease;
+}
+.tool-btn-cta:hover:not(:disabled) {
+  background-color: #1A8F4D !important;
+  transform: translateY(-1px);
+}
+.tool-btn-cta:active:not(:disabled) {
+  transform: translateY(0);
+}

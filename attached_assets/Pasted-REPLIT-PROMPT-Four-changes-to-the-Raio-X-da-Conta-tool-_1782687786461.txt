@@ -1,0 +1,45 @@
+REPLIT PROMPT:
+
+Four changes to the Raio-X da Conta tool (/comparar-desconto) and its API. Apply all. Keep it on real gd_offers data and pt-BR.
+
+=== 1. HARD RULE — NEVER DISCLOSE THE PARTNER (permanent, applies everywhere) ===
+The comercializadora / partner name is our core IP as a broker. If the customer sees who supplies the discount, they go direct and cut us out. The partner identity is NEVER revealed to the customer until a deal is committed (after they submit their bill / switch request and we proceed). This is a permanent rule, not one screen.
+- RESULT SCREEN: remove the "PARCEIROS COM OFERTA" box entirely. Show only the discount range, the R$ savings, and the disclaimer.
+- API RESPONSES: strip comercializadora / partner name / any partner ID from the JSON /api/savings-estimate returns to the client. The partner match is used SERVER-SIDE for routing ONLY and must never appear in any browser-visible response. (Verify in the raw network response — no partner name anywhere.)
+- STATUS PAGE and any PRE-COMMIT WHATSAPP/CONFIRMATION MESSAGE: never include the partner name.
+- Replace with neutral language: "Encontramos uma oferta disponível para a sua região" — never naming who.
+- Keep partner identity stored internally (DB, routing, admin/portal). This is only about what the customer-facing client and messages can see.
+- Add a code comment on the estimate endpoint documenting this as a permanent rule.
+
+=== 2. NUMBER RECONCILIATION — R$ must always equal the % applied to the entered bill ===
+savings_min_brl = entered_bill × discount_min%; savings_max_brl = entered_bill × discount_max% (monthly), computed from the EXACT bill the user entered — never a default or a different base. The displayed % range and R$ range must always reconcile against the bill shown. (The current R$70–R$105 at 10–15% reconciles to a R$700 bill, which is correct — just guarantee it always ties to the entered value and the two never diverge.) Round cleanly.
+
+=== 3. REGION-AWARE DISCOUNTS + THE "ATÉ 25%" MARKETING RULE ===
+- Every region has different real discounts. The RESULT screen shows the actual per-region range from the matched gd_offers rows for that distribuidora + grupo + tipo_cliente — never a generic number.
+- "até 25%" (25% = the real maximum discount_max across ALL offers) is a MARKETING figure for marketing surfaces ONLY: homepage card, hero. It must always be phrased "até 25%" / "up to 25%" — never a flat "25%" and never shown as a per-region result.
+- The tool result must NEVER display a % that the matched offers don't actually support. Marketing ceiling and per-region result are separate; do not let the marketing max leak into the calculator result.
+
+=== 4. MATCHING INTEGRITY (verify there's no hole) ===
+- A discount is only returned for offers that are genuinely "Disponível" for that exact distribuidora + grupo_tarifario + tipo_cliente. If a distribuidora has no Disponível residential offer, the tool must return "consulta" or "no_coverage" (send bill / waitlist) — NOT a discount.
+- Specifically verify LIGHT RJ residential: confirm it actually has a Disponível residential offer in gd_offers. If it does not, the RJ/LIGHT residential path must return consulta/waitlist, not a discount range. Show me the gd_offers rows that justify whatever LIGHT RJ returns.
+
+=== 5. EV FLAG — must be wired, not decorative ===
+The "Tenho carro elétrico" checkbox must be captured, stored on the lead AND the switch_request (e.g. has_ev boolean), and carried through routing/handoff so the EV-owner segment is addressable later. Confirm it persists to the DB (show the column + a test row). Optional: when checked, adjust the result copy to acknowledge the EV ("Sua conta subiu após o carro elétrico? Veja quanto dá para reduzir.").
+
+=== 6. ON-BRAND RESTYLE — match the rest of the site's design system ===
+Restyle the entire tool (all 3 steps + result) to the site's design tokens so it's visually consistent, not the current basic look:
+- Surfaces: cards on cream (#F5F4EF) sections, white squircle cards radius 22px, soft shadow (0 10px 34px rgba(14,21,37,.10)). Navy (#0E1525) where the site uses dark.
+- Action color: green #1FA459 only, flat fill, white text, pill radius 999px, hover lift + slight darken (#1A8F4D). No gradients.
+- Headings in Clash Display; body in Inter; the new type scale.
+- Inputs: radius 14px, ≥44px height, visible labels above, lime (#8FD14F) focus ring.
+- Stepper, toggles (Residência/Empresa), result card, badges: same token system. Status badge ("Desconto disponível") uses green, not yellow.
+- The big discount % on the result uses the display font; keep R$ savings as the visual hero (reais first, % secondary).
+- Match the floating pill nav / spacing rhythm already used site-wide. Keep all existing pt-BR copy.
+
+=== ACCEPTANCE ===
+- Result screen shows NO partner name; curl /api/savings-estimate → JSON has NO partner/comercializadora name or ID; status + pre-commit WhatsApp have none. Code comment documents the rule.
+- % range and R$ range reconcile against the entered bill in 3 test cases (paste them).
+- Per-region result comes from real gd_offers; "até 25%" appears only on marketing surfaces, always as "até". Tool never shows an unsupported %.
+- LIGHT RJ residential returns the correct path with the gd_offers rows shown as justification.
+- EV checkbox persists to DB (show column + test row).
+- Tool visually matches the site design system (squircle cards, flat green pills, Clash Display, lime focus) across all 3 steps + result; no basic/unstyled screens; no horizontal scroll at 320px.

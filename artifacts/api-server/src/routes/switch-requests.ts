@@ -58,6 +58,11 @@ function statusLabel(status: string): string {
   return labels[status] ?? status;
 }
 
+// PERMANENT RULE — NEVER expose partner/comercializadora identity in this response.
+// Partner identity is core broker IP. Customers must not see who supplies their discount
+// until a deal is committed (after they submit their bill and we proceed internally).
+// This is enforced by destructuring comercializadoras out before res.json().
+// It is retained in `result` for server-side logging and routing only.
 router.post("/savings-estimate", estimateLimiter, async (req, res): Promise<void> => {
   const parsed = GetSavingsEstimateBody.safeParse(req.body);
   if (!parsed.success) {
@@ -73,8 +78,14 @@ router.post("/savings-estimate", estimateLimiter, async (req, res): Promise<void
     hasEv: parsed.data.hasEv ?? undefined,
   });
 
-  req.log.info({ state: parsed.data.state, eligible: result.eligible }, "Savings estimate computed");
-  res.json(result);
+  req.log.info(
+    { state: parsed.data.state, eligible: result.eligible, partnerCount: result.comercializadoras.length },
+    "Savings estimate computed"
+  );
+
+  // Strip partner identity from the client response — server-side only
+  const { comercializadoras: _stripped, ...clientResult } = result;
+  res.json(clientResult);
 });
 
 router.post("/switch-requests", switchRequestGlobalLimiter, switchRequestPerIpLimiter, async (req, res): Promise<void> => {
