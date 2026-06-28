@@ -1,0 +1,84 @@
+Transform the EXISTING trocarluz.com.br build toward a light, airy, Payard-style design where GREEN is the page environment — not just the button color. Do NOT rebuild and do NOT change any pt-BR copy, the logo, the section order, or the brand palette. First, report the current stack and the files you'll touch in one line. This is the full visual pass; execute all of it.
+GOAL:
+
+The page currently leans dark/heavy (multiple full-bleed navy sections). Re-balance so only TWO sections are color-dominant — the green hero and the green CTA band — and everything between them is light. Rework the hero into a green environment with a full-width ghost-text heading, switch the home nav to a white pill, and lighten the mid-page sections. The result should feel clean, spacious, and premium.
+NEW TOKENS (add alongside existing ones):
+
+--hero-green: #0E4A2C (deep green hero base — white text passes contrast on this)
+--hero-green-2: #12603A (for an optional subtle hero gradient)
+--bg-green-tint: #E8F7EF (soft green-tinted light section)
+
+Keep existing: --green #1FA459 (buttons), --green-hover, --bg-invert #0E1525 (footer + dark cards only now), --surface-invert #16203A, --yellow #F2C33C, --bg-alt #F5F4EF (cream).
+
+
+HERO — green environment (highest priority):
+
+
+Background: --hero-green base (optionally a soft top-left→bottom-right gradient --hero-green → --hero-green-2). Over it, composite the NEW cleaned hero image (place at /public/hero-energy.webp or the project's asset path) at FULL vibrancy, anchored to the RIGHT. The deep-green base must dominate the LEFT third behind the text. REMOVE the old heavy left-to-right dark scrim entirely — the deep-green base now provides contrast.
+Optional Payard touch: a very subtle CSS dot/halftone pattern overlay on the green at ~6–8% opacity (pure CSS, no image).
+Heading: REMOVE the max-width wrapper — let it fill the full container width. Size clamp(3.5rem, 9vw, 7rem), line-height .95, letter-spacing -0.02em. Split into two visual lines: "Compare e economize" in SOLID white, and "na sua conta de energia." in white at ~60% opacity (ghost-text depth). Do NOT use 30% — verify the ghost line measures ≥3:1 and the solid line + subhead ≥4.5:1 over the deep-green base; report ratios.
+Subhead: constrain to ~520px max-width so it doesn't span the full width under the big heading.
+CTAs (invert for green bg): primary = WHITE fill + green text "Ver desconto disponível"; secondary = translucent/white outline "Enviar conta de luz". Both pills, flat, no gradient.
+Keep the CCEE trust line + lime shield icon.
+
+
+NAV — white pill on home (Payard contrast):
+
+
+Drop the isDark = isHome logic. On the home page the floating pill is WHITE from the initial scroll position (light border, --shadow-nav), since the hero is now green. Logo (navy + lime wordmark) sits left and reads correctly on white.
+The CTA chip inside the pill = --green fill, white text, "Ver desconto".
+Keep the condense-on-scroll behavior and the mobile hamburger sheet (focus trap, Esc to close) exactly as built; pill stays white/light across the light sections. Reserve height so condense causes ZERO layout shift.
+
+
+SECTION BACKGROUNDS — lighten the middle (the core Payard move):
+
+
+Urgency bar: KEEP yellow (correct signal use), dark text ≥4.5:1.
+"O que você quer comparar?" comparison tiles: KEEP white.
+"Como funciona" (01/02/03): change navy → WHITE (or --bg-alt cream). Keep the 01/02/03 numbers YELLOW — they pop on light. Keep the thin connecting line, subtle.
+Stats band (12000+, 18%, 27, 100%): change navy → --bg-green-tint. Numbers become --bg-invert (navy) on the tint; labels muted. (They were white-on-navy; now dark-on-tint.)
+"Para quem é a TrocarLuz?" audience section: change the SECTION background navy → --bg-alt cream. Keep the two cards themselves as dark navy cards (--surface-invert) with the green left-accent border — dark cards on a light section give Payard-style focus. Section heading becomes dark (navy) on the cream. (Alternative if you want fully airy: make the cards light with green accent — but default to keeping them dark.)
+Lead-form section ("Sua conta de luz está alta demais?"): KEEP cream.
+CTA band ("Pronto para pagar menos?"): KEEP green (the second bookend). Button stays white-fill/green-text.
+FAQ ("Dúvidas frequentes"): KEEP white. Footer: KEEP navy (footers are fine dark).
+Net rhythm: green hero → yellow bar → light → light(tint) → cream → cream form → green CTA → white FAQ → navy footer. Confirm NO full-bleed navy sections remain in the mid-page (footer excepted).
+
+
+OVERSIZED TWO-TONE WORD — exactly once:
+
+
+It must appear ONLY on the "Pronto para pagar menos?" CTA section. REMOVE the giant "Economia" word above the lead form entirely. Confirm one oversized/two-tone heading exists site-wide.
+
+
+SHOWCASE CARDS (comparison tiles) — more presence:
+
+
+Make the card header band (where "até 35% off" sits) taller and more prominent. Embed a low-opacity inline SVG (solar panel for Geração Distribuída, building/bolt for Mercado Livre) in the card background. Keep "até X% off" large in green. Keep badges in green or neutral — never yellow. Flat green CTA pills.
+
+
+MOTION (so it FEELS Payard, not just looks it):
+
+
+Ensure Lenis smooth scroll is active site-wide (lerp ~0.1). Scroll-reveal on section blocks: fade + 18–24px rise, ~450ms ease-out, 70ms stagger for grouped cards, fire ONCE at ~15% in view (never on the hero — it renders immediately). Optional small hero parallax (≤12% bg travel). ALL motion disabled under prefers-reduced-motion.
+
+
+BUTTONS: every primary CTA is a FLAT --green fill (white text) with a subtle --green-hover darken; hero/CTA-band primaries are WHITE fill + green text. Remove all linear-gradient from buttons.
+
+ACCESSIBILITY (WCAG 2.2 AA):
+
+Verify and report: white solid heading + subhead on --hero-green ≥4.5:1; ghost heading line ≥3:1; white nav pill links (dark) ≥4.5:1; dark stats numbers on --bg-green-tint ≥4.5:1; dark text on yellow bar ≥4.5:1; white CTA-band button text/green ≥4.5:1. If any pairing fails, adjust the token (deepen --hero-green, etc.) and tell me what changed.
+Keep semantic landmarks, one h1, keyboard operability (nav, sheet, accordion, form), visible focus everywhere.
+
+PERFORMANCE:
+
+Optimize hero-energy image to WebP, set explicit width/height or aspect-ratio (no CLS). Preconnect fonts, font-display: swap. Nav condense reserves height. Lazy-load below-fold images.
+
+ACCEPTANCE CRITERIA:
+
+Hero is a deep-green environment with the cleaned art vibrant on the right; old scrim gone; reported contrast ratios all pass.
+Home nav is a white pill with a green CTA chip from initial load; condenses with zero layout shift.
+Only the hero and CTA band are color-dominant; no full-bleed navy mid-page sections remain (footer excepted). Stats and "Como funciona" are light; audience section is on cream.
+Heading is full-width with one solid line + one ~60% ghost line; subhead constrained.
+Exactly one oversized two-tone heading (CTA section); no "Economia" word above the form.
+No gradient on any button; hero/CTA primaries are white-fill/green-text.
+Lenis active; section reveals fire once; reduced-motion disables all motion. No horizontal scroll at 320px. Lighthouse accessibility ≥95, no CLS.
