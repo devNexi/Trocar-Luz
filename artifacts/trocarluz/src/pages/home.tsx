@@ -19,7 +19,7 @@ import { Reveal } from "@/components/reveal";
 
 /* ── Dot texture helper ──────────────────────────────────────────── */
 const DOT_TEXTURE: React.CSSProperties = {
-  backgroundImage: "radial-gradient(circle, rgba(26,36,16,0.05) 1px, transparent 1px)",
+  backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
   backgroundSize: "22px 22px",
 };
 
@@ -151,6 +151,95 @@ function FloatImg({
         }}
       />
     </div>
+  );
+}
+
+/* ── CollageTile — floating photo/object for Payard-style "Por que" ─ */
+interface CollageTileProps {
+  src: string;
+  size: string;
+  baseRot: number;
+  delay: number;
+  duration: number;
+  parallaxRange: [number, number];
+  style?: React.CSSProperties;
+  className?: string;
+  energetic?: boolean;
+  isPhoto?: boolean;
+}
+
+function CollageTile({
+  src,
+  size,
+  baseRot,
+  delay,
+  duration,
+  parallaxRange,
+  style,
+  className,
+  energetic = false,
+  isPhoto = false,
+}: CollageTileProps) {
+  const prefersReduced = useReducedMotion();
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: wrapRef,
+    offset: ["start end", "end start"],
+  });
+  const scrollY = useTransform(scrollYProgress, [0, 1], parallaxRange);
+
+  const floatAnim = prefersReduced
+    ? {}
+    : energetic
+    ? {
+        y: [0, -22, 0, -12, 0],
+        x: [0, 10, 0, -6, 0],
+        rotate: [baseRot - 5, baseRot + 5, baseRot - 3, baseRot + 4, baseRot - 5],
+        scale: [1, 1.05, 1, 1.03, 1],
+      }
+    : {
+        y: [0, -14, 0, -8, 0],
+        x: [0, 6, 0, -5, 0],
+        rotate: [baseRot - 2, baseRot + 2.5, baseRot - 1, baseRot + 1.5, baseRot - 2],
+        scale: [1, 1.03, 1, 1.02, 1],
+      };
+
+  const floatTransition = prefersReduced
+    ? {}
+    : { duration, ease: "easeInOut" as const, repeat: Infinity, delay };
+
+  return (
+    <motion.div
+      ref={wrapRef}
+      className={className}
+      style={{
+        position: "absolute",
+        width: size,
+        height: size,
+        zIndex: 1,
+        ...(prefersReduced ? {} : { y: scrollY }),
+        ...style,
+      }}
+    >
+      <motion.img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        animate={floatAnim}
+        transition={floatTransition}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          borderRadius: isPhoto ? "22%" : "20px",
+          boxShadow: "0 18px 40px rgba(0,0,0,.12)",
+          display: "block",
+          transformBox: "fill-box",
+          transformOrigin: "center",
+        }}
+      />
+    </motion.div>
   );
 }
 
@@ -1445,91 +1534,79 @@ export default function Home() {
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
-          {/* Heading + ghost word + floating objects */}
-          <div style={{ position: "relative", marginBottom: "clamp(48px, 7vw, 72px)" }}>
-            {/* Ghost "Economia" — parallaxed */}
-            <motion.div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                bottom: "-20px",
-                left: "50%",
-                x: "-50%",
-                y: economiaY,
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(5rem, 18vw, 14rem)",
-                color: "var(--env-soft)",
-                lineHeight: 1,
-                letterSpacing: "-0.03em",
-                whiteSpace: "nowrap",
-                pointerEvents: "none",
-                zIndex: 0,
-              }}
-            >
-              Economia
-            </motion.div>
+          {/* Collage container — tiles in outer ring, heading centered (Payard style) */}
+          <div
+            style={{
+              position: "relative",
+              minHeight: "clamp(320px, 50vw, 480px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "clamp(48px, 7vw, 72px)",
+            }}
+          >
+            {/* ── 4 corner tiles — visible on all sizes ── */}
+            <CollageTile
+              src="/img/person-11.webp"
+              size="clamp(96px,16vw,200px)"
+              baseRot={-4}
+              delay={0.2}
+              duration={7.5}
+              parallaxRange={[35, -45]}
+              isPhoto
+              style={{ top: 0, left: 0 }}
+            />
+            <CollageTile
+              src="/img/hero-empresa.webp"
+              size="clamp(96px,14vw,165px)"
+              baseRot={5}
+              delay={1.2}
+              duration={8}
+              parallaxRange={[20, -50]}
+              style={{ top: 0, right: 0 }}
+            />
+            <CollageTile
+              src="/img/hero-casa.webp"
+              size="clamp(96px,13vw,158px)"
+              baseRot={4}
+              delay={1.7}
+              duration={7}
+              parallaxRange={[25, -45]}
+              style={{ bottom: 0, left: 0 }}
+            />
+            <CollageTile
+              src="/img/obj-mercado.webp"
+              size="clamp(96px,13vw,155px)"
+              baseRot={-3}
+              delay={0.9}
+              duration={8.5}
+              parallaxRange={[45, -35]}
+              style={{ bottom: 0, right: 0 }}
+            />
+            {/* ── Accent objects — hide on mobile ── */}
+            <CollageTile
+              src="/img/obj-raio.webp"
+              size="clamp(70px,7.5vw,90px)"
+              baseRot={8}
+              delay={0}
+              duration={7}
+              parallaxRange={[30, -30]}
+              energetic
+              className="collage-hide-mobile"
+              style={{ top: "clamp(150px,24vw,190px)", left: "clamp(80px,14vw,200px)" }}
+            />
+            <CollageTile
+              src="/img/obj-fazenda.webp"
+              size="clamp(80px,9vw,110px)"
+              baseRot={-5}
+              delay={1.4}
+              duration={7}
+              parallaxRange={[20, -30]}
+              className="collage-hide-mobile"
+              style={{ bottom: "clamp(150px,24vw,190px)", right: "clamp(80px,14vw,200px)" }}
+            />
 
-            {/* 4 corner objects — strictly in outer corners, clear of heading */}
-            {[
-              {
-                src: "/img/obj-raio.webp",
-                size: 100,
-                floatVariant: "a" as const,
-                delay: "0s",
-                strength: 14,
-                pos: { top: "24px", left: "24px" },
-                rot: "-8deg",
-              },
-              {
-                src: "/img/hero-empresa.webp",
-                size: 110,
-                floatVariant: "b" as const,
-                delay: "0.7s",
-                strength: 18,
-                pos: { top: "24px", right: "24px" },
-                rot: "6deg",
-              },
-              {
-                src: "/img/hero-casa.webp",
-                size: 88,
-                floatVariant: "a" as const,
-                delay: "1.4s",
-                strength: 10,
-                pos: { bottom: "24px", left: "24px" },
-                rot: "-4deg",
-              },
-              {
-                src: "/img/obj-mercado.webp",
-                size: 96,
-                floatVariant: "b" as const,
-                delay: "0.4s",
-                strength: 16,
-                pos: { bottom: "24px", right: "24px" },
-                rot: "8deg",
-              },
-            ].map((obj, i) => (
-              <FloatImg
-                key={i}
-                src={obj.src}
-                alt=""
-                width={obj.size}
-                height={obj.size}
-                floatVariant={obj.floatVariant}
-                animDelay={obj.delay}
-                parallaxStrength={obj.strength}
-                className="pq-obj"
-                style={{
-                  position: "absolute",
-                  zIndex: 1,
-                  transform: `rotate(${obj.rot})`,
-                  pointerEvents: "none",
-                  ...obj.pos,
-                }}
-              />
-            ))}
-
-            {/* Heading — centred, above ghost */}
+            {/* Heading — centered, always above tiles */}
             <Reveal>
               <h2
                 id="porque-heading"
@@ -1542,9 +1619,9 @@ export default function Home() {
                   color: "var(--ink)",
                   letterSpacing: "-0.02em",
                   textAlign: "center",
-                  padding: "clamp(20px, 4vw, 40px) clamp(120px, 18vw, 220px)",
+                  padding: "clamp(16px, 3vw, 40px) clamp(80px, 14vw, 220px)",
                   lineHeight: 1.1,
-                  marginBottom: 0,
+                  margin: 0,
                 }}
               >
                 Por que a TrocarLuz?

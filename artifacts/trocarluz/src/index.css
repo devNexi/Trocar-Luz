@@ -455,6 +455,16 @@
   .pq-obj { display: block; }
 }
 
+/* ── Collage tile responsive visibility ──────────────────────────── */
+.collage-hide-mobile { display: none !important; }
+@media (min-width: 769px) {
+  .collage-hide-mobile { display: block !important; }
+}
+.collage-hide-tablet { display: none !important; }
+@media (min-width: 1025px) {
+  .collage-hide-tablet { display: block !important; }
+}
+
 /* ── 3D object float animation ───────────────────────────────────── */
 @keyframes obj-float-a {
   from { transform: translateY(0px) rotate(-1deg); }

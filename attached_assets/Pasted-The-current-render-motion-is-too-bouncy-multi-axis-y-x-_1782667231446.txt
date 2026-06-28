@@ -1,0 +1,26 @@
+The current render motion is too bouncy (multi-axis y/x/rotate/scale = aimless bouncing) and applied to every image. Scope it down and calm it. Report files touched, then implement. Don't report done until only the four named cards animate and none of them bounce.
+
+REMOVE the idle float from ALL 3D renders site-wide — make them static — EXCEPT the four card images listed in step 2. (If the "Por que a TrocarLuz?" people-collage section exists, leave ITS tile/object motion exactly as-is — that section is the intended exception, not part of this change.)
+The only renders that keep an idle float are these four card images:
+
+"COMECE AGORA" section → Residências card image
+"COMECE AGORA" section → Empresas card image
+"Compare" section → Geração Distribuída card image
+"Compare" section → Mercado Livre card image
+
+
+For those four, REPLACE the bouncy animate/transition with a single calm vertical float — NO x, NO scale, NO rotation (those are what cause the bounce/wobble):
+
+animate={{ y: [0, -10, 0] }}
+
+transition={{ duration: 5.5, ease: "easeInOut", repeat: Infinity }}
+
+Give each a different delay (0s, 0.6s, 1.2s, 1.8s) so they're not synced. Remove any scroll-parallax transform on these four — keep it simple.
+Add a hover interaction on each of the four cards: on card hover, the card lifts 4px with a deeper shadow and its render nudges up ~5px (200ms ease-out). Life on interaction, not constant motion.
+Keep prefers-reduced-motion / useReducedMotion() gating: disables both the float and the hover-nudge.
+
+VERIFY: confirm ONLY the four named card images float idle (every other render static; people-collage untouched if it exists); confirm the float is y-only with no x/scale/rotate; confirm hover-lift works; confirm reduced-motion disables it. Say if anything was skipped.
+ACCEPTANCE: nothing bounces; the four card images do a slow, smooth, subtle vertical float, out of sync; all other product renders static; hover lifts the cards; reduced-motion safe.
+One separate thing I can see in shot 2: the Mercado Livre card still shows the solar panel — the earlier swap to obj-mercado never took. Quick fix to run after the motion one:
+
+On the "Compare" section Mercado Livre card ("até 30% off"), replace the solar-panel render with /public/img/obj-mercado.webp and remove obj-solar from this card. Leave the Geração Distribuída card as-is for now.
