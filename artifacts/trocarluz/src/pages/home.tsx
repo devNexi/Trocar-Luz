@@ -469,26 +469,6 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
-        {/* obj-raio — floating accent upper-right */}
-        <FloatImg
-          src="/img/obj-raio.webp"
-          alt=""
-          width={120}
-          height={120}
-          floatVariant="a"
-          animDelay="0.3s"
-          parallaxStrength={20}
-          loading="eager"
-          className="pq-obj"
-          style={{
-            position: "absolute",
-            top: "clamp(80px, 12vw, 120px)",
-            right: "clamp(40px, 8vw, 120px)",
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        />
-
         <div style={{ maxWidth: "var(--container)", margin: "0 auto", position: "relative", zIndex: 2 }}>
           <h1 id="hero-heading" style={{ margin: 0 }}>
             <motion.span
