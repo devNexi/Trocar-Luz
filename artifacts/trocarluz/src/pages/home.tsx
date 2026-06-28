@@ -2042,28 +2042,28 @@ export default function Home() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                padding: "16px 48px",
+                padding: "18px 56px",
                 borderRadius: "999px",
-                backgroundColor: "#fff",
-                color: "var(--green-text)",
+                backgroundColor: "var(--green)",
+                color: "#fff",
                 fontFamily: "var(--app-font-sans)",
-                fontWeight: 600,
-                fontSize: "16px",
+                fontWeight: 700,
+                fontSize: "17px",
                 textDecoration: "none",
-                boxShadow: "0 4px 16px rgba(26,36,16,0.12)",
+                boxShadow: "0 6px 24px rgba(0,184,107,0.35)",
                 transition: "transform 0.15s ease, box-shadow 0.15s ease, background 0.15s",
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "translateY(-2px)";
-                el.style.boxShadow = "0 8px 24px rgba(26,36,16,0.18)";
-                el.style.background = "#f5f5f0";
+                el.style.boxShadow = "0 12px 32px rgba(0,184,107,0.45)";
+                el.style.background = "#00a85f";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.transform = "";
-                el.style.boxShadow = "0 4px 16px rgba(26,36,16,0.12)";
-                el.style.background = "#fff";
+                el.style.boxShadow = "0 6px 24px rgba(0,184,107,0.35)";
+                el.style.background = "var(--green)";
               }}
               onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
               onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
