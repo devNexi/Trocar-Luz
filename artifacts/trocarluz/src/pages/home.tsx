@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useId } from "react";
 import { Link } from "wouter";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import {
@@ -23,6 +23,34 @@ const DOT_TEXTURE: React.CSSProperties = {
   backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
   backgroundSize: "22px 22px",
 };
+
+/* ── Two-tone logo bolt — matches the brand mark in the nav ───────── */
+function LogoBolt({ size = 18 }: { size?: number }) {
+  const uid = useId();
+  const gid = `lb${uid.replace(/[^a-z0-9]/gi, "")}`;
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 256 256"
+      aria-hidden="true"
+      style={{ flexShrink: 0, display: "block" }}
+    >
+      <defs>
+        <linearGradient id={gid} x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#186B38" />
+          <stop offset="55%" stopColor="#186B38" />
+          <stop offset="56%" stopColor="#6ABF4B" />
+          <stop offset="100%" stopColor="#6ABF4B" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M213.85,128.93l-112,120a8,8,0,0,1-13.69-7.6L112,120H40a8,8,0,0,1-5.66-13.66l112-112a8,8,0,0,1,13.57,8.59L136,120h72a8,8,0,0,1,5.29,13.93Z"
+        fill={`url(#${gid})`}
+      />
+    </svg>
+  );
+}
 
 /* ── Layered card shadow ─────────────────────────────────────────── */
 const CARD_SHADOW = "0 10px 34px rgba(26,36,16,.10), 0 2px 6px rgba(26,36,16,.06)";
@@ -1918,11 +1946,7 @@ export default function Home() {
                       key={benefit}
                       style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}
                     >
-                      <Lightning
-                        size={18}
-                        weight="fill"
-                        style={{ color: "var(--green)", flexShrink: 0, marginTop: "2px" }}
-                      />
+                      <LogoBolt size={18} />
                       <span
                         style={{
                           fontFamily: "var(--app-font-sans)",

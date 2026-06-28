@@ -1,0 +1,25 @@
+REPLIT PROMPT (hero: large 3D bolt anchor + clear the CTA band):
+Two changes. Do NOT change copy, colours, fonts, the headline, or other sections. Report files touched in one line, then apply. Do not report done until every acceptance criterion passes.
+
+1) HERO — place obj-raio.webp as a LARGE anchor (not a small icon)
+- Use the existing 3D bolt render /public/img/obj-raio.webp. Render it transparent — NO white box, NO drop-shadow wrapper, NO background behind it.
+- Size: LARGE — height ≈ 60–70% of the hero's height (~380–460px on desktop). This is the hero's main visual, not a decorative accent.
+- Position: anchored to the hero's TOP-RIGHT, bleeding off the top and right edges. Set the hero container to position: relative; overflow: hidden so the bolt is CROPPED by the edges and never causes horizontal scroll. Rotation ~ +12°.
+- Layering: z-index BELOW the headline, subhead, CTAs, avatar cluster, and trust line. The type sits IN FRONT of the bolt and may overlap it — that overlap is intentional. pointer-events: none.
+- Legibility guard: the headline must stay fully readable. If any headline letters sit directly over the solid body of the bolt and contrast drops, nudge the bolt further up/right so the overlap falls on the headline's whitespace/margins, NOT across letters. Never recolour the headline.
+- Above the fold: load eagerly (no lazy-load). object-fit: contain. Fixed width/height or aspect-ratio (zero CLS).
+- Motion: static, OR an extremely subtle drift (±4px, 10s) — a large anchor should not bounce. prefers-reduced-motion: static.
+
+2) "PRONTO PARA PAGAR MENOS?" CTA band — REMOVE both 3D objects
+- Stop rendering the sun+arrow object and obj-raio on the CTA band (leave the files in /public/img/). The band shows ONLY the giant "Pronto" word, the subhead, and the "Comparar agora" button. No floating objects.
+
+RESPONSIVE (≤480px): bolt scales down (height ~200–240px), still cropped top-right, still behind the type, no overlap across headline letters. No horizontal scroll at 320px. If it crowds the headline, reduce size or push further off-corner.
+
+ACCESSIBILITY: bolt alt="" (decorative); reduced-motion renders it static.
+
+ACCEPTANCE CRITERIA:
+- Hero shows ONE large 3D bolt anchored top-right, visibly cropped by the edge, sitting behind the type; headline fully legible everywhere.
+- No white box and no drop-shadow wrapper around the bolt.
+- CTA band has zero floating objects.
+- No horizontal scroll at 320px; no CLS.
+- Report the file(s) edited and confirm each criterion line by line.
