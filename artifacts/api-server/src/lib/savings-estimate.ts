@@ -1,3 +1,6 @@
+import { db, gdOffersTable } from "@workspace/db";
+import { and, eq, ne } from "drizzle-orm";
+
 export interface EstimateParams {
   state: string;
   distributor?: string;
@@ -15,80 +18,134 @@ export interface EstimateResult {
   partnerAvailable: boolean;
   nextStep: "upload_bill" | "join_waitlist";
   disclaimer: string;
+  coverageStatus: "eligible" | "consulta" | "below_minimum" | "no_coverage";
+  comercializadoras: string[];
+  minBillNeeded?: number;
 }
 
 const DISCLAIMER =
   "Estimativas são indicativas, sujeitas à análise da conta, distribuidora, região, disponibilidade de parceiro e aprovação final. Valores não garantidos.";
 
-/**
- * GD discount bands by state (residential cota GD, net of TUSD-FIO).
- * Source: TrocarLuz commercial analysis of available GD offers, June 2026.
- * Ceiling: 22% (defensible upper bound for residential GD net discount after all fees).
- * To replace with live partner offers: use the gd_offers table (per-partner-per-region, status+ticket gate).
- */
-const GD_BANDS: Record<string, { min: number; max: number }> = {
-  SP: { min: 12, max: 20 },
-  RJ: { min: 11, max: 18 },
-  MG: { min: 12, max: 20 },
-  RS: { min: 10, max: 17 },
-  SC: { min: 10, max: 17 },
-  PR: { min: 11, max: 18 },
-  BA: { min: 10, max: 15 },
-  CE: { min: 10, max: 15 },
-  PE: { min: 10, max: 15 },
-  GO: { min: 10, max: 17 },
-  MT: { min: 10, max: 17 },
-  MS: { min: 10, max: 16 },
-  ES: { min: 11, max: 17 },
-  DF: { min: 10, max: 16 },
-  RN: { min: 9, max: 14 },
-  PB: { min: 8, max: 13 },
-  AL: { min: 8, max: 13 },
-  SE: { min: 8, max: 13 },
-  PI: { min: 8, max: 12 },
-  MA: { min: 8, max: 12 },
-  PA: { min: 8, max: 12 },
-  AM: { min: 7, max: 11 },
-  RO: { min: 7, max: 11 },
-  TO: { min: 8, max: 12 },
-  AC: { min: 7, max: 11 },
-  AP: { min: 7, max: 11 },
-  RR: { min: 7, max: 11 },
-};
+// Conservative tariff estimate for kWh reverse-calculation (residential avg Brazil ~R$0.85/kWh)
+const AVG_TARIFF_BRL_KWH = 0.85;
 
-export function computeEstimate(params: EstimateParams): EstimateResult {
-  const stateUpper = params.state.toUpperCase();
-  const band = GD_BANDS[stateUpper] ?? { min: 8, max: 15 };
-
+export async function computeEstimate(params: EstimateParams): Promise<EstimateResult> {
+  const uf = params.state.toUpperCase();
   const bill = params.monthlyBillValue;
+  const estimatedKwh = Math.round(bill / AVG_TARIFF_BRL_KWH);
 
-  const eligible = bill >= 100;
-  const partnerAvailable = eligible;
+  // Fetch all non-"Sem Disponibilidade" offers for this UF
+  const allUfOffers = await db
+    .select()
+    .from(gdOffersTable)
+    .where(and(eq(gdOffersTable.uf, uf), ne(gdOffersTable.status, "Sem Disponibilidade")));
 
-  if (!eligible) {
+  if (allUfOffers.length === 0) {
+    return noResult("no_coverage");
+  }
+
+  // Filter by tipo_cliente
+  const tipoFilter = (tipoCliente: string): boolean => {
+    if (params.customerType === "residential") {
+      return tipoCliente.toLowerCase().includes("residencial");
+    }
+    return (
+      tipoCliente.toLowerCase().includes("comercial") ||
+      tipoCliente.toLowerCase().includes("grupo a")
+    );
+  };
+
+  let pool = allUfOffers.filter((o) => tipoFilter(o.tipoCliente));
+  // Fallback: if tipo_cliente filter leaves nothing, use full pool
+  if (pool.length === 0) pool = allUfOffers;
+
+  // Prefer specific distribuidora if provided
+  if (params.distributor) {
+    const distLower = params.distributor.toLowerCase();
+    const distPool = pool.filter(
+      (o) =>
+        o.distribuidora.toLowerCase().includes(distLower) ||
+        distLower.includes(o.distribuidora.toLowerCase()),
+    );
+    if (distPool.length > 0) pool = distPool;
+  }
+
+  // Ticket gate: pass if null (no minimum) or estimated consumption meets minimum
+  const passesTicket = (ticketKwh: number | null): boolean =>
+    ticketKwh === null || estimatedKwh >= ticketKwh;
+
+  // 1. Disponível offers passing ticket gate
+  const disponivel = pool.filter(
+    (o) => o.status === "Disponível" && passesTicket(o.ticketMinimoKwh),
+  );
+
+  if (disponivel.length > 0) {
+    const withDisc = disponivel.filter((o) => o.discountMin !== null && o.discountMax !== null);
+    const discMin = withDisc.length > 0 ? Math.min(...withDisc.map((o) => o.discountMin!)) : 0;
+    const discMax = withDisc.length > 0 ? Math.max(...withDisc.map((o) => o.discountMax!)) : 0;
+    const comercializadoras = [...new Set(disponivel.map((o) => o.comercializadora))];
     return {
-      eligible: false,
-      discountMin: 0,
-      discountMax: 0,
-      savingsMinBrl: 0,
-      savingsMaxBrl: 0,
-      partnerAvailable: false,
-      nextStep: "join_waitlist",
+      eligible: true,
+      discountMin: discMin,
+      discountMax: discMax,
+      savingsMinBrl: Math.round((bill * discMin) / 100),
+      savingsMaxBrl: Math.round((bill * discMax) / 100),
+      partnerAvailable: true,
+      nextStep: "upload_bill",
       disclaimer: DISCLAIMER,
+      coverageStatus: "eligible",
+      comercializadoras,
     };
   }
 
-  const savingsMinBrl = Math.round((bill * band.min) / 100);
-  const savingsMaxBrl = Math.round((bill * band.max) / 100);
+  // 2. Sujeito a Consulta (ticket gate not enforced — consulta means custom analysis)
+  const consulta = pool.filter((o) => o.status === "Sujeito a Consulta");
+  if (consulta.length > 0) {
+    const withDisc = consulta.filter((o) => o.discountMin !== null && o.discountMax !== null);
+    const discMin = withDisc.length > 0 ? Math.min(...withDisc.map((o) => o.discountMin!)) : 0;
+    const discMax = withDisc.length > 0 ? Math.max(...withDisc.map((o) => o.discountMax!)) : 0;
+    const comercializadoras = [...new Set(consulta.map((o) => o.comercializadora))];
+    return {
+      eligible: true,
+      discountMin: discMin,
+      discountMax: discMax,
+      savingsMinBrl: Math.round((bill * discMin) / 100),
+      savingsMaxBrl: Math.round((bill * discMax) / 100),
+      partnerAvailable: false,
+      nextStep: "upload_bill",
+      disclaimer: DISCLAIMER,
+      coverageStatus: "consulta",
+      comercializadoras,
+    };
+  }
 
+  // 3. Disponível but all fail ticket gate (bill too low)
+  const belowTicket = pool.filter(
+    (o) => o.status === "Disponível" && !passesTicket(o.ticketMinimoKwh),
+  );
+  if (belowTicket.length > 0) {
+    const minTicket = Math.min(...belowTicket.map((o) => o.ticketMinimoKwh!));
+    const minBillNeeded = Math.ceil(minTicket * AVG_TARIFF_BRL_KWH);
+    return {
+      ...noResult("below_minimum"),
+      minBillNeeded,
+    };
+  }
+
+  return noResult("no_coverage");
+}
+
+function noResult(coverageStatus: "no_coverage" | "below_minimum"): EstimateResult {
   return {
-    eligible: true,
-    discountMin: band.min,
-    discountMax: band.max,
-    savingsMinBrl,
-    savingsMaxBrl,
-    partnerAvailable,
-    nextStep: "upload_bill",
+    eligible: false,
+    discountMin: 0,
+    discountMax: 0,
+    savingsMinBrl: 0,
+    savingsMaxBrl: 0,
+    partnerAvailable: false,
+    nextStep: "join_waitlist",
     disclaimer: DISCLAIMER,
+    coverageStatus,
+    comercializadoras: [],
   };
 }

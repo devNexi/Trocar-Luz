@@ -1155,7 +1155,7 @@ export default function Home() {
                         letterSpacing: "-0.02em",
                       }}
                     >
-                      até 35% off
+                      até 25% off
                     </div>
                     <span
                       style={{

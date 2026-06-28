@@ -65,7 +65,7 @@ router.post("/savings-estimate", estimateLimiter, async (req, res): Promise<void
     return;
   }
 
-  const result = computeEstimate({
+  const result = await computeEstimate({
     state: parsed.data.state,
     distributor: parsed.data.distributor ?? undefined,
     monthlyBillValue: parsed.data.monthlyBillValue,
