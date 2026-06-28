@@ -1,1 +1,1 @@
-- [GD Engine build](gd-engine-build.md) — switch-request flow, DB tables, route patterns, and critical gotchas for this codebase.
+- [Next.js firewall block](nextjs-firewall.md) — Replit package firewall blocks all next@15.x downloads with 403; stay on Vite SPA for trocarluz.

@@ -6,6 +6,10 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
+// Replit proxies all traffic through its reverse proxy — trust the X-Forwarded-For header
+// so express-rate-limit can identify clients by real IP, not the proxy's IP.
+app.set("trust proxy", 1);
+
 app.use(
   pinoHttp({
     logger,
