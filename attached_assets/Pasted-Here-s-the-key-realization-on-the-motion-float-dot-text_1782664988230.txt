@@ -1,0 +1,33 @@
+Here's the key realization on the motion: float + dot-texture are trivial deterministic CSS. There's no world where they "can't" work — the agent is either not adding them or, more likely for the float, putting the Framer parallax transform on the same <img> as the float, so the inline transform overrides the keyframe. So stop trusting the agent for these two. Paste this into your global stylesheet yourself (index.css / globals.css) in the Replit editor — it cannot fail:
+css/* FLOAT — apply these classes to every 3D render <img> */
+@keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+.floaty   { animation: floatY 5s   ease-in-out infinite; will-change: transform; }
+.floaty-2 { animation: floatY 6s   ease-in-out infinite; animation-delay: -1.5s; will-change: transform; }
+.floaty-3 { animation: floatY 5.5s ease-in-out infinite; animation-delay: -3s;   will-change: transform; }
+@media (prefers-reduced-motion: reduce){ .floaty,.floaty-2,.floaty-3 { animation: none; } }
+css/* DOT TEXTURE — apply to the hero + every yellow/coloured section */
+background-color: #F4EAA6;
+background-image: radial-gradient(rgba(26,36,16,0.08) 1.5px, transparent 1.5px);
+background-size: 22px 22px;
+(If the dots still read too faint on the yellow, bump 0.08 to 0.11.)
+Then this prompt fixes the placements and wires the scroll motion correctly (parallax on a wrapper, never on the floating <img>):
+REPLIT PROMPT:
+
+Fix the broken image placements and wire the scroll motion correctly. I have ALREADY added CSS float classes (.floaty/.floaty-2/.floaty-3) and a dot-texture to the global stylesheet — do NOT remove them, and APPLY .floaty (varied: -2/-3) to every 3D render img. Report files touched, then do all of this. Do not report done unless placements have no overlaps AND scroll motion works.
+PLACEMENT FIXES:
+
+HERO: the obj-raio lightning is currently overlapping the headline word "na" — this is broken. Move it OUT of the headline entirely: position it in the EMPTY lower-right area of the hero (right of the subhead/CTA column, below the headline baseline), max 150px, with at least 32px clearance from ALL text. It must not touch the headline or subhead. If no clean space exists, remove it from the hero.
+"POR QUE A TROCARLUZ?": currently two identical solar panels collide with the heading. Replace with FOUR DIFFERENT objects (obj-raio, obj-fazenda, hero-casa, obj-mercado) placed ONLY in the four outer corners of the section, 90–110px each, slight rotation (±8°). NONE may come within 60px of the central "Por que a TrocarLuz?" heading. They may sit over the faint ghost "Economia" but never over the readable heading text.
+MERCADO LIVRE card ("até 30% off"): replace obj-solar with obj-mercado.webp if that file exists; otherwise use obj-raio.webp (lightning) — do NOT use the solar panel on this card.
+Re-verify the Residências/Empresas cards and the comparison cards have NO image overlapping text (2-column: text | image).
+
+SCROLL MOTION (the float is already in CSS — add these on TOP):
+
+PARALLAX: wrap each render in a Framer Motion div and set the scroll translate on the WRAPPER DIV ONLY, never on the img (the img has the CSS float; putting a transform on the img kills the float). Pattern: const {scrollYProgress}=useScroll({target:ref,offset:["start end","end start"]}); const y=useTransform(scrollYProgress,[0,1],[28,-28]); → <motion.div ref={ref} style={{y}}><img class="floaty" .../></motion.div>.
+REVEALS: wrap each section block in <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:0.15}} transition={{duration:0.45,ease:"easeOut"}}>; stagger grouped cards/steps at 0.07.
+STICKY NAV: the white pill must stay pinned at the top through the entire scroll (position: sticky; top: 12px; high z-index). Confirm it actually stays pinned.
+STATS: count 0→value over ~1.2s on first in-view.
+prefers-reduced-motion disables parallax, reveals, count-up (CSS already handles float).
+
+VERIFICATION (required): confirm .floaty is applied to every render img; confirm parallax style={{y}} is on WRAPPER divs and NOT on any img; list the file for each; confirm no image overlaps any text at desktop and mobile; describe the visible motion. If anything isn't done, say which — do not claim completion.
+ACCEPTANCE (reject if any fail): no image overlaps text anywhere; hero lightning is clear of the headline or removed; "Por que" has 4 different corner objects clear of the heading; Mercado Livre card uses lightning/obj-mercado not solar; renders visibly float AND parallax; sticky pill stays pinned; reveals + count-up fire; reduced-motion safe; no CLS; no horizontal scroll at 320px.

@@ -28,12 +28,29 @@ const CARD_SHADOW = "0 10px 34px rgba(26,36,16,.10), 0 2px 6px rgba(26,36,16,.06
 const CARD_SHADOW_HOVER = "0 24px 56px rgba(26,36,16,.16), 0 4px 10px rgba(26,36,16,.08)";
 
 /* ── FloatImg ────────────────────────────────────────────────────── */
+/* Three multi-axis float variants — A & B are energetic (hero/corners),
+   C is slower with a big rotate sweep. Assigned by index at call sites. */
+const FLOAT_VARIANTS = {
+  a: {
+    animate: { y: [0, -22, 0, -12, 0], x: [0, 8, 0, -6, 0], rotate: [-3, 4, -2, 3, -3], scale: [1, 1.04, 1, 1.02, 1] },
+    transition: { duration: 7, ease: "easeInOut" as const, repeat: Infinity, times: [0, 0.25, 0.5, 0.75, 1] },
+  },
+  b: {
+    animate: { y: [0, 18, 0, 24, 0], x: [0, -10, 0, 6, 0], rotate: [2, -5, 3, -3, 2], scale: [1, 1.03, 1, 1.05, 1] },
+    transition: { duration: 8.5, ease: "easeInOut" as const, repeat: Infinity },
+  },
+  c: {
+    animate: { y: [0, -16, 0], rotate: [-6, 6, -6], scale: [1, 1.05, 1] },
+    transition: { duration: 6, ease: "easeInOut" as const, repeat: Infinity },
+  },
+};
+
 interface FloatImgProps {
   src: string;
   alt?: string;
   width?: number | string;
   height?: number | string;
-  floatClass?: "obj-float-a" | "obj-float-b";
+  floatVariant?: "a" | "b" | "c";
   animDelay?: string;
   parallaxStrength?: number;
   style?: React.CSSProperties;
@@ -47,7 +64,7 @@ function FloatImg({
   alt = "",
   width,
   height,
-  floatClass = "obj-float-a",
+  floatVariant = "a",
   animDelay = "0s",
   parallaxStrength = 16,
   style,
@@ -61,22 +78,11 @@ function FloatImg({
   const rafRef = useRef<number>(0);
   const delaySeconds = parseFloat(animDelay) || 0;
 
-  /* ── float loop via framer-motion (not CSS — works reliably) ─ */
-  const floatVariant = floatClass === "obj-float-b" ? "b" : "a";
-  const floatAnimate = prefersReduced
-    ? {}
-    : {
-        y: [0, -10, 0],
-        rotate: floatVariant === "a" ? [-1, 2, -1] : [1, -2, 1],
-      };
+  const variant = FLOAT_VARIANTS[floatVariant];
+  const floatAnimate = prefersReduced ? {} : variant.animate;
   const floatTransition = prefersReduced
     ? {}
-    : {
-        duration: floatVariant === "a" ? 5.4 : 5.8,
-        ease: "easeInOut" as const,
-        repeat: Infinity,
-        delay: delaySeconds,
-      };
+    : { ...variant.transition, delay: delaySeconds };
 
   /* ── scroll parallax ─────────────────────────────────────────── */
   useEffect(() => {
@@ -107,16 +113,21 @@ function FloatImg({
     };
   }, [parallaxStrength, prefersReduced]);
 
+  /* Extract any transform from external style so we can combine it with parallax */
+  const { transform: externalTransform, ...restStyle } = style ?? {};
+
   return (
     <div
       ref={wrapRef}
       className={className}
       style={{
-        transform: "translateY(var(--py, 0px))",
+        transform: externalTransform
+          ? `translateY(var(--py, 0px)) ${externalTransform}`
+          : "translateY(var(--py, 0px))",
         transition: "transform 0.08s linear",
         width,
         height,
-        ...style,
+        ...restStyle,
       }}
     >
       <motion.img
@@ -133,6 +144,8 @@ function FloatImg({
           height: "100%",
           objectFit: "contain",
           display: "block",
+          transformBox: "fill-box",
+          transformOrigin: "center",
           willChange: prefersReduced ? "auto" : "transform",
           ...imgStyle,
         }}
@@ -462,8 +475,8 @@ export default function Home() {
           alt=""
           width={120}
           height={120}
-          floatClass="obj-float-b"
-          animDelay="0.4s"
+          floatVariant="a"
+          animDelay="0.3s"
           parallaxStrength={20}
           loading="eager"
           className="pq-obj"
@@ -768,8 +781,8 @@ export default function Home() {
                     <FloatImg
                       src="/img/hero-casa.webp"
                       alt=""
-                      floatClass="obj-float-a"
-                      animDelay="0.2s"
+                      floatVariant="b"
+                      animDelay="0.9s"
                       parallaxStrength={10}
                       loading="eager"
                       style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
@@ -892,8 +905,8 @@ export default function Home() {
                     <FloatImg
                       src="/img/hero-empresa.webp"
                       alt=""
-                      floatClass="obj-float-b"
-                      animDelay="0.8s"
+                      floatVariant="c"
+                      animDelay="1.5s"
                       parallaxStrength={10}
                       loading="eager"
                       style={{ width: "100%", maxWidth: "220px", aspectRatio: "1" }}
@@ -1080,14 +1093,14 @@ export default function Home() {
                   </div>
                   {/* Body: text constrained to ~65%; obj-solar in its own right zone */}
                   <div style={{ padding: "20px 28px 28px", flex: 1, display: "flex", flexDirection: "column", gap: "12px", position: "relative" }}>
-                    {/* obj-solar — right zone, below badge, not over text */}
+                    {/* hero-casa — right zone, below badge, not over text */}
                     <FloatImg
-                      src="/img/obj-solar.webp"
+                      src="/img/hero-casa.webp"
                       alt=""
                       width={110}
                       height={110}
-                      floatClass="obj-float-a"
-                      animDelay="0.3s"
+                      floatVariant="a"
+                      animDelay="0.5s"
                       parallaxStrength={12}
                       style={{
                         position: "absolute",
@@ -1223,8 +1236,8 @@ export default function Home() {
                       alt=""
                       width={110}
                       height={110}
-                      floatClass="obj-float-b"
-                      animDelay="1.1s"
+                      floatVariant="b"
+                      animDelay="1.2s"
                       parallaxStrength={12}
                       style={{
                         position: "absolute",
@@ -1333,8 +1346,8 @@ export default function Home() {
                   <FloatImg
                     src="/img/obj-fazenda.webp"
                     alt=""
-                    floatClass="obj-float-a"
-                    animDelay="0.6s"
+                    floatVariant="c"
+                    animDelay="0.8s"
                     parallaxStrength={18}
                     style={{
                       width: "90%",
@@ -1477,31 +1490,31 @@ export default function Home() {
               Economia
             </motion.div>
 
-            {/* 4 corner objects — strictly in outer corners, 40px+ clear of heading */}
+            {/* 4 corner objects — strictly in outer corners, clear of heading */}
             {[
               {
                 src: "/img/obj-raio.webp",
                 size: 100,
-                floatClass: "obj-float-a" as const,
+                floatVariant: "a" as const,
                 delay: "0s",
                 strength: 14,
                 pos: { top: "24px", left: "24px" },
                 rot: "-8deg",
               },
               {
-                src: "/img/obj-fazenda.webp",
+                src: "/img/hero-empresa.webp",
                 size: 110,
-                floatClass: "obj-float-b" as const,
+                floatVariant: "b" as const,
                 delay: "0.7s",
                 strength: 18,
                 pos: { top: "24px", right: "24px" },
                 rot: "6deg",
               },
               {
-                src: "/img/obj-solar.webp",
+                src: "/img/hero-casa.webp",
                 size: 88,
-                floatClass: "obj-float-a" as const,
-                delay: "1.3s",
+                floatVariant: "a" as const,
+                delay: "1.4s",
                 strength: 10,
                 pos: { bottom: "24px", left: "24px" },
                 rot: "-4deg",
@@ -1509,7 +1522,7 @@ export default function Home() {
               {
                 src: "/img/obj-mercado.webp",
                 size: 96,
-                floatClass: "obj-float-b" as const,
+                floatVariant: "b" as const,
                 delay: "0.4s",
                 strength: 16,
                 pos: { bottom: "24px", right: "24px" },
@@ -1522,7 +1535,7 @@ export default function Home() {
                 alt=""
                 width={obj.size}
                 height={obj.size}
-                floatClass={obj.floatClass}
+                floatVariant={obj.floatVariant}
                 animDelay={obj.delay}
                 parallaxStrength={obj.strength}
                 className="pq-obj"
