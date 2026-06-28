@@ -338,8 +338,8 @@ const WHY_REASONS = [
   },
   {
     Icon: SealCheck,
-    title: "Broker certificado CCEE",
-    desc: "Único broker certificado para acompanhar você no mercado livre residencial de 2027.",
+    title: "Parceiro Ótima Energia",
+    desc: "Operamos com a Ótima Energia, operador certificado e regulamentado no mercado livre de energia.",
   },
   {
     Icon: MapPin,
@@ -374,7 +374,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "O que muda em 2027 para residências?",
-    a: "A partir de dezembro de 2027, consumidores residenciais poderão migrar para o Mercado Livre de Energia e escolher seu fornecedor. Como broker certificado CCEE, a TrocarLuz gerenciará todo o processo.",
+    a: "A partir de dezembro de 2027, consumidores residenciais poderão migrar para o Mercado Livre de Energia e escolher seu fornecedor. A TrocarLuz, em parceria com a Ótima Energia, gerenciará todo o processo para você.",
   },
 ];
 
@@ -756,7 +756,7 @@ export default function Home() {
                 color: "rgba(26,36,16,0.70)",
               }}
             >
-              Broker certificado CCEE
+              Parceiro Ótima Energia
             </span>
           </motion.div>
         </div>

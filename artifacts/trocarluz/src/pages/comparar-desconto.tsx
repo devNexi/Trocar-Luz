@@ -807,7 +807,7 @@ export default function CompararDesconto() {
               flexWrap: "wrap",
             }}
           >
-            {["Broker certificado CCEE", "Sem custo para você", "Dados reais verificados"].map((t) => (
+            {["Parceiro Ótima Energia", "Sem custo para você", "Dados reais verificados"].map((t) => (
               <div key={t} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <span style={{ color: GREEN }}>✓</span>
                 <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: MUTED }}>{t}</span>

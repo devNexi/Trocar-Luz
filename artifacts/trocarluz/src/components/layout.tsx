@@ -617,7 +617,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 color: "rgba(26,36,16,0.70)",
               }}
             >
-              © {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados. Broker certificado CCEE.
+              © {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados.
             </p>
             <div
               style={{

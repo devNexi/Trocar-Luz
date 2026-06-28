@@ -5,18 +5,18 @@ export default function About() {
   return (
     <Layout>
       <SEOHead
-        title="Sobre a TrocarLuz — Broker certificado de energia"
-        description="A TrocarLuz é o broker certificado de energia que o consumidor brasileiro estava esperando. Parceira da Ótima Energia, certificada pela CCEE."
+        title="Sobre a TrocarLuz — Energia mais barata para você"
+        description="A TrocarLuz conecta residências e empresas a fontes de energia mais baratas. Parceira da Ótima Energia, operador certificado no mercado livre."
       />
 
       {/* Hero */}
       <section className="bg-[#0A1628] text-white py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-display font-extrabold mb-6" style={{ fontSize: 'clamp(36px, 5vw, 52px)', lineHeight: '1.1' }}>
-            O broker certificado de energia que o consumidor brasileiro estava esperando.
+            A plataforma de energia que o consumidor brasileiro estava esperando.
           </h1>
           <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.80)', lineHeight: '1.7' }}>
-            Certificados pela CCEE. Parceiros da Ótima Energia. Prontos para levar você ao mercado livre.
+            Parceiros da Ótima Energia. Prontos para levar você ao mercado livre.
           </p>
         </div>
       </section>
@@ -28,13 +28,13 @@ export default function About() {
             <div>
               <h2 className="font-display font-bold mb-6" style={{ fontSize: '36px', color: '#1A1F36' }}>Quem somos</h2>
               <p>
-                A <strong style={{ color: '#1A1F36' }}>TrocarLuz</strong> é o broker certificado de energia que o consumidor brasileiro estava esperando.
+                A <strong style={{ color: '#1A1F36' }}>TrocarLuz</strong> é a plataforma de energia que o consumidor brasileiro estava esperando.
               </p>
               <p className="mt-4">
                 Hoje, ajudamos residências e empresas a economizarem através da geração distribuída — sem obras, sem investimento, com desconto direto na conta.
               </p>
               <p className="mt-4">
-                A partir de dezembro de 2027, seremos o veículo legal pelo qual milhões de lares brasileiros farão sua primeira migração para o mercado livre de energia. A lei exige um broker certificado para essa transição (MP nº 1.300/2025). <strong style={{ color: '#1A1F36' }}>Nós somos esse broker.</strong>
+                A partir de dezembro de 2027, milhões de lares brasileiros farão sua primeira migração para o mercado livre de energia. A lei exige um agente habilitado para essa transição (MP nº 1.300/2025). <strong style={{ color: '#1A1F36' }}>Através da Ótima Energia, nosso parceiro certificado, gerenciamos esse processo para você.</strong>
               </p>
               <p className="mt-4">
                 Somos parceiros da Ótima Energia, operadores certificados no mercado de energia brasileiro, com clientes reais e economia comprovada.
@@ -70,9 +70,9 @@ export default function About() {
             <h3 className="font-display font-bold mb-8 text-center" style={{ fontSize: '28px', color: '#1A1F36' }}>Nossos pilares de confiança</h3>
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                { title: 'Broker certificado CCEE', desc: 'Somos o intermediário legal obrigatório para migração residencial ao mercado livre.' },
+                { title: 'Parceiro Ótima Energia', desc: 'Operamos com a Ótima Energia, operador certificado e regulamentado no mercado livre de energia.' },
                 { title: 'Sem custo pro usuário', desc: 'Você nunca paga nada para nós. Nossa remuneração vem dos fornecedores parceiros.' },
-                { title: 'Parceiros verificados', desc: 'Só trabalhamos com empresas reguladas pela ANEEL e pela CCEE.' },
+                { title: 'Parceiros verificados', desc: 'Só trabalhamos com empresas reguladas pela ANEEL.' },
               ].map((p) => (
                 <div key={p.title} className="flex gap-3">
                   <span className="font-bold text-lg shrink-0 mt-0.5" style={{ color: '#00B86B' }}>✓</span>
