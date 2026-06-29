@@ -739,8 +739,8 @@ export default function Home() {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#fff",
-                color: "var(--green-text)",
+                backgroundColor: "var(--green)",
+                color: "#fff",
                 fontFamily: "var(--app-font-sans)",
                 fontWeight: 600,
                 fontSize: "15px",
@@ -752,13 +752,13 @@ export default function Home() {
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "#F5F5F0";
+                el.style.background = "#1a9350";
                 el.style.transform = "translateY(-2px)";
-                el.style.boxShadow = "0 6px 20px rgba(26,36,16,0.14)";
+                el.style.boxShadow = "0 6px 20px rgba(26,36,16,0.20)";
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "#fff";
+                el.style.background = "var(--green)";
                 el.style.transform = "";
                 el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.10)";
               }}
