@@ -867,6 +867,7 @@ export default function Home() {
           zIndex: 10,
           marginTop: "calc(clamp(120px, 18vw, 200px) * -1)",
           padding: "0 var(--gutter)",
+          paddingTop: "clamp(3rem, 5vw, 4.5rem)",
           paddingBottom: "clamp(6rem,12vw,10rem)",
           backgroundColor: "#F7F4EA",
         }}
