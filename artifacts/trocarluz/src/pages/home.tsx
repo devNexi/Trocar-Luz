@@ -1743,31 +1743,41 @@ export default function Home() {
               calm
               style={{ top: "9%", right: "4%" }}
             />
-            {/* E — person-4, far-left flank, 130px — desktop only */}
+            {/* E — person-4, far-left flank */}
             <CollageTile
               src="/img/person-4.webp"
-              size="130px"
+              size="clamp(82px,19vw,130px)"
               baseRot={-8}
               delay={0.6}
               duration={8}
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              className="collage-hide-mobile"
               style={{ top: "49%", left: "2%" }}
             />
-            {/* F — person-6, far-right flank, 152px — desktop only */}
+            {/* F — person-6, far-right flank */}
             <CollageTile
               src="/img/person-6.webp"
-              size="152px"
+              size="clamp(90px,22vw,152px)"
               baseRot={4}
               delay={0.9}
               duration={7}
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              className="collage-hide-mobile"
               style={{ top: "38%", right: "2%" }}
+            />
+            {/* K — person-11, lower-centre, always visible */}
+            <CollageTile
+              src="/img/person-11.webp"
+              size="clamp(84px,18vw,140px)"
+              baseRot={-4}
+              delay={1.1}
+              duration={7.8}
+              parallaxRange={[10, -10]}
+              isPhoto
+              calm
+              style={{ top: "78%", left: "34%" }}
             />
             {/* G — person-7, lower-left, 100px */}
             <CollageTile
