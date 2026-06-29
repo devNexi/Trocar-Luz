@@ -1743,7 +1743,7 @@ export default function Home() {
               calm
               style={{ top: "9%", right: "4%" }}
             />
-            {/* E — person-4, far-left flank */}
+            {/* E — person-4, left flank */}
             <CollageTile
               src="/img/person-4.webp"
               size="clamp(82px,19vw,130px)"
@@ -1753,9 +1753,9 @@ export default function Home() {
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              style={{ top: "49%", left: "2%" }}
+              style={{ top: "28%", left: "2%" }}
             />
-            {/* F — person-6, far-right flank */}
+            {/* F — person-6, right flank */}
             <CollageTile
               src="/img/person-6.webp"
               size="clamp(90px,22vw,152px)"
@@ -1765,7 +1765,7 @@ export default function Home() {
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              style={{ top: "38%", right: "2%" }}
+              style={{ top: "16%", right: "2%" }}
             />
             {/* K — person-11, lower-centre, always visible */}
             <CollageTile
