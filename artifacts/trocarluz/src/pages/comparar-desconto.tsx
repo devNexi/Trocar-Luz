@@ -359,7 +359,7 @@ export default function CompararDesconto() {
       />
 
       {/* ── Hero ── */}
-      <section style={{ backgroundColor: "var(--env)", padding: "56px 0 48px", ...DOT_TEXTURE }}>
+      <section style={{ backgroundColor: "var(--env)", padding: "clamp(100px, 14vw, 120px) 0 48px", ...DOT_TEXTURE }}>
         <div style={{ maxWidth: "600px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <div
             style={{
@@ -373,7 +373,7 @@ export default function CompararDesconto() {
               textTransform: "uppercase",
               padding: "5px 16px",
               borderRadius: "999px",
-              marginBottom: "18px",
+              marginBottom: "12px",
             }}
           >
             Ferramenta gratuita
