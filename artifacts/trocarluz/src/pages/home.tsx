@@ -599,15 +599,16 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
-        {/* ── Hero bolt anchor — large 3D visual, top-right, cropped by overflow:hidden ── */}
+        {/* ── Hero bolt — large 3D visual, top-right, cropped by section overflow:hidden ── */}
         <div
           aria-hidden="true"
+          className="hero-bolt-anchor"
           style={{
             position: "absolute",
             top: "-24px",
             right: "-48px",
-            width: "clamp(180px, 38vw, 460px)",
-            height: "clamp(180px, 38vw, 460px)",
+            width: "clamp(220px, 44vw, 540px)",
+            height: "clamp(220px, 44vw, 540px)",
             zIndex: 1,
             pointerEvents: "none",
           }}
@@ -630,194 +631,209 @@ export default function Home() {
           />
         </div>
 
-        <div style={{ maxWidth: "var(--container)", margin: "0 auto", position: "relative", zIndex: 2 }}>
-          <h1 id="hero-heading" style={{ margin: 0 }}>
-            <motion.span
-              initial={{ opacity: 0, y: 18 }}
+        {/* ── Two-column grid: text left ≈55%, bolt zone right ≈45% ── */}
+        <div
+          className="hero-inner"
+          style={{
+            maxWidth: "var(--container)",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "55fr 45fr",
+            gap: "clamp(24px, 4vw, 64px)",
+          }}
+        >
+          {/* LEFT: all text content */}
+          <div style={{ position: "relative", zIndex: 2 }}>
+            <h1 id="hero-heading" style={{ margin: 0 }}>
+              <motion.span
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0 }}
+                style={{
+                  display: "block",
+                  fontFamily: "var(--app-font-display)",
+                  fontWeight: 700,
+                  fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
+                  lineHeight: 0.96,
+                  letterSpacing: "-0.02em",
+                  color: "var(--ink)",
+                  marginBottom: "4px",
+                }}
+              >
+                Compare e economize na sua conta
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                style={{
+                  display: "block",
+                  fontFamily: "var(--app-font-display)",
+                  fontWeight: 700,
+                  fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
+                  lineHeight: 0.96,
+                  letterSpacing: "-0.02em",
+                  color: "var(--env-soft)",
+                  marginBottom: "28px",
+                }}
+              >
+                de energia.
+              </motion.span>
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.22 }}
               style={{
-                display: "block",
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(3.25rem, 8vw, 6rem)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.02em",
-                color: "var(--ink)",
-                marginBottom: "4px",
+                fontFamily: "var(--app-font-sans)",
+                fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
+                lineHeight: 1.6,
+                color: "rgba(26,36,16,0.75)",
+                marginBottom: "20px",
               }}
             >
-              Compare e economize na sua conta
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 18 }}
+              Geração distribuída já disponível para reduzir sua conta agora. E a partir de
+              dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
+            </motion.p>
+
+            {/* ── Social-proof avatar cluster ── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.28 }}
+              style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}
+            >
+              <div style={{ display: "flex" }}>
+                {["/img/person-1.webp", "/img/person-5.webp", "/img/person-8.webp"].map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=""
+                    loading="eager"
+                    decoding="async"
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      border: "2px solid var(--env)",
+                      marginLeft: i === 0 ? 0 : "-12px",
+                      position: "relative",
+                      zIndex: 3 - i,
+                      flexShrink: 0,
+                    }}
+                  />
+                ))}
+              </div>
+              <span
+                style={{
+                  fontFamily: "var(--app-font-sans)",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  lineHeight: 1.3,
+                }}
+              >
+                Mais de 12 mil comparações feitas
+              </span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-              style={{
-                display: "block",
-                fontFamily: "var(--app-font-display)",
-                fontWeight: 700,
-                fontSize: "clamp(3.25rem, 8vw, 6rem)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.02em",
-                color: "var(--env-soft)",
-                marginBottom: "28px",
-              }}
+              transition={{ duration: 0.4, ease: "easeOut", delay: 0.34 }}
+              className="flex flex-col sm:flex-row gap-3 mb-8"
             >
-              de energia.
-            </motion.span>
-          </h1>
+              <Link
+                href="/comparar-desconto"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "var(--green)",
+                  color: "#fff",
+                  fontFamily: "var(--app-font-sans)",
+                  fontWeight: 600,
+                  fontSize: "15px",
+                  padding: "15px 32px",
+                  borderRadius: "999px",
+                  textDecoration: "none",
+                  transition: "background 0.15s, transform 0.12s, box-shadow 0.12s",
+                  boxShadow: "0 2px 8px rgba(26,36,16,0.10)",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.background = "#1a9350";
+                  el.style.transform = "translateY(-2px)";
+                  el.style.boxShadow = "0 6px 20px rgba(26,36,16,0.20)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.background = "var(--green)";
+                  el.style.transform = "";
+                  el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.10)";
+                }}
+                onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
+                onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
+              >
+                Ver desconto disponível
+              </Link>
+              <Link
+                href="/enviar-conta"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                  color: "var(--ink)",
+                  border: "1.5px solid var(--ink)",
+                  fontFamily: "var(--app-font-sans)",
+                  fontWeight: 600,
+                  fontSize: "15px",
+                  padding: "15px 32px",
+                  borderRadius: "999px",
+                  textDecoration: "none",
+                  transition: "background 0.15s, transform 0.12s",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.background = "rgba(26,36,16,0.07)";
+                  el.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.background = "transparent";
+                  el.style.transform = "";
+                }}
+                onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
+                onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
+              >
+                Enviar conta de luz
+              </Link>
+            </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: 0.22 }}
-            style={{
-              fontFamily: "var(--app-font-sans)",
-              fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
-              lineHeight: 1.6,
-              color: "rgba(26,36,16,0.75)",
-              maxWidth: "560px",
-              marginBottom: "20px",
-            }}
-          >
-            Geração distribuída já disponível para reduzir sua conta agora. E a partir de
-            dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
-          </motion.p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.44 }}
+              style={{ display: "flex", alignItems: "center", gap: "8px" }}
+            >
+              <ShieldCheck size={18} weight="fill" style={{ color: "var(--green)", flexShrink: 0 }} />
+              <span
+                style={{
+                  fontFamily: "var(--app-font-sans)",
+                  fontSize: "14px",
+                  color: "rgba(26,36,16,0.70)",
+                }}
+              >
+                Parceiro Ótima Energia
+              </span>
+            </motion.div>
+          </div>
 
-          {/* ── Social-proof avatar cluster ── */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.28 }}
-            style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "28px" }}
-          >
-            <div style={{ display: "flex" }}>
-              {["/img/person-1.webp", "/img/person-5.webp", "/img/person-8.webp"].map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt=""
-                  loading="eager"
-                  decoding="async"
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "2px solid var(--env)",
-                    marginLeft: i === 0 ? 0 : "-12px",
-                    position: "relative",
-                    zIndex: 3 - i,
-                    flexShrink: 0,
-                  }}
-                />
-              ))}
-            </div>
-            <span
-              style={{
-                fontFamily: "var(--app-font-sans)",
-                fontSize: "15px",
-                fontWeight: 500,
-                color: "var(--ink)",
-                lineHeight: 1.3,
-              }}
-            >
-              Mais de 12 mil comparações feitas
-            </span>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut", delay: 0.34 }}
-            className="flex flex-col sm:flex-row gap-3 mb-8"
-          >
-            <Link
-              href="/comparar-desconto"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "var(--green)",
-                color: "#fff",
-                fontFamily: "var(--app-font-sans)",
-                fontWeight: 600,
-                fontSize: "15px",
-                padding: "15px 32px",
-                borderRadius: "999px",
-                textDecoration: "none",
-                transition: "background 0.15s, transform 0.12s, box-shadow 0.12s",
-                boxShadow: "0 2px 8px rgba(26,36,16,0.10)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "#1a9350";
-                el.style.transform = "translateY(-2px)";
-                el.style.boxShadow = "0 6px 20px rgba(26,36,16,0.20)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "var(--green)";
-                el.style.transform = "";
-                el.style.boxShadow = "0 2px 8px rgba(26,36,16,0.10)";
-              }}
-              onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
-              onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
-            >
-              Ver desconto disponível
-            </Link>
-            <Link
-              href="/enviar-conta"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "transparent",
-                color: "var(--ink)",
-                border: "1.5px solid var(--ink)",
-                fontFamily: "var(--app-font-sans)",
-                fontWeight: 600,
-                fontSize: "15px",
-                padding: "15px 32px",
-                borderRadius: "999px",
-                textDecoration: "none",
-                transition: "background 0.15s, transform 0.12s",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "rgba(26,36,16,0.07)";
-                el.style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLAnchorElement;
-                el.style.background = "transparent";
-                el.style.transform = "";
-              }}
-              onMouseDown={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "scale(0.98)"; }}
-              onMouseUp={(e) => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
-            >
-              Enviar conta de luz
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.44 }}
-            style={{ display: "flex", alignItems: "center", gap: "8px" }}
-          >
-            <ShieldCheck size={18} weight="fill" style={{ color: "var(--green)", flexShrink: 0 }} />
-            <span
-              style={{
-                fontFamily: "var(--app-font-sans)",
-                fontSize: "14px",
-                color: "rgba(26,36,16,0.70)",
-              }}
-            >
-              Parceiro Ótima Energia
-            </span>
-          </motion.div>
+          {/* RIGHT: bolt visual zone — bolt anchored at section level above */}
+          <div className="hero-bolt-col" aria-hidden="true" />
         </div>
 
       </section>

@@ -1,0 +1,20 @@
+REPLIT PROMPT (restructure hero into two columns: text left, bolt right):
+Restructure the hero into two columns. Do NOT change copy, colours, fonts, or other sections. Report files touched in one line, then apply. Do not report done until every acceptance criterion passes.
+
+LAYOUT (desktop ≥768px):
+- Two columns. LEFT column ≈ 55% width holds ALL text content in this order: headline, subheadline, the social-proof avatar cluster, the two CTA buttons, the "Parceiro Ótima Energia" trust line. RIGHT column ≈ 45% is the bolt's visual zone. Put a clear gap between the columns.
+- Cap the headline to the left column with a max-width so it NEVER crosses into the right column. Keep it left-aligned and two-tone (ink + ghost "de energia"). Let it wrap naturally; if it runs past ~5 lines or feels cramped, drop the headline font-size one step so it sits cleanly in the left column.
+- There is a large empty grey/olive placeholder box in the hero right now — REMOVE it entirely. The bolt replaces it.
+
+THE BOLT (right column):
+- Place the existing hero bolt image as the right column's main visual: large (~70% of hero height), anchored toward the top-right, bleeding off the top and right edges. Hero stays position: relative; overflow: hidden so the bolt is cropped by the frame and never causes horizontal scroll. Rotation ~ +12°.
+- It must NOT overlap the headline or any left-column text — the column gap guarantees separation. Keep z-index below text as a safeguard; pointer-events: none. Eager-load (above the fold). Explicit width/height or aspect-ratio (zero CLS).
+
+RESPONSIVE (<768px): stack to one column — text first (full width), bolt below it OR as a smaller cropped top-right accent (~190–230px) that does not overlap the headline. No horizontal scroll at 320px. If the bolt crowds the text on mobile, hide it.
+
+ACCEPTANCE CRITERIA:
+- Hero is two columns on desktop: text left (~55%), bolt right (~45%); they do NOT overlap.
+- The empty grey placeholder box is gone.
+- Headline is capped to the left column and wraps cleanly; bolt is cropped by the top/right edges.
+- No horizontal scroll at 320px; no CLS.
+- Report the file(s) edited and confirm each criterion line by line.

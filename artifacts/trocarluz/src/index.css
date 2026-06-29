@@ -488,6 +488,13 @@
 }
 
 
+/* ── Hero two-column responsive ──────────────────────────────────── */
+@media (max-width: 767px) {
+  .hero-inner { grid-template-columns: 1fr !important; }
+  .hero-bolt-anchor,
+  .hero-bolt-col { display: none !important; }
+}
+
 /* ── Raio-X da Conta tool interactive states ─────────────────────── */
 .tool-input:focus {
   outline: 2px solid #8FD14F;

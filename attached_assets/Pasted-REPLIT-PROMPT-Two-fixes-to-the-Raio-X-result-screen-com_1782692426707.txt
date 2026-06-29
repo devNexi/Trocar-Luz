@@ -1,0 +1,27 @@
+REPLIT PROMPT:
+
+Two fixes to the Raio-X result screen (/comparar-desconto). Keep it on real gd_offers data, pt-BR.
+
+=== 1. COLLAPSE EQUAL RANGES — never show "X–X" ===
+Whenever min and max are equal, show a SINGLE value, not a range. Applies to both the R$ and the % lines.
+- R$: if savings_min_brl === savings_max_brl → "R$200/mês" (not "R$200–R$200/mês"). If they differ → "R$180–R$240/mês".
+- %: if discount_min === discount_max → "20% de desconto estimado" (not "20%–20%"). If they differ → "15%–25% de desconto estimado".
+- Apply the same single-vs-range logic anywhere else a min/max pair is rendered (annual figure, etc.). Build one small helper (e.g. formatRange) and use it everywhere so this can never reappear.
+
+=== 2. FRAME EVERYTHING AS A FREE ESTIMATE PENDING THE BILL ===
+The result must read clearly as (a) an estimate that can't be finalised until they send their electricity bill, and (b) a service that is free for them because suppliers pay us. Update the result copy:
+- Soften the headline label from a hard "Desconto disponível" promise toward an estimate. Keep the value prominent but add, directly under the numbers, a clear line such as:
+  "Estimativa com base em ofertas reais para a sua região. O desconto exato é confirmado após o envio da sua conta de luz."
+- Add a free-to-use reassurance line near the CTA (its own line or a small pill), e.g.:
+  "O uso é 100% gratuito para você — somos remunerados pelos fornecedores, não por você."
+- Keep the existing fine-print disclaimer ("Estimativas são indicativas… Valores não garantidos."), but make sure the "confirmado após envio da conta" point is visible WITHOUT needing to read the fine print.
+- The CTA stays "Confirmar com minha conta de luz →" — it now reads naturally as the step that turns the estimate into a real number.
+- Do NOT name the partner anywhere (existing permanent rule stands).
+- Apply the same "estimate, confirmed after bill / free for you" framing to the consulta and below-minimum/no-coverage states where relevant, so the honesty + free message is consistent across every result path.
+
+ACCEPTANCE:
+- No "X–X" anywhere — equal min/max collapses to one value on both R$ and %; unequal still shows a range. Show a screenshot/test of an equal case (e.g. R$200, 20%) and an unequal case.
+- Result clearly states the exact discount is confirmed after the bill is sent, visible without reading fine print.
+- Result clearly states the service is free for the user (paid by suppliers).
+- Consistent across eligible, consulta, and below-minimum/no-coverage states.
+- Partner name still absent everywhere.
