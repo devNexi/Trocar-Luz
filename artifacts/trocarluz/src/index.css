@@ -491,7 +491,6 @@
 /* ── Hero two-column responsive ──────────────────────────────────── */
 @media (max-width: 767px) {
   .hero-inner { grid-template-columns: 1fr !important; }
-  .hero-bolt-anchor,
   .hero-bolt-col { display: none !important; }
 }
 

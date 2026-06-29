@@ -166,6 +166,10 @@ function ToggleButton({
   );
 }
 
+function formatRange(min: number, max: number, fmt: (n: number) => string): string {
+  return min === max ? fmt(min) : `${fmt(min)}–${fmt(max)}`;
+}
+
 function StepIndicator({ step }: { step: 1 | 2 | "result" }) {
   const steps = ["Localização", "Sua conta", "Resultado"];
   const idx = step === 1 ? 0 : step === 2 ? 1 : 2;
@@ -624,9 +628,7 @@ export default function CompararDesconto() {
                         letterSpacing: "-0.02em",
                       }}
                     >
-                      R${result.savingsMinBrl.toLocaleString("pt-BR")}
-                      <span style={{ color: MUTED, fontWeight: 500 }}>–</span>
-                      R${result.savingsMaxBrl.toLocaleString("pt-BR")}
+                      {formatRange(result.savingsMinBrl, result.savingsMaxBrl, n => `R$${n.toLocaleString("pt-BR")}`)}
                       <span style={{ fontSize: "0.38em", fontWeight: 600, color: MUTED, verticalAlign: "middle" }}>/mês</span>
                     </div>
                     <div
@@ -639,11 +641,14 @@ export default function CompararDesconto() {
                         marginBottom: "4px",
                       }}
                     >
-                      {result.discountMin}%–{result.discountMax}%
+                      {formatRange(result.discountMin, result.discountMax, n => `${n}%`)}
                     </div>
                     <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "15px", color: MUTED }}>
                       de desconto estimado
                     </div>
+                    <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: MUTED, lineHeight: 1.55, margin: "12px 0 0" }}>
+                      Estimativa com base em ofertas reais para a sua região. O desconto exato é confirmado após o envio da sua conta de luz.
+                    </p>
                     {hasEv && (
                       <div
                         style={{
@@ -675,6 +680,9 @@ export default function CompararDesconto() {
                     </p>
                   </div>
 
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#157A3C", backgroundColor: "rgba(31,164,89,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
+                    O uso é 100% gratuito para você — somos remunerados pelos fornecedores, não por você.
+                  </p>
                   <div className="space-y-3">
                     <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Confirmar com minha conta de luz →
@@ -709,7 +717,7 @@ export default function CompararDesconto() {
                     >
                       <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#92730B" }}>
                         Desconto indicativo:{" "}
-                        <strong>{result.discountMin}%–{result.discountMax}%</strong>{" "}
+                        <strong>{formatRange(result.discountMin, result.discountMax, n => `${n}%`)}</strong>{" "}
                         — sujeito à análise da conta.
                       </p>
                     </div>
@@ -728,6 +736,9 @@ export default function CompararDesconto() {
                     </p>
                   </div>
 
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#157A3C", backgroundColor: "rgba(31,164,89,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
+                    O uso é 100% gratuito para você — somos remunerados pelos fornecedores, não por você.
+                  </p>
                   <div className="space-y-3">
                     <button onClick={goToSendBill} className="tool-btn-cta" style={BTN_CTA}>
                       Solicitar análise personalizada →

@@ -599,38 +599,6 @@ export default function Home() {
           ...DOT_TEXTURE,
         }}
       >
-        {/* ── Hero bolt — large 3D visual, top-right, cropped by section overflow:hidden ── */}
-        <div
-          aria-hidden="true"
-          className="hero-bolt-anchor"
-          style={{
-            position: "absolute",
-            top: "-24px",
-            right: "-48px",
-            width: "clamp(220px, 44vw, 540px)",
-            height: "clamp(220px, 44vw, 540px)",
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        >
-          <motion.img
-            src="/img/obj-raio.webp"
-            alt=""
-            loading="eager"
-            decoding="async"
-            animate={prefersReduced ? {} : { y: [0, -4, 0] }}
-            transition={prefersReduced ? {} : { duration: 10, ease: "easeInOut", repeat: Infinity }}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              display: "block",
-              transform: "rotate(12deg)",
-              transformOrigin: "top right",
-            }}
-          />
-        </div>
-
         {/* ── Two-column grid: text left ≈55%, bolt zone right ≈45% ── */}
         <div
           className="hero-inner"
@@ -832,8 +800,36 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* RIGHT: bolt visual zone — bolt anchored at section level above */}
-          <div className="hero-bolt-col" aria-hidden="true" />
+          {/* RIGHT: bolt visual zone — centred vertically + horizontally in column */}
+          <div
+            className="hero-bolt-col"
+            aria-hidden="true"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              zIndex: 1,
+            }}
+          >
+            <motion.img
+              src="/img/obj-raio.webp"
+              alt=""
+              loading="eager"
+              decoding="async"
+              animate={prefersReduced ? {} : { y: [0, -4, 0] }}
+              transition={prefersReduced ? {} : { duration: 10, ease: "easeInOut", repeat: Infinity }}
+              style={{
+                width: "clamp(240px, 36vw, 420px)",
+                height: "clamp(240px, 36vw, 420px)",
+                objectFit: "contain",
+                display: "block",
+                transform: "rotate(12deg)",
+                pointerEvents: "none",
+                flexShrink: 0,
+              }}
+            />
+          </div>
         </div>
 
       </section>
