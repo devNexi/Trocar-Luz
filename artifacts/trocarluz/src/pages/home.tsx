@@ -611,6 +611,31 @@ export default function Home() {
         >
           {/* LEFT: all text content */}
           <div style={{ position: "relative", zIndex: 2 }}>
+            {/* Eyebrow pill */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.38, ease: "easeOut", delay: 0 }}
+              style={{ marginBottom: "16px" }}
+            >
+              <span
+                style={{
+                  display: "inline-block",
+                  backgroundColor: "#dcfce7",
+                  color: "#15803d",
+                  fontFamily: "var(--app-font-sans)",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "5px 12px",
+                  borderRadius: "999px",
+                }}
+              >
+                Geração Distribuída · Disponível Agora
+              </span>
+            </motion.div>
+
             <h1 id="hero-heading" style={{ margin: 0 }}>
               <motion.span
                 initial={{ opacity: 0, y: 18 }}
@@ -660,8 +685,9 @@ export default function Home() {
                 marginBottom: "20px",
               }}
             >
-              Geração distribuída já disponível para reduzir sua conta agora. E a partir de
-              dezembro de 2027, ajudamos você a migrar para o mercado livre de energia.
+              Reduza{" "}
+              <strong style={{ color: "var(--ink)", fontWeight: 700 }}>até 25%</strong>
+              {" "}na sua conta de luz com energia solar compartilhada — sem obras, sem instalação e com economia já na primeira fatura.
             </motion.p>
 
             {/* ── Social-proof avatar cluster ── */}
@@ -794,7 +820,7 @@ export default function Home() {
                   color: "rgba(26,36,16,0.70)",
                 }}
               >
-                Parceiro Ótima Energia
+                Operado pela Ótima Energia
               </span>
             </motion.div>
           </div>

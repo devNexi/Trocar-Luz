@@ -1,0 +1,33 @@
+REPLIT PROMPT (hero update — number + promise + truthful backing, no CCEE):
+Strengthen the hero copy so the value proposition is above the fold. Do NOT change the two-column layout, the bolt, fonts, or section colours. Copy/content changes in the hero left column only. Report files touched in one line, then apply.
+
+1) EYEBROW PILL above the headline (add it; if one already exists, replace its text):
+   - Text: "GERAÇÃO DISTRIBUÍDA · DISPONÍVEL AGORA"
+   - Small uppercase, letter-spacing ~0.08em, ~11–12px, green text #15803d on a soft pale-green pill (rounded-full), left-aligned, ~16px gap below before the headline.
+   - Do NOT mention CCEE or "broker certificado" anywhere.
+
+2) HEADLINE: unchanged ("Compare e economize na sua conta de energia.", two-tone ink + ghost).
+
+3) SUBHEADLINE: replace the current subhead with (carries the number + kills the objections):
+   "Reduza até 25% na sua conta de luz com energia solar compartilhada — sem obras, sem instalação e com economia já na primeira fatura."
+   - Same muted ink colour as now, BUT emphasise "até 25%" in dark ink / bold so the number stands out of the muted line.
+
+4) AVATAR CLUSTER + "Mais de 12 mil comparações feitas": unchanged.
+
+5) CTAs: unchanged ("Ver desconto disponível" green solid, "Enviar conta de luz" outline).
+
+6) BOTTOM TRUST LINE: change the existing "Parceiro Ótima Energia" to "Operado pela Ótima Energia". Keep the green shield icon before it. No CCEE.
+
+CRITICAL ACCURACY:
+- The discount number in the subhead MUST equal the number shown on the Geração Distribuída offer card. If that card says a different figure (e.g. 30%), use that exact number in both places. Do not invent a higher number.
+- "Disponível agora" applies to Geração Distribuída (available now) — correct. Do not present the 2027 mercado-livre discount as available now.
+- No CCEE, no "broker certificado", no self-attributed certification anywhere in the hero.
+
+RESPONSIVE (<768px): eyebrow, subhead, avatars, CTAs, trust line stack cleanly; eyebrow may wrap to two lines; subhead may wrap to 3; no horizontal scroll at 320px.
+
+ACCEPTANCE CRITERIA:
+- Above the fold the hero shows: the discount number (matching the GD card), the no-install/first-bill promise, the GD availability eyebrow, and "Operado pela Ótima Energia" — plus the existing headline, avatars, and CTAs.
+- Hero discount number matches the offers section exactly.
+- Zero CCEE / certification claims in the hero.
+- Layout, bolt, and section colours unchanged; no horizontal scroll at 320px.
+- Report the file(s) edited and confirm each criterion line by line.
