@@ -843,7 +843,7 @@ export default function Home() {
           marginTop: "calc(clamp(120px, 18vw, 200px) * -1)",
           padding: "0 var(--gutter)",
           paddingBottom: "clamp(6rem,12vw,10rem)",
-          background: "transparent",
+          backgroundColor: "#F7F4EA",
         }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
@@ -1523,7 +1523,11 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-labelledby="como-heading"
-        style={{ backgroundColor: "var(--cream)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
+        style={{
+          backgroundColor: "#E5EFDE",
+          padding: "clamp(6rem,12vw,10rem) var(--gutter)",
+          ...DOT_TEXTURE,
+        }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="como-grid">
@@ -1656,7 +1660,7 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-label="Números TrocarLuz"
-        style={{ backgroundColor: "var(--tint)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
+        style={{ backgroundColor: "#F7F4EA", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -1951,7 +1955,7 @@ export default function Home() {
       {/* ─────────────────────────────────────────────────────────── */}
       <section
         aria-labelledby="lead-form-heading"
-        style={{ backgroundColor: "var(--cream)", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
+        style={{ backgroundColor: "#F7F4EA", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
           <div className="grid md:grid-cols-2 gap-12 items-start">
