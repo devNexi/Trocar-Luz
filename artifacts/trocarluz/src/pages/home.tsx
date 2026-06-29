@@ -1765,7 +1765,7 @@ export default function Home() {
               parallaxRange={[12, -12]}
               isPhoto
               calm
-              style={{ top: "16%", right: "2%" }}
+              style={{ top: "28%", right: "2%" }}
             />
             {/* K — person-11, lower-centre, always visible */}
             <CollageTile
