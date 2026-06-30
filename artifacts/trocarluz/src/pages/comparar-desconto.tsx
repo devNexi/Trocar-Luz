@@ -358,7 +358,7 @@ export default function CompararDesconto() {
   return (
     <Layout>
       <SEOHead
-        title={`${TOOL_NAME} — TrocarLuz`}
+        title={`${TOOL_NAME} — TrocaLuz`}
         description="Descubra em 1 minuto quanto você pode economizar na conta de luz com energia solar compartilhada. Estimativa gratuita com dados reais."
       />
 

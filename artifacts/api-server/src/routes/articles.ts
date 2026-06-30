@@ -95,7 +95,7 @@ router.post("/articles", async (req, res): Promise<void> => {
       category: data.category ?? null,
       estado: data.estado ?? null,
       keywords: data.keywords ?? [],
-      author: data.author ?? "Equipe TrocarLuz",
+      author: data.author ?? "Equipe TrocaLuz",
       reviewer: data.reviewer ?? null,
       schemaType: data.schemaType ?? null,
       faqItems: data.faqItems ?? null,

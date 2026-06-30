@@ -20,7 +20,7 @@ const faqs = [
     a: "Em média, entre R$0,06 e R$0,12 por km, dependendo da tarifa da distribuidora. Compare: gasolina custa entre R$0,35 e R$0,55 por km. Mesmo com a conta mais alta, o custo total de mobilidade tende a ser menor.",
   },
   {
-    q: "A TrocarLuz atende donos de carros elétricos em todo o Brasil?",
+    q: "A TrocaLuz atende donos de carros elétricos em todo o Brasil?",
     a: "Sim, em todos os estados. A disponibilidade de parceiros de GD varia por região. Em áreas onde ainda não temos cobertura, colocamos você na lista de espera e avisamos quando houver opções.",
   },
 ];
@@ -39,7 +39,7 @@ export default function CarroEletrico() {
   return (
     <Layout>
       <SEOHead
-        title="Carro elétrico deixou a conta de luz alta? Veja como reduzir — TrocarLuz"
+        title="Carro elétrico deixou a conta de luz alta? Veja como reduzir — TrocaLuz"
         description="Comprou um carro elétrico e a conta de luz subiu? A geração distribuída pode compensar o aumento. Sem obras, sem instalação. Veja como."
         schema={schema}
       />

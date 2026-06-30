@@ -11,7 +11,7 @@ export default function StatesIndex() {
   return (
     <Layout>
       <SEOHead 
-        title="Opções de Energia por Estado Brasileiro — TrocarLuz" 
+        title="Opções de Energia por Estado Brasileiro — TrocaLuz" 
         description="Veja as distribuidoras, tarifas e disponibilidade de GD para o seu estado no Brasil."
       />
       

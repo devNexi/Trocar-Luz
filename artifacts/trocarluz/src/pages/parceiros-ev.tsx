@@ -63,8 +63,8 @@ export default function ParceirosEV() {
   return (
     <Layout>
       <SEOHead
-        title="Parceiros — Veículos Elétricos e Mobilidade — TrocarLuz"
-        description="Seja parceiro da TrocarLuz. Para montadoras, concessionárias, instaladores de carregadores e marcas de mobilidade elétrica."
+        title="Parceiros — Veículos Elétricos e Mobilidade — TrocaLuz"
+        description="Seja parceiro da TrocaLuz. Para montadoras, concessionárias, instaladores de carregadores e marcas de mobilidade elétrica."
       />
 
       {/* Hero */}
@@ -80,7 +80,7 @@ export default function ParceirosEV() {
             Seus clientes compram um EV.<br />A conta de luz sobe.<br />Nós resolvemos isso.
           </h1>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "18px", color: "rgba(255,255,255,0.75)", lineHeight: 1.7, maxWidth: "640px", margin: "0 auto 40px" }}>
-            A TrocarLuz ajuda os compradores de carros elétricos a reduzirem a conta de luz com geração distribuída — sem obras, sem instalação. Uma parceria que aumenta a satisfação pós-venda e abre uma nova fonte de receita.
+            A TrocaLuz ajuda os compradores de carros elétricos a reduzirem a conta de luz com geração distribuída — sem obras, sem instalação. Uma parceria que aumenta a satisfação pós-venda e abre uma nova fonte de receita.
           </p>
         </div>
       </section>
@@ -89,14 +89,14 @@ export default function ParceirosEV() {
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-display font-bold mb-10 text-center" style={{ fontSize: "32px", color: "#1A1F36" }}>
-            Por que fazer parceria com a TrocarLuz
+            Por que fazer parceria com a TrocaLuz
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: "⚡",
                 title: "Supere a objeção da conta alta",
-                body: "\"Mas minha conta vai subir\" é a principal objeção de compradores de EV. Com a TrocarLuz como parceira, você responde com uma solução concreta.",
+                body: "\"Mas minha conta vai subir\" é a principal objeção de compradores de EV. Com a TrocaLuz como parceira, você responde com uma solução concreta.",
               },
               {
                 icon: "🤝",

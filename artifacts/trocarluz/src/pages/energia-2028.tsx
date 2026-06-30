@@ -8,7 +8,7 @@ const timeline = [
     date: "Desde 2019",
     color: "#6ABF4B",
     title: "Grupo A — Industrial e comercial de alta tensão",
-    desc: "Empresas com alta demanda de energia já podem migrar para o mercado livre. A TrocarLuz já facilita essa migração.",
+    desc: "Empresas com alta demanda de energia já podem migrar para o mercado livre. A TrocaLuz já facilita essa migração.",
   },
   {
     status: "Em breve",
@@ -37,7 +37,7 @@ export default function Energia2028() {
   return (
     <Layout>
       <SEOHead
-        title="Mercado Livre Residencial: dezembro de 2027 — TrocarLuz"
+        title="Mercado Livre Residencial: dezembro de 2027 — TrocaLuz"
         description="A abertura do mercado livre para residências começa em dezembro de 2027. Entenda o cronograma e por que você vai precisar de um broker certificado."
       />
 
@@ -96,7 +96,7 @@ export default function Energia2028() {
               Esse broker agrega o consumo de vários consumidores, negocia preços com os geradores em seu nome, e gerencia toda a transição — desde a notificação formal à sua distribuidora atual até a assinatura do contrato com o novo fornecedor.
             </p>
             <p>
-              A TrocarLuz e a Ótima Energia são esse broker certificado. Não somos apenas uma plataforma de comparação — <strong style={{ color: '#1A1F36' }}>somos o veículo legal pelo qual você faz a migração.</strong>
+              A TrocaLuz e a Ótima Energia são esse broker certificado. Não somos apenas uma plataforma de comparação — <strong style={{ color: '#1A1F36' }}>somos o veículo legal pelo qual você faz a migração.</strong>
             </p>
           </div>
 

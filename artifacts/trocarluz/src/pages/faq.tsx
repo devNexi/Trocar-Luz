@@ -29,7 +29,7 @@ export default function FAQ() {
   return (
     <Layout>
       <SEOHead 
-        title="Perguntas Frequentes — TrocarLuz" 
+        title="Perguntas Frequentes — TrocaLuz" 
         description="Tire suas dúvidas sobre Geração Distribuída, Mercado Livre de Energia e como economizar na conta de luz."
         schema={faqSchema}
       />

@@ -164,7 +164,7 @@ export default function EnviarConta() {
   if (done) {
     return (
       <Layout>
-        <SEOHead title="Solicitação enviada — TrocarLuz" description="Sua solicitação foi recebida." />
+        <SEOHead title="Solicitação enviada — TrocaLuz" description="Sua solicitação foi recebida." />
         <section className="py-24 bg-[#F7F7F5]">
           <div className="max-w-lg mx-auto px-4 text-center">
             <div
@@ -254,7 +254,7 @@ export default function EnviarConta() {
   return (
     <Layout>
       <SEOHead
-        title="Enviar conta de luz — TrocarLuz"
+        title="Enviar conta de luz — TrocaLuz"
         description="Envie sua conta de luz para analisarmos e confirmarmos as opções de desconto disponíveis para você."
       />
 
@@ -388,7 +388,7 @@ export default function EnviarConta() {
                       key: "whatsapp",
                       value: whatsappConsent,
                       set: setWhatsappConsent,
-                      label: "Aceito receber mensagens da TrocarLuz/Ótima sobre minha análise e proposta pelo WhatsApp.",
+                      label: "Aceito receber mensagens da TrocaLuz/Ótima sobre minha análise e proposta pelo WhatsApp.",
                     },
                     {
                       key: "partner",
@@ -433,7 +433,7 @@ export default function EnviarConta() {
                             >
                               Política de Privacidade
                             </Link>{" "}
-                            da TrocarLuz e autorizo o tratamento dos meus dados conforme descrito.
+                            da TrocaLuz e autorizo o tratamento dos meus dados conforme descrito.
                           </>
                         ) : (
                           c.label

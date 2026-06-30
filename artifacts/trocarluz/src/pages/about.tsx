@@ -5,8 +5,8 @@ export default function About() {
   return (
     <Layout>
       <SEOHead
-        title="Sobre a TrocarLuz — Energia mais barata para você"
-        description="A TrocarLuz conecta residências e empresas a fontes de energia mais baratas. Parceira da Ótima Energia, operador certificado no mercado livre."
+        title="Sobre a TrocaLuz — Energia mais barata para você"
+        description="A TrocaLuz conecta residências e empresas a fontes de energia mais baratas. Parceira da Ótima Energia, operador certificado no mercado livre."
       />
 
       {/* Hero */}
@@ -28,7 +28,7 @@ export default function About() {
             <div>
               <h2 className="font-display font-bold mb-6" style={{ fontSize: '36px', color: '#1A1F36' }}>Quem somos</h2>
               <p>
-                A <strong style={{ color: '#1A1F36' }}>TrocarLuz</strong> é a plataforma de energia que o consumidor brasileiro estava esperando.
+                A <strong style={{ color: '#1A1F36' }}>TrocaLuz</strong> é a plataforma de energia que o consumidor brasileiro estava esperando.
               </p>
               <p className="mt-4">
                 Hoje, ajudamos residências e empresas a economizarem através da geração distribuída — sem obras, sem investimento, com desconto direto na conta.
@@ -44,7 +44,7 @@ export default function About() {
             <div className="pt-8 border-t border-[#E2E1DC]">
               <h2 className="font-display font-bold mb-6" style={{ fontSize: '32px', color: '#1A1F36' }}>Como ganhamos dinheiro?</h2>
               <p>
-                A transparência é nosso principal valor. O uso da plataforma TrocarLuz é <strong style={{ color: '#1A1F36' }}>100% gratuito para você</strong>.
+                A transparência é nosso principal valor. O uso da plataforma TrocaLuz é <strong style={{ color: '#1A1F36' }}>100% gratuito para você</strong>.
               </p>
               <p className="mt-4">
                 Somos remunerados pelas empresas fornecedoras de energia (fazendas solares, comercializadoras no Mercado Livre) toda vez que conectamos um novo cliente a elas. Isso não encarece a sua conta — pelo contrário, as empresas nos pagam justamente porque conseguimos trazer volume e baratear o custo de encontrar clientes.

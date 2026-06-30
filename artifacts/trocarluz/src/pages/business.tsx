@@ -6,7 +6,7 @@ export default function Business() {
   return (
     <Layout>
       <SEOHead 
-        title="Para sua empresa — TrocarLuz" 
+        title="Para sua empresa — TrocaLuz" 
         description="Reduza os custos operacionais da sua empresa com energia mais barata via Mercado Livre ou GD."
       />
       

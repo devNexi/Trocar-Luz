@@ -7,7 +7,7 @@ export default function Residential() {
   return (
     <Layout>
       <SEOHead
-        title="Para sua casa — TrocarLuz"
+        title="Para sua casa — TrocaLuz"
         description="Economize na conta de luz da sua residência com Geração Distribuída agora, e garanta sua vaga para o mercado livre em dezembro de 2027."
       />
 
@@ -18,7 +18,7 @@ export default function Residential() {
             Pare de pagar mais do que precisa na sua conta de luz.
           </h1>
           <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.80)', lineHeight: '1.7' }}>
-            Hoje: economize com geração distribuída. A partir de dezembro de 2027: migre para o mercado livre com a TrocarLuz como seu broker certificado.
+            Hoje: economize com geração distribuída. A partir de dezembro de 2027: migre para o mercado livre com a TrocaLuz como seu broker certificado.
           </p>
         </div>
       </section>
@@ -67,7 +67,7 @@ export default function Residential() {
                 </p>
               </div>
               <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: '#6B7080', lineHeight: '1.6' }}>
-                A TrocarLuz é esse broker. Cadastre-se agora para ser notificado quando a migração abrir para o seu perfil — e entrar na fila na frente de todos.
+                A TrocaLuz é esse broker. Cadastre-se agora para ser notificado quando a migração abrir para o seu perfil — e entrar na fila na frente de todos.
               </p>
             </div>
           </div>

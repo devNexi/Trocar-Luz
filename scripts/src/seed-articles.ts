@@ -41,7 +41,7 @@ Para uma conta de R$400/mês, o desconto pode representar entre R$44 e R$120 por
 
 ## Qual é o custo para aderir
 
-Nenhum. A TrocarLuz não cobra nada do consumidor. O modelo funciona assim: a fazenda solar vende a energia com desconto em relação à tarifa da distribuidora — e nós garantimos que você acessa o melhor desconto disponível para sua região.
+Nenhum. A TrocaLuz não cobra nada do consumidor. O modelo funciona assim: a fazenda solar vende a energia com desconto em relação à tarifa da distribuidora — e nós garantimos que você acessa o melhor desconto disponível para sua região.
 
 ## Próximos passos
 
@@ -49,7 +49,7 @@ Use nossa calculadora gratuita para ver a estimativa de desconto disponível na 
     excerpt: "Entenda o que é geração distribuída, como funciona o sistema de compensação de energia e quanto você pode economizar sem instalar nada.",
     category: "geracao-distribuida",
     keywords: ["geração distribuída", "GD", "energia solar", "desconto conta de luz", "SCEE"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-01-10"),
   },
@@ -97,7 +97,7 @@ A GD é a opção com maior impacto e menor fricção para a maioria dos consumi
     excerpt: "Entenda tarifas, bandeiras, encargos e impostos da conta de luz — e onde é possível economizar de forma simples e sem obras.",
     category: "educacao-energia",
     keywords: ["conta de luz", "tarifa de energia", "bandeira tarifária", "encargos", "ICMS energia"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-01-15"),
   },
@@ -165,7 +165,7 @@ Use nossa calculadora para ver o desconto disponível por GD na sua região.`,
     excerpt: "Descubra as diferenças entre geração distribuída compartilhada e painéis solares no telhado — e qual faz mais sentido para o seu perfil.",
     category: "geracao-distribuida",
     keywords: ["geração distribuída", "painel solar", "energia solar telhado", "GD compartilhada", "comparação"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-01-20"),
   },
@@ -199,7 +199,7 @@ Para participar do MLE, consumidores residenciais precisarão de um **broker cer
 3. Garante conformidade regulatória
 4. Gerencia a migração e o pós-migração
 
-A TrocarLuz é broker certificado e já está cadastrando consumidores interessados para as primeiras migrações de 2027.
+A TrocaLuz é broker certificado e já está cadastrando consumidores interessados para as primeiras migrações de 2027.
 
 ## Vale a pena esperar pelo MLE ou aderir à GD agora?
 
@@ -211,7 +211,7 @@ Deixe seus dados em nosso cadastro e avisaremos assim que as condições estiver
     excerpt: "A partir de dezembro de 2027, residências poderão escolher seu fornecedor de energia. Entenda o que muda, o papel do broker e como se preparar.",
     category: "mercado-livre",
     keywords: ["mercado livre energia residencial", "MLE 2027", "abertura mercado livre", "broker energia", "CCEE"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-02-01"),
   },
@@ -264,7 +264,7 @@ Use nossa calculadora gratuita. Você informa seu estado e o valor atual da cont
     excerpt: "Carro elétrico aumentou sua conta de luz? Veja como a geração distribuída pode compensar o custo do carregamento, sem obras e sem investimento inicial.",
     category: "carro-eletrico",
     keywords: ["carro elétrico conta de luz", "EV conta energia", "carregar carro elétrico custo", "geração distribuída carro elétrico"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-02-10"),
   },
@@ -322,7 +322,7 @@ Nossa calculadora usa os dados de cada estado e distribuidora para gerar uma est
     excerpt: "Veja quais estados têm maior desconto em geração distribuída, as principais distribuidoras e onde há mais disponibilidade de parceiros.",
     category: "geracao-distribuida",
     keywords: ["geração distribuída por estado", "GD São Paulo", "GD Minas Gerais", "desconto conta de luz estado"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-02-15"),
   },
@@ -336,7 +336,7 @@ Quando você contrata geração distribuída ou migra para o mercado livre de en
 
 ## Quais dados são coletados
 
-Ao usar a TrocarLuz ou contratar GD, os dados típicos coletados são:
+Ao usar a TrocaLuz ou contratar GD, os dados típicos coletados são:
 
 - **Dados de identificação:** nome, CPF, telefone, e-mail
 - **Dados de consumo:** histórico de fatura, consumo médio em kWh
@@ -359,9 +359,9 @@ A LGPD garante que você pode:
 - A conta de luz não pode ser compartilhada sem sua autorização
 - Não podem usar seus dados para marketing não solicitado sem opt-in
 
-## Consentimentos que a TrocarLuz pede (e por quê)
+## Consentimentos que a TrocaLuz pede (e por quê)
 
-Ao enviar sua conta pela TrocarLuz, pedimos três consentimentos:
+Ao enviar sua conta pela TrocaLuz, pedimos três consentimentos:
 
 1. **WhatsApp:** para enviar sua análise e proposta
 2. **Compartilhamento com parceiro:** para gerar uma proposta de GD
@@ -375,7 +375,7 @@ Envie um e-mail para **privacidade@trocarluz.com.br** ou acesse nossa Política 
     excerpt: "Entenda seus direitos pela LGPD ao contratar geração distribuída ou migrar para o mercado livre de energia — e como exercê-los.",
     category: "regulatorio",
     keywords: ["LGPD energia", "proteção de dados energia", "direitos consumidor GD", "privacidade conta de luz"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-03-01"),
   },
@@ -389,7 +389,7 @@ Aderir à GD é mais simples do que parece. Veja o processo completo.
 
 ## Etapa 1: Verificar elegibilidade (5 minutos)
 
-Use a calculadora da TrocarLuz para verificar se há parceiros disponíveis na sua distribuidora e qual o desconto estimado para sua região.
+Use a calculadora da TrocaLuz para verificar se há parceiros disponíveis na sua distribuidora e qual o desconto estimado para sua região.
 
 **O que você precisa:** seu estado, distribuidora (opcional) e o valor médio da conta.
 
@@ -440,7 +440,7 @@ Após a ativação, os créditos aparecem na sua conta como "Energia Injetada" o
 
 ## Quanto custa tudo isso?
 
-**Zero.** A TrocarLuz não cobra nada do consumidor. Nossa receita vem dos parceiros de GD, que compensam pelo acesso a clientes qualificados.
+**Zero.** A TrocaLuz não cobra nada do consumidor. Nossa receita vem dos parceiros de GD, que compensam pelo acesso a clientes qualificados.
 
 ## Perguntas frequentes
 
@@ -452,7 +452,7 @@ Após a ativação, os créditos aparecem na sua conta como "Energia Injetada" o
     excerpt: "Do primeiro acesso ao desconto na conta: guia passo a passo para aderir à geração distribuída em 2025, com prazos reais por distribuidora.",
     category: "geracao-distribuida",
     keywords: ["como aderir geração distribuída", "passo a passo GD", "prazo ativação GD", "contrato geração distribuída"],
-    author: "Equipe TrocarLuz",
+    author: "Equipe TrocaLuz",
     published: true,
     publishedAt: new Date("2025-03-10"),
   },

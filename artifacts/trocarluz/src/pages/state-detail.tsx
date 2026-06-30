@@ -43,7 +43,7 @@ export default function StateDetail() {
   return (
     <Layout>
       <SEOHead 
-        title={`Energia no ${state.name} (${state.uf}) — TrocarLuz`}
+        title={`Energia no ${state.name} (${state.uf}) — TrocaLuz`}
         description={`Saiba como economizar na conta de luz no estado de ${state.name}. Distribuidora: ${state.distributor}.`}
       />
       

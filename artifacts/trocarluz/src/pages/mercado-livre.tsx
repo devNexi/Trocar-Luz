@@ -6,7 +6,7 @@ export default function MercadoLivre() {
   return (
     <Layout>
       <SEOHead 
-        title="Mercado Livre de Energia (ACL) — TrocarLuz" 
+        title="Mercado Livre de Energia (ACL) — TrocaLuz" 
         description="Entenda o que é o Ambiente de Contratação Livre de energia e como ele permite escolher seu fornecedor."
       />
       

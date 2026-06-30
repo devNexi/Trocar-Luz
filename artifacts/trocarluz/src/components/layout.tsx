@@ -1,7 +1,37 @@
 import { Link, useLocation } from "wouter";
-import { type ReactNode, useState, useEffect, useRef } from "react";
+import { type ReactNode, useState, useEffect, useRef, useId } from "react";
 import { X } from "@phosphor-icons/react";
 import { ScrollProgress } from "./scroll-progress";
+
+/* ── TrocaLuz wordmark: bolt + TROCA (green) + LUZ (yellow) ─────── */
+function TrocaLuzLogo({ height = 36 }: { height?: number }) {
+  const uid = useId();
+  const gid = `tl${uid.replace(/[^a-z0-9]/gi, "")}`;
+  const boltW = Math.round(height * 0.52);
+  const fontSize = Math.round(height * 0.72);
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", lineHeight: 1 }}>
+      <svg width={boltW} height={height} viewBox="0 0 256 256" aria-hidden="true" style={{ flexShrink: 0, display: "block" }}>
+        <defs>
+          <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stopColor="#E8B800" />
+            <stop offset="52%"  stopColor="#E8B800" />
+            <stop offset="53%"  stopColor="#1a5c20" />
+            <stop offset="100%" stopColor="#1a5c20" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M213.85,128.93l-112,120a8,8,0,0,1-13.69-7.6L112,120H40a8,8,0,0,1-5.66-13.66l112-112a8,8,0,0,1,13.57,8.59L136,120h72a8,8,0,0,1,5.29,13.93Z"
+          fill={`url(#${gid})`}
+        />
+      </svg>
+      <span style={{ fontFamily: "var(--app-font-sans)", fontWeight: 800, fontSize, letterSpacing: "-0.01em", lineHeight: 1 }}>
+        <span style={{ color: "#1a5c20" }}>TROCA</span>
+        <span style={{ color: "#E8B800" }}>LUZ</span>
+      </span>
+    </span>
+  );
+}
 
 const MAIN_NAV = [
   { href: "/para-sua-casa",      label: "Para sua casa" },
@@ -131,14 +161,10 @@ export function Layout({ children }: { children: ReactNode }) {
           {/* Logo — outside pill, left */}
           <Link
             href="/"
-            aria-label="TrocarLuz — página inicial"
+            aria-label="TrocaLuz — página inicial"
             style={{ flexShrink: 0, lineHeight: 0 }}
           >
-            <img
-              src="/img/logo-trocarluz-nobg.png"
-              alt="TrocarLuz"
-              style={{ height: "36px", width: "auto", display: "block" }}
-            />
+            <TrocaLuzLogo height={36} />
           </Link>
 
           {/* Desktop: white floating nav pill (centre) */}
@@ -512,11 +538,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div className="md:col-span-1">
               <Link href="/" style={{ display: "block", lineHeight: 0, marginBottom: "16px" }}>
-                <img
-                  src="/img/logo-trocarluz-nobg.png"
-                  alt="TrocarLuz"
-                  style={{ height: "32px", width: "auto", display: "block" }}
-                />
+                <TrocaLuzLogo height={32} />
               </Link>
               <p
                 style={{
@@ -617,7 +639,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 color: "rgba(26,36,16,0.70)",
               }}
             >
-              © {new Date().getFullYear()} TrocarLuz. Todos os direitos reservados.
+              © {new Date().getFullYear()} TrocaLuz. Todos os direitos reservados.
             </p>
             <div
               style={{

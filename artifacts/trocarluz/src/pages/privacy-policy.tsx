@@ -5,8 +5,8 @@ export default function PrivacyPolicy() {
   return (
     <Layout>
       <SEOHead
-        title="Política de Privacidade — TrocarLuz"
-        description="Política de Privacidade da TrocarLuz. Como coletamos, usamos e protegemos seus dados pessoais conforme a LGPD."
+        title="Política de Privacidade — TrocaLuz"
+        description="Política de Privacidade da TrocaLuz. Como coletamos, usamos e protegemos seus dados pessoais conforme a LGPD."
       />
 
       <section className="bg-[#0A1628] text-white py-16 text-center">
@@ -26,7 +26,7 @@ export default function PrivacyPolicy() {
 
             <div>
               <h2 className="font-display font-bold mb-4" style={{ fontSize: "24px", color: "#1A1F36" }}>1. Quem somos</h2>
-              <p>A TrocarLuz é um serviço operado em parceria com a Ótima Energia, atuando como broker certificado de energia elétrica no Brasil. Nosso CNPJ e dados de contato estão disponíveis sob solicitação pelo WhatsApp ou e-mail.</p>
+              <p>A TrocaLuz é um serviço operado em parceria com a Ótima Energia, atuando como broker certificado de energia elétrica no Brasil. Nosso CNPJ e dados de contato estão disponíveis sob solicitação pelo WhatsApp ou e-mail.</p>
             </div>
 
             <div>

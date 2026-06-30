@@ -70,7 +70,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* ── TrocarLuz Design System ─────────────────────────────────────── */
+/* ── TrocaLuz Design System ─────────────────────────────────────── */
 :root {
   /* ── Payard palette ── the canonical tokens */
   --env:       #F4EAA6;

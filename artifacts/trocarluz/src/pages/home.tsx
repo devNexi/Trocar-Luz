@@ -344,7 +344,7 @@ function StatItem({ value, suffix, label }: { value: number; suffix: string; lab
 const schema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "TrocarLuz",
+  name: "TrocaLuz",
   url: "https://trocarluz.com.br",
   logo: "https://trocarluz.com.br/favicon.png",
   description:
@@ -393,7 +393,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Preciso trocar minha distribuidora?",
-    a: "Não. Sua distribuidora continua sendo a mesma. A TrocarLuz negocia com fornecedores de GD credenciados pela ANEEL e o desconto aparece na sua conta habitual.",
+    a: "Não. Sua distribuidora continua sendo a mesma. A TrocaLuz negocia com fornecedores de GD credenciados pela ANEEL e o desconto aparece na sua conta habitual.",
   },
   {
     q: "Qual a economia média que posso esperar?",
@@ -401,7 +401,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "O que muda em 2027 para residências?",
-    a: "A partir de dezembro de 2027, consumidores residenciais poderão migrar para o Mercado Livre de Energia e escolher seu fornecedor. A TrocarLuz, em parceria com a Ótima Energia, gerenciará todo o processo para você.",
+    a: "A partir de dezembro de 2027, consumidores residenciais poderão migrar para o Mercado Livre de Energia e escolher seu fornecedor. A TrocaLuz, em parceria com a Ótima Energia, gerenciará todo o processo para você.",
   },
 ];
 
@@ -579,7 +579,7 @@ export default function Home() {
   return (
     <Layout>
       <SEOHead
-        title="TrocarLuz — Compare e Economize na Conta de Energia"
+        title="TrocaLuz — Compare e Economize na Conta de Energia"
         description="Veja se dá pra pagar menos. Compare opções reais de energia para sua casa ou empresa em poucos passos. Sem complicação."
         schema={schema}
       />
@@ -1685,7 +1685,7 @@ export default function Home() {
       {/* 5. STATS — --tint band, count-up                           */}
       {/* ─────────────────────────────────────────────────────────── */}
       <section
-        aria-label="Números TrocarLuz"
+        aria-label="Números TrocaLuz"
         style={{ backgroundColor: "#F7F4EA", padding: "clamp(6rem,12vw,10rem) var(--gutter)" }}
       >
         <div style={{ maxWidth: "var(--container)", margin: "0 auto" }}>
@@ -1878,7 +1878,7 @@ export default function Home() {
                   margin: 0,
                 }}
               >
-                Por que a TrocarLuz?
+                Por que a TrocaLuz?
               </h2>
             </Reveal>
           </div>

@@ -13,14 +13,14 @@ export default function GuidesIndex() {
   return (
     <Layout>
       <SEOHead 
-        title="Guias de Energia — TrocarLuz" 
+        title="Guias de Energia — TrocaLuz" 
         description="Aprenda tudo sobre mercado livre de energia, geração distribuída e como reduzir sua conta de luz."
       />
       
       <section className="bg-white py-16 border-b border-[#E2E1DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="font-display font-extrabold text-4xl text-[#1A1F36] mb-4">
-            Guias TrocarLuz
+            Guias TrocaLuz
           </h1>
           <p className="text-xl text-[#6B7080] max-w-2xl">
             Tudo o que você precisa saber para tomar a melhor decisão e pagar menos na conta de luz. Sem complicação.

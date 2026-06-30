@@ -74,7 +74,7 @@ export default function GuideDetail() {
   return (
     <Layout>
       <SEOHead 
-        title={`${article.title} — Guias TrocarLuz`}
+        title={`${article.title} — Guias TrocaLuz`}
         description={article.metaDescription || article.excerpt || ""}
         schema={schema}
       />

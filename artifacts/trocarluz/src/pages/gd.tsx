@@ -7,7 +7,7 @@ export default function GD() {
   return (
     <Layout>
       <SEOHead
-        title="O que é Geração Distribuída (GD) — TrocarLuz"
+        title="O que é Geração Distribuída (GD) — TrocaLuz"
         description="Entenda como funciona a Geração Distribuída e como você pode economizar até 35% na conta de luz sem instalar placas solares. Disponível agora."
       />
 
@@ -47,7 +47,7 @@ export default function GD() {
               <div className="font-display font-bold mb-2" style={{ fontSize: '13px', color: '#FFD000', textTransform: 'uppercase', letterSpacing: '0.08em' }}>A partir de dezembro de 2027</div>
               <h3 className="font-display font-bold text-white mb-3" style={{ fontSize: '20px' }}>Mercado Livre (ACL)</h3>
               <p style={{ fontFamily: "'Inter', sans-serif", fontSize: '15px', color: 'rgba(255,255,255,0.70)', lineHeight: '1.7' }}>
-                Você troca de fornecedor de energia. Para residências, isso só será possível a partir de dezembro de 2027 — e exige um broker certificado como a TrocarLuz.
+                Você troca de fornecedor de energia. Para residências, isso só será possível a partir de dezembro de 2027 — e exige um broker certificado como a TrocaLuz.
               </p>
             </div>
           </div>

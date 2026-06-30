@@ -39,16 +39,16 @@ export async function sendLeadNotification(lead: LeadEmailData): Promise<void> {
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px;">
-      <h2 style="color: #1A1F36;">Novo lead TrocarLuz</h2>
+      <h2 style="color: #1A1F36;">Novo lead TrocaLuz</h2>
       <p><strong>Tipo:</strong> ${lead.type === "business" ? "Empresarial" : "Residencial"}</p>
       <p><strong>Nome:</strong> ${lead.nome}</p>
       <p><strong>WhatsApp:</strong> ${lead.whatsapp}</p>
       <p><strong>Estado:</strong> ${lead.estado}</p>
       ${lead.type === "residential" ? residentialDetails : businessDetails}
-      <p><strong>Fonte:</strong> ${lead.pageSource ?? "TrocarLuz"}</p>
+      <p><strong>Fonte:</strong> ${lead.pageSource ?? "TrocaLuz"}</p>
       <p><strong>Data:</strong> ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}</p>
       <hr style="border: 1px solid #E2E1DC; margin: 24px 0;" />
-      <p style="color: #6B7080; font-size: 12px;">Este email foi enviado automaticamente pela TrocarLuz.</p>
+      <p style="color: #6B7080; font-size: 12px;">Este email foi enviado automaticamente pela TrocaLuz.</p>
     </div>
   `;
 

@@ -1,4 +1,4 @@
-# TrocarLuz
+# TrocaLuz
 
 Brazilian energy comparison and lead capture website. Helps residential and business users compare energy options, understand geração distribuída (GD), Mercado Livre de Energia, and solar — and captures leads via WhatsApp contact forms.
 

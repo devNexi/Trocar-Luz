@@ -56,7 +56,7 @@ export default function StatusPage({ params }: { params: { publicId: string } })
 
   return (
     <Layout>
-      <SEOHead title="Acompanhar solicitação — TrocarLuz" description="Acompanhe o status da sua solicitação de desconto." />
+      <SEOHead title="Acompanhar solicitação — TrocaLuz" description="Acompanhe o status da sua solicitação de desconto." />
 
       <section className="bg-[#0A1628] text-white py-14 text-center">
         <div className="max-w-xl mx-auto px-4">

@@ -12,7 +12,7 @@ export const articlesTable = pgTable("articles", {
   category: text("category"),
   estado: text("estado"),
   keywords: text("keywords").array(),
-  author: text("author").notNull().default("Equipe TrocarLuz"),
+  author: text("author").notNull().default("Equipe TrocaLuz"),
   reviewer: text("reviewer"),
   schemaType: text("schema_type"),
   faqItems: jsonb("faq_items"),
