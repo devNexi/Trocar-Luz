@@ -134,7 +134,7 @@ export function Layout({ children }: { children: ReactNode }) {
             aria-label="TrocaLuz — página inicial"
             style={{ flexShrink: 0, lineHeight: 0 }}
           >
-            <img src="/img/trocaluz-logo.png" alt="TrocaLuz" style={{ height: "36px", width: "auto", display: "block" }} />
+            <img src="/img/trocaluz-lockup-color.png" alt="TrocaLuz" style={{ height: "36px", width: "auto", display: "block" }} />
           </Link>
 
           {/* Desktop: white floating nav pill (centre) */}
@@ -491,7 +491,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <footer
         aria-label="Rodapé"
         style={{
-          backgroundColor: "#F4EAA6",
+          backgroundColor: "#F3ECC4",
           backgroundImage: "radial-gradient(rgba(26,36,16,0.10) 1.5px, transparent 1.5px)",
           backgroundSize: "22px 22px",
           borderTop: "1px solid rgba(26,36,16,0.12)",
@@ -508,7 +508,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
             <div className="md:col-span-1">
               <Link href="/" style={{ display: "block", lineHeight: 0, marginBottom: "16px" }}>
-                <img src="/img/trocaluz-logo.png" alt="TrocaLuz" style={{ height: "32px", width: "auto", display: "block" }} />
+                <img src="/img/trocaluz-lockup-color.png" alt="TrocaLuz" style={{ height: "32px", width: "auto", display: "block" }} />
               </Link>
               <p
                 style={{

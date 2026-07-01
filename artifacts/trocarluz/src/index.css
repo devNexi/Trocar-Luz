@@ -73,9 +73,9 @@
 /* ── TrocaLuz Design System ─────────────────────────────────────── */
 :root {
   /* ── Payard palette ── the canonical tokens */
-  --env:       #F4EAA6;
+  --env:       #F3ECC4;
   --env-soft:  rgba(26,36,16,0.28);
-  --signal:    #F3E25C;
+  --signal:    #FFD64D;
   --ink:       #1A2410;
   --cream:     #F5F4EF;
   --tint:      #EAF5DC;
@@ -95,12 +95,12 @@
   --text-invert-muted: #9AA6B8;
 
   /* ── Brand */
-  --green:         #1FA459;
-  --green-hover:   #1A8F4D;
-  --green-text:    #157A3C;
-  --lime:          #8FD14F;
-  --yellow:        #F2C33C;
-  --yellow-ink:    #2A2003;
+  --green:         #0E9F6E;
+  --green-hover:   #0B8A5F;
+  --green-text:    #047857;
+  --lime:          #5EE0A0;
+  --yellow:        #FFD64D;
+  --yellow-ink:    #2A2400;
 
   /* ── Borders */
   --border-light:  #E6E4DC;
@@ -120,7 +120,7 @@
   --hero-green:    #0E4A2C;
   --hero-green-2:  #12603A;
   --bg-green-tint: #E8F7EF;
-  --hero-env:      #F4EAA6;   /* = --env */
+  --hero-env:      #F3ECC4;   /* = --env */
   --hero-env-soft: rgba(26,36,16,0.30);
   --ink-on-env:    #1A2410;   /* = --ink */
 
@@ -130,10 +130,10 @@
   --section-y: clamp(5rem, 11vw, 9rem);
 
   /* ── Legacy brand tokens */
-  --tt-green: #1FA459;
-  --tt-green-dark: #1A8F4D;
-  --tt-green-darker: #157A3C;
-  --tt-yellow: #F2C33C;
+  --tt-green: #0E9F6E;
+  --tt-green-dark: #0B8A5F;
+  --tt-green-darker: #047857;
+  --tt-yellow: #FFD64D;
   --tt-navy: #0E1525;
 
   /* ── Fonts — Poppins replaces Clash Display */
@@ -149,7 +149,7 @@
   --elevate-1: rgba(0,0,0,.03);
   --elevate-2: rgba(0,0,0,.08);
 
-  --primary: 148 80% 38%;
+  --primary: 160 84% 34%;
   --primary-foreground: 0 0% 100%;
 
   --background: 0 0% 100%;
@@ -223,7 +223,7 @@
 
   --background: 225 34% 9%;
   --foreground: 0 0% 96%;
-  --primary: 148 80% 42%;
+  --primary: 160 84% 38%;
   --primary-foreground: 0 0% 100%;
   --secondary: 225 30% 17%;
   --secondary-foreground: 0 0% 96%;
@@ -238,7 +238,7 @@
   --card-border: 225 30% 21%;
   --border: 225 30% 21%;
   --input: 225 30% 24%;
-  --ring: 148 80% 42%;
+  --ring: 160 84% 38%;
   --popover: 225 34% 13%;
   --popover-foreground: 0 0% 96%;
   --popover-border: 225 30% 21%;
@@ -496,15 +496,15 @@
 
 /* ── Raio-X da Conta tool interactive states ─────────────────────── */
 .tool-input:focus {
-  outline: 2px solid #8FD14F;
+  outline: 2px solid #5EE0A0;
   outline-offset: 0;
-  border-color: #8FD14F !important;
+  border-color: #5EE0A0 !important;
 }
 .tool-btn-cta {
   transition: background-color 0.15s ease, transform 0.12s ease;
 }
 .tool-btn-cta:hover:not(:disabled) {
-  background-color: #1A8F4D !important;
+  background-color: #0B8A5F !important;
   transform: translateY(-1px);
 }
 .tool-btn-cta:active:not(:disabled) {

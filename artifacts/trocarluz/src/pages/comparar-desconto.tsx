@@ -89,7 +89,7 @@ interface CommitForm {
 
 const NAVY = "#0E1525";
 const CREAM = "#F5F4EF";
-const GREEN = "#1FA459";
+const GREEN = "#0E9F6E";
 const BORDER = "#E6E4DC";
 const MUTED = "#515A68";
 
@@ -191,11 +191,11 @@ function ToggleButton({
         padding: "12px 16px",
         borderRadius: "14px",
         border: `2px solid ${active ? GREEN : BORDER}`,
-        backgroundColor: active ? "rgba(31,164,89,0.09)" : "#fff",
+        backgroundColor: active ? "rgba(14,159,110,0.09)" : "#fff",
         fontFamily: "'Inter', sans-serif",
         fontSize: "14px",
         fontWeight: 600,
-        color: active ? "#157A3C" : MUTED,
+        color: active ? "#047857" : MUTED,
         cursor: "pointer",
         transition: "border-color 0.15s, background-color 0.15s, color 0.15s",
         lineHeight: 1.2,
@@ -361,7 +361,7 @@ function OfferCard({
         border: `2px solid ${isBest ? GREEN : BORDER}`,
         borderRadius: "18px",
         padding: "20px 24px",
-        backgroundColor: isBest ? "rgba(31,164,89,0.04)" : "#fff",
+        backgroundColor: isBest ? "rgba(14,159,110,0.04)" : "#fff",
         position: "relative",
       }}
     >
@@ -474,8 +474,8 @@ function OfferCard({
           style={{
             fontFamily: "'Inter', sans-serif",
             fontSize: "12px",
-            color: "#157A3C",
-            backgroundColor: "rgba(31,164,89,0.09)",
+            color: "#047857",
+            backgroundColor: "rgba(14,159,110,0.09)",
             padding: "4px 10px",
             borderRadius: "999px",
           }}
@@ -974,7 +974,7 @@ export default function CompararDesconto() {
                       cursor: uploadState === "uploading" ? "wait" : "pointer",
                       backgroundColor:
                         uploadState === "done"
-                          ? "rgba(31,164,89,0.06)"
+                          ? "rgba(14,159,110,0.06)"
                           : uploadState === "error"
                           ? "rgba(220,38,38,0.04)"
                           : "#fff",
@@ -1014,10 +1014,10 @@ export default function CompararDesconto() {
                     {uploadState === "done" && billFile && (
                       <>
                         <div style={{ fontSize: "20px", marginBottom: "6px" }}>✅</div>
-                        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#157A3C", fontWeight: 600 }}>
+                        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", color: "#047857", fontWeight: 600 }}>
                           {billFile.name}
                         </div>
-                        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#157A3C", marginTop: "3px" }}>
+                        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#047857", marginTop: "3px" }}>
                           Conta enviada com sucesso — vamos buscar ofertas reais!
                         </div>
                       </>
@@ -1112,7 +1112,7 @@ export default function CompararDesconto() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  backgroundColor: "rgba(31,164,89,0.12)",
+                  backgroundColor: "rgba(14,159,110,0.12)",
                   color: "#156B3B",
                   fontFamily: "'Inter', sans-serif",
                   fontSize: "12px",
@@ -1213,7 +1213,7 @@ export default function CompararDesconto() {
             <div style={CARD}>
               <div
                 style={{
-                  backgroundColor: "rgba(31,164,89,0.09)",
+                  backgroundColor: "rgba(14,159,110,0.09)",
                   borderRadius: "14px",
                   padding: "16px 20px",
                   marginBottom: "24px",
@@ -1228,7 +1228,7 @@ export default function CompararDesconto() {
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       fontSize: "12px",
-                      color: "#157A3C",
+                      color: "#047857",
                       fontWeight: 700,
                       textTransform: "uppercase",
                       letterSpacing: "0.05em",
@@ -1422,7 +1422,7 @@ export default function CompararDesconto() {
                       Estimativa com base em ofertas reais para a sua região. Envie sua conta para confirmar desconto exato.
                     </p>
                     {hasEv && (
-                      <div style={{ marginTop: "14px", backgroundColor: "rgba(31,164,89,0.09)", borderRadius: "10px", padding: "10px 14px", fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#157A3C", fontWeight: 600 }}>
+                      <div style={{ marginTop: "14px", backgroundColor: "rgba(14,159,110,0.09)", borderRadius: "10px", padding: "10px 14px", fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#047857", fontWeight: 600 }}>
                         Sua conta subiu após o carro elétrico? Veja quanto dá para reduzir.
                       </div>
                     )}
@@ -1434,7 +1434,7 @@ export default function CompararDesconto() {
                     </p>
                   </div>
 
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#157A3C", backgroundColor: "rgba(31,164,89,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#047857", backgroundColor: "rgba(14,159,110,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
                     O uso é 100% gratuito para você — somos remunerados pelos fornecedores, não por você.
                   </p>
 
@@ -1474,7 +1474,7 @@ export default function CompararDesconto() {
                     </p>
                   </div>
 
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#157A3C", backgroundColor: "rgba(31,164,89,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#047857", backgroundColor: "rgba(14,159,110,0.09)", borderRadius: "8px", padding: "10px 14px", marginBottom: "16px", lineHeight: 1.5 }}>
                     O uso é 100% gratuito para você — somos remunerados pelos fornecedores, não por você.
                   </p>
 
