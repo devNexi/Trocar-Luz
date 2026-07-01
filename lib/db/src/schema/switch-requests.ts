@@ -5,6 +5,8 @@ import {
   uuid,
   numeric,
   boolean,
+  integer,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
@@ -36,6 +38,13 @@ export const switchRequestsTable = pgTable("switch_requests", {
   partnerShareConsent: boolean("partner_share_consent").notNull().default(false),
   whatsappConsent: boolean("whatsapp_consent").notNull().default(false),
   proposalValidUntil: timestamp("proposal_valid_until", { withTimezone: true }),
+  // GD marketplace fields — set when customer chooses a real offer from bill parse
+  chosenOfferId: integer("chosen_offer_id"),
+  parsedConsumptionKwh: integer("parsed_consumption_kwh"),
+  parsedDistribuidora: text("parsed_distribuidora"),
+  billReadable: boolean("bill_readable"),
+  // PII from parsed bill — server-side only, NEVER sent to client
+  parsedPiiJson: jsonb("parsed_pii_json"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
@@ -44,6 +53,7 @@ export const insertSwitchRequestSchema = createInsertSchema(switchRequestsTable)
   id: true,
   createdAt: true,
   updatedAt: true,
+  parsedPiiJson: true,
 });
 export type InsertSwitchRequest = z.infer<typeof insertSwitchRequestSchema>;
 export type SwitchRequest = typeof switchRequestsTable.$inferSelect;

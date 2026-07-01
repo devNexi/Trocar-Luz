@@ -81,6 +81,49 @@ export const GetSavingsEstimateResponse = zod.object({
 
 
 /**
+ * @summary Parse an uploaded bill and return matched real GD offers, or fall back to estimate
+ */
+export const getBillOffersBodyStateMin = 2;
+export const getBillOffersBodyStateMax = 2;
+
+export const getBillOffersBodyMonthlyBillValueMin = 0;
+
+
+
+export const GetBillOffersBody = zod.object({
+  "billObjectPath": zod.string().optional(),
+  "state": zod.string().min(getBillOffersBodyStateMin).max(getBillOffersBodyStateMax),
+  "distributor": zod.string().optional(),
+  "monthlyBillValue": zod.number().min(getBillOffersBodyMonthlyBillValueMin).optional(),
+  "customerType": zod.enum(['residential', 'business'])
+})
+
+export const GetBillOffersResponse = zod.object({
+  "mode": zod.enum(['real_offers', 'estimate']),
+  "sessionId": zod.string().nullish(),
+  "options": zod.array(zod.object({
+  "optionId": zod.string(),
+  "label": zod.string(),
+  "discountPct": zod.number(),
+  "savingsBrl": zod.number(),
+  "fidelidade": zod.string()
+})).optional(),
+  "parsedKwh": zod.number().nullish(),
+  "parsedDistribuidora": zod.string().nullish(),
+  "eligible": zod.boolean().nullish(),
+  "discountMin": zod.number().nullish(),
+  "discountMax": zod.number().nullish(),
+  "savingsMinBrl": zod.number().nullish(),
+  "savingsMaxBrl": zod.number().nullish(),
+  "nextStep": zod.string().nullish(),
+  "disclaimer": zod.string().nullish(),
+  "partnerAvailable": zod.boolean().nullish(),
+  "coverageStatus": zod.string().nullish(),
+  "minBillNeeded": zod.number().nullish()
+})
+
+
+/**
  * @summary Submit a GD switch request with bill and LGPD consents
  */
 export const createSwitchRequestBodyNomeMin = 2;
@@ -111,6 +154,8 @@ export const CreateSwitchRequestBody = zod.object({
   "source": zod.string().optional(),
   "campaign": zod.string().optional(),
   "partnerCode": zod.string().optional(),
+  "sessionId": zod.string().optional(),
+  "chosenOptionId": zod.string().optional(),
   "lgpdConsent": zod.boolean(),
   "partnerShareConsent": zod.boolean(),
   "whatsappConsent": zod.boolean()

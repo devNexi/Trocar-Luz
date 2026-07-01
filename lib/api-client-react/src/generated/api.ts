@@ -23,6 +23,8 @@ import type {
   Article,
   ArticleInput,
   ArticleSummary,
+  BillOffersRequest,
+  BillOffersResponse,
   ErrorResponse,
   Faq,
   FaqInput,
@@ -270,6 +272,77 @@ export const useGetSavingsEstimate = <TError = ErrorType<ErrorResponse>,
         TContext
       > => {
       return useMutation(getGetSavingsEstimateMutationOptions(options));
+    }
+
+export const getGetBillOffersUrl = () => {
+
+
+
+
+  return `/api/bill-offers`
+}
+
+/**
+ * @summary Parse an uploaded bill and return matched real GD offers, or fall back to estimate
+ */
+export const getBillOffers = async (billOffersRequest: BillOffersRequest, options?: RequestInit): Promise<BillOffersResponse> => {
+
+  return customFetch<BillOffersResponse>(getGetBillOffersUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      billOffersRequest,)
+  }
+);}
+
+
+
+
+export const getGetBillOffersMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getBillOffers>>, TError,{data: BodyType<BillOffersRequest>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof getBillOffers>>, TError,{data: BodyType<BillOffersRequest>}, TContext> => {
+
+const mutationKey = ['getBillOffers'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof getBillOffers>>, {data: BodyType<BillOffersRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  getBillOffers(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GetBillOffersMutationResult = NonNullable<Awaited<ReturnType<typeof getBillOffers>>>
+    export type GetBillOffersMutationBody = BodyType<BillOffersRequest>
+    export type GetBillOffersMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Parse an uploaded bill and return matched real GD offers, or fall back to estimate
+ */
+export const useGetBillOffers = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof getBillOffers>>, TError,{data: BodyType<BillOffersRequest>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof getBillOffers>>,
+        TError,
+        {data: BodyType<BillOffersRequest>},
+        TContext
+      > => {
+      return useMutation(getGetBillOffersMutationOptions(options));
     }
 
 export const getCreateSwitchRequestUrl = () => {

@@ -32,6 +32,8 @@ export interface SwitchRequestInput {
   source?: string;
   campaign?: string;
   partnerCode?: string;
+  sessionId?: string;
+  chosenOptionId?: string;
   lgpdConsent: boolean;
   partnerShareConsent: boolean;
   whatsappConsent: boolean;

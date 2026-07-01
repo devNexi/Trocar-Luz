@@ -5,6 +5,7 @@ import articlesRouter from "./articles";
 import faqsRouter from "./faqs";
 import statesRouter from "./states";
 import switchRequestsRouter from "./switch-requests";
+import billOffersRouter from "./bill-offers";
 import storageRouter from "./storage";
 import sitemapRouter from "./sitemap";
 
@@ -16,6 +17,7 @@ router.use(articlesRouter);
 router.use(faqsRouter);
 router.use(statesRouter);
 router.use(switchRequestsRouter);
+router.use(billOffersRouter);
 router.use(storageRouter);
 router.use(sitemapRouter);
 

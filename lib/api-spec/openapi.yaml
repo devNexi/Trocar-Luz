@@ -93,6 +93,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /bill-offers:
+    post:
+      operationId: getBillOffers
+      tags: [switchRequests]
+      summary: Parse an uploaded bill and return matched real GD offers, or fall back to estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillOffersRequest"
+      responses:
+        "200":
+          description: Ranked real offers (bill parsed) or indicative estimate (fallback)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillOffersResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /switch-requests:
     post:
       operationId: createSwitchRequest
@@ -614,6 +645,10 @@ components:
           type: string
         partnerCode:
           type: string
+        sessionId:
+          type: string
+        chosenOptionId:
+          type: string
         lgpdConsent:
           type: boolean
         partnerShareConsent:
@@ -877,3 +912,75 @@ components:
           type: string
         metadata:
           $ref: '#/components/schemas/UploadUrlRequest'
+
+    GdOfferOption:
+      type: object
+      properties:
+        optionId:
+          type: string
+        label:
+          type: string
+        discountPct:
+          type: number
+        savingsBrl:
+          type: number
+        fidelidade:
+          type: string
+      required: [optionId, label, discountPct, savingsBrl, fidelidade]
+
+    BillOffersRequest:
+      type: object
+      properties:
+        billObjectPath:
+          type: string
+        state:
+          type: string
+          minLength: 2
+          maxLength: 2
+        distributor:
+          type: string
+        monthlyBillValue:
+          type: number
+          minimum: 0
+        customerType:
+          type: string
+          enum: [residential, business]
+      required: [state, customerType]
+
+    BillOffersResponse:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: [real_offers, estimate]
+        sessionId:
+          type: ["string", "null"]
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/GdOfferOption"
+        parsedKwh:
+          type: ["integer", "null"]
+        parsedDistribuidora:
+          type: ["string", "null"]
+        eligible:
+          type: ["boolean", "null"]
+        discountMin:
+          type: ["number", "null"]
+        discountMax:
+          type: ["number", "null"]
+        savingsMinBrl:
+          type: ["number", "null"]
+        savingsMaxBrl:
+          type: ["number", "null"]
+        nextStep:
+          type: ["string", "null"]
+        disclaimer:
+          type: ["string", "null"]
+        partnerAvailable:
+          type: ["boolean", "null"]
+        coverageStatus:
+          type: ["string", "null"]
+        minBillNeeded:
+          type: ["number", "null"]
+      required: [mode]

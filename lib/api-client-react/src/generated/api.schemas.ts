@@ -149,6 +149,8 @@ export interface SwitchRequestInput {
   source?: string;
   campaign?: string;
   partnerCode?: string;
+  sessionId?: string;
+  chosenOptionId?: string;
   lgpdConsent: boolean;
   partnerShareConsent: boolean;
   whatsappConsent: boolean;
@@ -287,6 +289,74 @@ export interface UploadUrlResponse {
   uploadURL: string;
   objectPath: string;
   metadata?: UploadUrlRequest;
+}
+
+export interface GdOfferOption {
+  optionId: string;
+  label: string;
+  discountPct: number;
+  savingsBrl: number;
+  fidelidade: string;
+}
+
+export type BillOffersRequestCustomerType = typeof BillOffersRequestCustomerType[keyof typeof BillOffersRequestCustomerType];
+
+
+export const BillOffersRequestCustomerType = {
+  residential: 'residential',
+  business: 'business',
+} as const;
+
+export interface BillOffersRequest {
+  billObjectPath?: string;
+  /**
+     * @minLength 2
+     * @maxLength 2
+     */
+  state: string;
+  distributor?: string;
+  /** @minimum 0 */
+  monthlyBillValue?: number;
+  customerType: BillOffersRequestCustomerType;
+}
+
+export type BillOffersResponseMode = typeof BillOffersResponseMode[keyof typeof BillOffersResponseMode];
+
+
+export const BillOffersResponseMode = {
+  real_offers: 'real_offers',
+  estimate: 'estimate',
+} as const;
+
+export interface BillOffersResponse {
+  mode: BillOffersResponseMode;
+  /** @nullable */
+  sessionId?: string | null;
+  options?: GdOfferOption[];
+  /** @nullable */
+  parsedKwh?: number | null;
+  /** @nullable */
+  parsedDistribuidora?: string | null;
+  /** @nullable */
+  eligible?: boolean | null;
+  /** @nullable */
+  discountMin?: number | null;
+  /** @nullable */
+  discountMax?: number | null;
+  /** @nullable */
+  savingsMinBrl?: number | null;
+  /** @nullable */
+  savingsMaxBrl?: number | null;
+  /** @nullable */
+  nextStep?: string | null;
+  /** @nullable */
+  disclaimer?: string | null;
+  /** @nullable */
+  partnerAvailable?: boolean | null;
+  /** @nullable */
+  coverageStatus?: string | null;
+  /** @nullable */
+  minBillNeeded?: number | null;
 }
 
 export type ListArticlesParams = {

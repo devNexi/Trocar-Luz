@@ -1,0 +1,29 @@
+REPLIT PROMPT:
+
+Upgrade the Raio-X tool (/comparar-desconto) into a real automated GD marketplace using the Ótima bill parser. When a customer uploads their bill, we read it, match real pre-registered offers, and show them REAL, FINAL, ranked options they can choose between — fully automated, no human, no partner round-trip. Anonymise partners as "Opção A / B / C". pt-BR. Keep all hard rules.
+
+=== PARSER (server-side only) ===
+- Standalone service at https://parser.otimaenergia.com. Add server client parser-client.ts: POST the uploaded PDF/image to /parse?force=BILL, header X-Parser-Key: PARSER_API_KEY (env var), 120s timeout, normalise JSON, plus a /health helper. ALL parser calls on OUR backend — the key and URL must NEVER reach the browser. Env: PARSER_API_KEY (I'll add to secrets).
+
+=== THE REAL-PROPOSAL FLOW (this is the change) ===
+- Bill uploaded → parse → extract real consumption (kWh), distribuidora, grupo/subgrupo, tipo where available.
+- Match ALL "Disponível" offers in gd_offers for that distribuidora + grupo + tipo_cliente that pass the ticket-mínimo gate against the REAL parsed consumption.
+- Return these as a RANKED LIST of options (best discount first), each shown to the customer as an anonymised "Opção A / Opção B / Opção C" with: the real discount %, the real R$ savings/month (= discount% × the bill), ticket mínimo met, and fidelidade/lock-in terms. These are real, final offers — not estimates.
+- Customer selects one option → that selection + LGPD consents is the committed choice → creates the switch_request with the chosen optionId, the parsed bill data, and the resolved partner (server-side). This is the automated proposal; no human, no waiting on a comercializadora.
+- If no bill uploaded: keep the existing manual bill-amount flow, but present the result as an ESTIMATE (parsing is what turns it into real options). Manual path must still work and never be gated behind upload.
+
+=== HARD RULE — PARTNER NAMES + PARSED IDENTITY NEVER REACH THE CLIENT ===
+- Options are labelled ONLY "Opção A/B/C" client-side. The comercializadora name is NEVER sent to the browser. The mapping (Opção B → real partner) exists SERVER-SIDE ONLY and is resolved at commitment. Do NOT ship any client-side list or field that maps an option label to a partner name or a partner-identifying id. Use opaque optionIds (e.g. random per-session tokens), not the partner name or a stable partner id.
+- Parsed customer identity (name, CNPJ/CPF, UC code) is PII: stored server-side with the lead, NEVER in any browser response, NEVER on screen. Only consumption/discount/R$ figures flow to the client.
+- Verify: inspect the raw network response after upload — it must contain NO comercializadora name, NO partner-identifying id, and NO customer name/CNPJ/UC.
+
+=== ROBUSTNESS ===
+- Parsing must be fault-tolerant: if the parser is down, times out, errors, or returns low confidence / no readable consumption, fall back gracefully to the manual bill→kWh estimate path — the customer NEVER sees an error or a broken screen. Log failures server-side.
+- Include the parsed data (or a "bill unreadable / low confidence" flag) in the internal lead-notification email, so unreadable bills surface as a human-exception case.
+
+=== ACCEPTANCE ===
+- Upload a real bill → see ranked real options (Opção A/B/C) with real % and R$ from matched Disponível offers; picking one creates a switch_request with the chosen option + parsed data + resolved partner server-side.
+- Raw network response after upload contains NO partner name, NO partner-identifying id (only opaque optionIds), and NO customer name/CNPJ/UC.
+- No upload → manual estimate flow still works, unchanged, labelled as an estimate.
+- Parser down/low-confidence → silent fallback to manual estimate, no user-facing error; internal email flags the unreadable bill.
+- Equal min/max collapses; "até 25%" stays marketing-only; no dead ends.
