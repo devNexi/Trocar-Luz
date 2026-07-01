@@ -1,6 +1,46 @@
 import { logger } from "./logger";
 
-const NOTIFICATION_EMAIL = process.env.LEAD_NOTIFICATION_EMAIL ?? "leads@trocarluz.com.br";
+const NOTIFICATION_EMAIL = process.env.LEAD_NOTIFICATION_EMAIL ?? "oi@trocaluz.com";
+const SMTP_FROM = process.env.SMTP_FROM ?? "ana@trocaluz.com";
+
+function getTransporter() {
+  const host = process.env.SMTP_HOST;
+  const password = process.env.SMTP_PASSWORD;
+  const user = SMTP_FROM;
+  const port = parseInt(process.env.SMTP_PORT ?? "587", 10);
+
+  if (!host || !password) {
+    return null;
+  }
+
+  return {
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass: password },
+  };
+}
+
+async function sendMail(options: {
+  subject: string;
+  html: string;
+}): Promise<void> {
+  const transportConfig = getTransporter();
+  if (!transportConfig) {
+    logger.warn("SMTP_HOST or SMTP_PASSWORD not set — skipping email notification");
+    return;
+  }
+
+  const nodemailer = await import("nodemailer");
+  const transporter = nodemailer.createTransport(transportConfig);
+
+  await transporter.sendMail({
+    from: `"TrocaLuz" <${SMTP_FROM}>`,
+    to: NOTIFICATION_EMAIL,
+    subject: options.subject,
+    html: options.html,
+  });
+}
 
 interface LeadEmailData {
   type: "residential" | "business";
@@ -16,14 +56,6 @@ interface LeadEmailData {
 }
 
 export async function sendLeadNotification(lead: LeadEmailData): Promise<void> {
-  if (!process.env.RESEND_API_KEY) {
-    logger.warn("RESEND_API_KEY not set — skipping email notification");
-    return;
-  }
-
-  const { Resend } = await import("resend");
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
   const subject = `Novo lead GD ${lead.type === "business" ? "Empresarial" : "Residencial"} — ${lead.estado}`;
 
   const residentialDetails = `
@@ -53,12 +85,7 @@ export async function sendLeadNotification(lead: LeadEmailData): Promise<void> {
   `;
 
   try {
-    await resend.emails.send({
-      from: "leads@trocarluz.com.br",
-      to: NOTIFICATION_EMAIL,
-      subject,
-      html,
-    });
+    await sendMail({ subject, html });
     logger.info({ estado: lead.estado, type: lead.type }, "Lead notification email sent");
   } catch (err) {
     logger.error({ err }, "Failed to send lead notification email");
@@ -75,14 +102,6 @@ interface UnreadableBillData {
 }
 
 export async function sendUnreadableBillNotification(data: UnreadableBillData): Promise<void> {
-  if (!process.env.RESEND_API_KEY) {
-    logger.warn("RESEND_API_KEY not set — skipping unreadable bill notification");
-    return;
-  }
-
-  const { Resend } = await import("resend");
-  const resend = new Resend(process.env.RESEND_API_KEY);
-
   const subject = `[Ação] Conta ilegível — ${data.state} · ${data.customerType}`;
 
   const html = `
@@ -103,12 +122,7 @@ export async function sendUnreadableBillNotification(data: UnreadableBillData): 
   `;
 
   try {
-    await resend.emails.send({
-      from: "leads@trocarluz.com.br",
-      to: NOTIFICATION_EMAIL,
-      subject,
-      html,
-    });
+    await sendMail({ subject, html });
     logger.info({ state: data.state, confidence: data.confidence }, "Unreadable bill notification sent");
   } catch (err) {
     logger.error({ err }, "Failed to send unreadable bill notification");
